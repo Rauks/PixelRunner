@@ -5,8 +5,10 @@
 package org.game.runner.manager;
 
 import org.andengine.engine.Engine;
+import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
+import org.game.runner.scene.SplashScene;
 
 /**
  *
@@ -47,6 +49,13 @@ public class SceneManager {
     
     public BaseScene getCurrentScene(){
         return this.currentScene;
+    }
+    
+    public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback) {
+        ResourcesManager.getInstance().loadSplashScreen();
+        this.splashScene = new SplashScene();
+        this.currentScene = this.splashScene;
+        pOnCreateSceneCallback.onCreateSceneFinished(this.splashScene);
     }
     
     public static SceneManager getInstance(){

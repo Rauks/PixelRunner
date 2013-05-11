@@ -50,7 +50,8 @@ public class GameActivity extends BaseGameActivity{
 
     @Override
     public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
+        pOnPopulateSceneCallback.onPopulateSceneFinished();
     }
     
     @Override
@@ -65,25 +66,33 @@ public class GameActivity extends BaseGameActivity{
     @Override
     public synchronized void onPauseGame() {
         super.onPauseGame();
-        SceneManager.getInstance().getCurrentScene().onPause();
+        if (this.isGameLoaded()){
+            SceneManager.getInstance().getCurrentScene().onPause();
+        }
     }
     
     @Override
     public synchronized void onResumeGame() {
         super.onResumeGame();
-        SceneManager.getInstance().getCurrentScene().onResume();
+        if (this.isGameLoaded()){
+            SceneManager.getInstance().getCurrentScene().onResume();
+        }
     }
     
     @Override
     protected void onPause() {
         super.onPause();
-        SceneManager.getInstance().getCurrentScene().onPause();
+        if (this.isGameLoaded()){
+            SceneManager.getInstance().getCurrentScene().onPause();
+        }
     }
     
     @Override
     protected synchronized void onResume() {
         super.onResume();
-        SceneManager.getInstance().getCurrentScene().onResume();
+        if (this.isGameLoaded()){
+            SceneManager.getInstance().getCurrentScene().onResume();
+        }
     }
     
     @Override
