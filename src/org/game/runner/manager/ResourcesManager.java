@@ -63,11 +63,11 @@ public class ResourcesManager {
     
     public void loadMainMenuResources(){
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-        this.mainMenuAutoParallaxBackgroundTexture = new BitmapTextureAtlas(this.activity.getTextureManager(), 400, 480);
+        this.mainMenuAutoParallaxBackgroundTexture = new BitmapTextureAtlas(this.activity.getTextureManager(), 960, 960);
         this.mainMenuParallaxLayer1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_1.png", 0, 0);
-        this.mainMenuParallaxLayer2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_2.png", 100, 0);
-        this.mainMenuParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_3.png", 200, 0);
-        this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_4.png", 300, 0);
+        this.mainMenuParallaxLayer2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_2.png", 480, 0);
+        this.mainMenuParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_3.png", 0, 480);
+        this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_4.png", 480, 480);
         this.mainMenuAutoParallaxBackgroundTexture.load();
     }
     

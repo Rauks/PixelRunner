@@ -43,17 +43,20 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     }
     
     private void createBackground(){
-        this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 10);
-        this.autoParallaxBackground.setColor(Color.BLACK);
-        this.parallaxLayer1 = new Sprite(50, this.camera.getHeight()/2, this.resourcesManager.mainMenuParallaxLayer1, this.vbom);
-        this.parallaxLayer2 = new Sprite(50, this.camera.getHeight()/2, this.resourcesManager.mainMenuParallaxLayer2, this.vbom);
-        this.parallaxLayer3 = new Sprite(50, this.camera.getHeight()/2, this.resourcesManager.mainMenuParallaxLayer3, this.vbom);
-        this.parallaxLayer4 = new Sprite(50, this.camera.getHeight()/2, this.resourcesManager.mainMenuParallaxLayer4, this.vbom);
+        this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5);
+        this.setBackground(autoParallaxBackground);
+        this.parallaxLayer1 = new Sprite(0, 0, this.resourcesManager.mainMenuParallaxLayer1, this.vbom);
+        this.parallaxLayer2 = new Sprite(0, 0, this.resourcesManager.mainMenuParallaxLayer2, this.vbom);
+        this.parallaxLayer3 = new Sprite(0, 0, this.resourcesManager.mainMenuParallaxLayer3, this.vbom);
+        this.parallaxLayer4 = new Sprite(0, 0, this.resourcesManager.mainMenuParallaxLayer4, this.vbom);
+        this.parallaxLayer1.setOffsetCenter(0, 0);
+        this.parallaxLayer2.setOffsetCenter(0, 0);
+        this.parallaxLayer3.setOffsetCenter(0, 0);
+        this.parallaxLayer4.setOffsetCenter(0, 0);
         this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-10.0f, this.parallaxLayer1));
         this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-15.0f, this.parallaxLayer2));
         this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-20.0f, this.parallaxLayer3));
         this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-25.0f, this.parallaxLayer4));
-        this.setBackground(autoParallaxBackground);
     }
     
     private void createMenuChildScene(){
