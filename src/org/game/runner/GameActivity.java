@@ -58,7 +58,8 @@ public class GameActivity extends BaseGameActivity{
             public void onTimePassed(final TimerHandler pTimerHandler) 
             {
                 GameActivity.this.mEngine.unregisterUpdateHandler(pTimerHandler);
-                SceneManager.getInstance().createMainMenuScene();
+                SceneManager.getInstance().createSplashEndScene();
+                SceneManager.getInstance().disposeSplashScene();
             }
         }));
         pOnPopulateSceneCallback.onPopulateSceneFinished();

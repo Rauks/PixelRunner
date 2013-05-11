@@ -30,6 +30,7 @@ public class ResourcesManager {
     public VertexBufferObjectManager vbom;
     
     //Fonts
+    public Font fontPixel_34;
     public Font fontPixel_60;
     public Font fontPixel_100;
     
@@ -39,6 +40,10 @@ public class ResourcesManager {
     public ITextureRegion mainMenuParallaxLayer2;
     public ITextureRegion mainMenuParallaxLayer3;
     public ITextureRegion mainMenuParallaxLayer4;
+    private BitmapTextureAtlas splashHeadphonesTexture;
+    public ITextureRegion splashHeadphones;
+    private BitmapTextureAtlas splashEndHeadphonesTexture;
+    public ITextureRegion splashEndHeadphones;
     
     public static void prepareManager(Engine engine, GameActivity activity, Camera camera, VertexBufferObjectManager vbom){
         getInstance().engine = engine;
@@ -53,6 +58,9 @@ public class ResourcesManager {
     
     private void loadFonts(){
         FontFactory.setAssetBasePath("font/");
+        final ITexture fontPixel34Texture = new BitmapTextureAtlas(this.activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        this.fontPixel_34 = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel34Texture, this.activity.getAssets(), "pixel.ttf", 34, false, Color.WHITE, 1, Color.BLACK);
+        this.fontPixel_34.load();
         final ITexture fontPixel60Texture = new BitmapTextureAtlas(this.activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         this.fontPixel_60 = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel60Texture, this.activity.getAssets(), "pixel.ttf", 60, false, Color.WHITE, 2, Color.BLACK);
         this.fontPixel_60.load();
@@ -80,9 +88,27 @@ public class ResourcesManager {
     }
 
     public void loadSplashResources() {
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+        this.splashHeadphonesTexture = new BitmapTextureAtlas(this.activity.getTextureManager(), 960, 960);
+        this.splashHeadphones = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.splashHeadphonesTexture, this.activity, "headphones.png", 0, 0);
+        this.splashHeadphonesTexture.load();
     }
 
     public void unloadSplashResources() {
+        this.splashHeadphonesTexture.unload();
+        this.splashHeadphones = null;
+    }
+
+    public void loadSplashEndResources() {
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+        this.splashEndHeadphonesTexture = new BitmapTextureAtlas(this.activity.getTextureManager(), 960, 960);
+        this.splashEndHeadphones = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.splashEndHeadphonesTexture, this.activity, "headphones.png", 0, 0);
+        this.splashEndHeadphonesTexture.load();
+    }
+
+    public void unloadSplashEndResources() {
+        this.splashEndHeadphonesTexture.unload();
+        this.splashEndHeadphones = null;
     }
     
     public static ResourcesManager getInstance(){

@@ -32,7 +32,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     
     private MenuScene menuChildScene;
     private final int MENUID_PLAY = 0;
-    private final int MENUID_CREDITS = 1;
+    private final int MENUID_OPTIONS = 1;
+    private final int MENUID_CREDITS = 2;
 
     @Override
     public void createScene() {
@@ -64,16 +65,19 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
         this.menuChildScene.setPosition(0, 0);
         
         final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_PLAY, this.resourcesManager.fontPixel_60, "PLAY", vbom), 1.4f, 1);
+        final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_OPTIONS, this.resourcesManager.fontPixel_60, "OPTIONS", vbom), 1.4f, 1);
         final IMenuItem creditsMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_CREDITS, this.resourcesManager.fontPixel_60, "CREDITS", vbom), 1.4f, 1);
 
         this.menuChildScene.addMenuItem(playMenuItem);
+        this.menuChildScene.addMenuItem(optionsMenuItem);
         this.menuChildScene.addMenuItem(creditsMenuItem);
 
         this.menuChildScene.buildAnimations();
         this.menuChildScene.setBackgroundEnabled(false);
 
         playMenuItem.setPosition(playMenuItem.getX(), playMenuItem.getY() - 10);
-        creditsMenuItem.setPosition(creditsMenuItem.getX(), creditsMenuItem.getY() - 40);
+        optionsMenuItem.setPosition(optionsMenuItem.getX(), optionsMenuItem.getY() - 40);
+        creditsMenuItem.setPosition(creditsMenuItem.getX(), creditsMenuItem.getY() - 70);
 
         this.menuChildScene.setOnMenuItemClickListener(this);
 
@@ -84,6 +88,8 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
         switch(pMenuItem.getID()){
             case MENUID_PLAY:
+                return true;
+            case MENUID_OPTIONS:
                 return true;
             case MENUID_CREDITS:
                 return true;

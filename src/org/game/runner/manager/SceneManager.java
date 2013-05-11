@@ -9,6 +9,7 @@ import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
 import org.game.runner.scene.MainMenuScene;
+import org.game.runner.scene.SplashEndScene;
 import org.game.runner.scene.SplashScene;
 
 /**
@@ -21,13 +22,14 @@ public class SceneManager {
         SCENE_SPLASH,
         SCENE_MENU,
         SCENE_GAME,
-        SCENE_LOADING
-    }
+        SCENE_LOADING,
+        SCENE_SPLASH_END}
     
     private static final SceneManager INSTANCE = new SceneManager();
     
     private BaseScene creditsScene;
     private BaseScene splashScene;
+    private BaseScene splashEndScene;
     private BaseScene mainMenuScene;
     private BaseScene gameScene;
     private BaseScene loadingScene;
@@ -53,6 +55,9 @@ public class SceneManager {
             case SCENE_SPLASH:
                 setScene(this.splashScene);
                 break;
+            case SCENE_SPLASH_END:
+                setScene(this.splashEndScene);
+                break;
             case SCENE_LOADING:
                 setScene(this.loadingScene);
                 break;
@@ -76,13 +81,24 @@ public class SceneManager {
         ResourcesManager.getInstance().loadMainMenuResources();
         this.mainMenuScene = new MainMenuScene();
         this.setScene(this.mainMenuScene);
-        this.disposeSplashScene();
     }
     
-    private void disposeMainMenuScene(){
+    public void disposeMainMenuScene(){
         ResourcesManager.getInstance().unloadMainMenuResources();
         this.mainMenuScene.disposeScene();
         this.mainMenuScene = null;
+    }
+    
+    public void createSplashEndScene() {
+        ResourcesManager.getInstance().loadSplashEndResources();
+        this.splashEndScene = new SplashEndScene();
+        this.setScene(this.splashEndScene);
+    }
+    
+    public void disposeSplashEndScene(){
+        ResourcesManager.getInstance().unloadSplashEndResources();
+        this.splashEndScene.disposeScene();
+        this.splashEndScene = null;
     }
     
     public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback) {
@@ -92,7 +108,7 @@ public class SceneManager {
         pOnCreateSceneCallback.onCreateSceneFinished(this.splashScene);
     }
     
-    private void disposeSplashScene(){
+    public void disposeSplashScene(){
         ResourcesManager.getInstance().unloadSplashResources();
         this.splashScene.disposeScene();
         this.splashScene = null;
