@@ -4,8 +4,12 @@
  */
 package org.game.runner.manager;
 
+import android.graphics.Color;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -25,12 +29,16 @@ public class ResourcesManager {
     public Camera camera;
     public VertexBufferObjectManager vbom;
     
+    //Fonts
+    public Font fontPixel_60;
+    public Font fontPixel_100;
+    
     //Textures & Regions
-    private BitmapTextureAtlas splashAutoParallaxBackgroundTexture;
-    public ITextureRegion splashParallaxLayer1;
-    public ITextureRegion splashParallaxLayer2;
-    public ITextureRegion splashParallaxLayer3;
-    public ITextureRegion splashParallaxLayer4;
+    private BitmapTextureAtlas mainMenuAutoParallaxBackgroundTexture;
+    public ITextureRegion mainMenuParallaxLayer1;
+    public ITextureRegion mainMenuParallaxLayer2;
+    public ITextureRegion mainMenuParallaxLayer3;
+    public ITextureRegion mainMenuParallaxLayer4;
     
     public static void prepareManager(Engine engine, GameActivity activity, Camera camera, VertexBufferObjectManager vbom){
         getInstance().engine = engine;
@@ -39,22 +47,42 @@ public class ResourcesManager {
         getInstance().vbom = vbom;
     }
     
-    public void loadSplashScreen(){
-	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-        this.splashAutoParallaxBackgroundTexture = new BitmapTextureAtlas(this.activity.getTextureManager(), 400, 480);
-        this.splashParallaxLayer1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.splashAutoParallaxBackgroundTexture, this.activity, "menu_bg_1.png", 0, 0);
-        this.splashParallaxLayer2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.splashAutoParallaxBackgroundTexture, this.activity, "menu_bg_2.png", 100, 0);
-        this.splashParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.splashAutoParallaxBackgroundTexture, this.activity, "menu_bg_3.png", 200, 0);
-        this.splashParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.splashAutoParallaxBackgroundTexture, this.activity, "menu_bg_4.png", 300, 0);
-        this.splashAutoParallaxBackgroundTexture.load();
+    public void loadForAll(){
+        this.loadFonts();
     }
     
-    public void unloadSplashScreen(){
-        this.splashAutoParallaxBackgroundTexture.unload();
-        splashParallaxLayer1 = null;
-        splashParallaxLayer2 = null;
-        splashParallaxLayer3 = null;
-        splashParallaxLayer4 = null;
+    private void loadFonts(){
+        FontFactory.setAssetBasePath("font/");
+        final ITexture fontPixel60Texture = new BitmapTextureAtlas(this.activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        this.fontPixel_60 = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel60Texture, this.activity.getAssets(), "pixel.ttf", 60, false, Color.WHITE, 2, Color.BLACK);
+        this.fontPixel_60.load();
+        final ITexture fontPixel100Texture = new BitmapTextureAtlas(this.activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        this.fontPixel_100 = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel100Texture, this.activity.getAssets(), "pixel.ttf", 100, false, Color.WHITE, 2, Color.BLACK);
+        this.fontPixel_100.load();
+    }
+    
+    public void loadMainMenuResources(){
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+        this.mainMenuAutoParallaxBackgroundTexture = new BitmapTextureAtlas(this.activity.getTextureManager(), 400, 480);
+        this.mainMenuParallaxLayer1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_1.png", 0, 0);
+        this.mainMenuParallaxLayer2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_2.png", 100, 0);
+        this.mainMenuParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_3.png", 200, 0);
+        this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_4.png", 300, 0);
+        this.mainMenuAutoParallaxBackgroundTexture.load();
+    }
+    
+    public void unloadMainMenuResources(){
+        this.mainMenuAutoParallaxBackgroundTexture.unload();
+        mainMenuParallaxLayer1 = null;
+        mainMenuParallaxLayer2 = null;
+        mainMenuParallaxLayer3 = null;
+        mainMenuParallaxLayer4 = null;
+    }
+
+    public void loadSplashResources() {
+    }
+
+    public void unloadSplashResources() {
     }
     
     public static ResourcesManager getInstance(){

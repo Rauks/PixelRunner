@@ -8,6 +8,7 @@ import org.andengine.engine.Engine;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
+import org.game.runner.scene.MainMenuScene;
 import org.game.runner.scene.SplashScene;
 
 /**
@@ -27,35 +28,74 @@ public class SceneManager {
     
     private BaseScene creditsScene;
     private BaseScene splashScene;
-    private BaseScene menuScene;
+    private BaseScene mainMenuScene;
     private BaseScene gameScene;
     private BaseScene loadingScene;
     
     private Engine engine = ResourcesManager.getInstance().engine;
     private GameActivity activity = ResourcesManager.getInstance().activity;
-    private SceneType currentSceneType = SceneType.SCENE_SPLASH;
     private BaseScene currentScene;
     
     
     public void setScene(BaseScene scene){
-        this.engine.setScene(scene);
         this.currentScene = scene;
-        this.currentSceneType = scene.getSceneType();
+        this.engine.setScene(scene);
+    }
+    
+    public void setScene(SceneType sceneType){
+        switch (sceneType){
+            case SCENE_MENU:
+                setScene(this.mainMenuScene);
+                break;
+            case SCENE_GAME:
+                setScene(this.gameScene);
+                break;
+            case SCENE_SPLASH:
+                setScene(this.splashScene);
+                break;
+            case SCENE_LOADING:
+                setScene(this.loadingScene);
+                break;
+            case SCENE_CREDITS:
+                setScene(this.creditsScene);
+                break;
+            default:
+                break;
+        }
     }
     
     public SceneType getCurrentSceneType(){
-        return this.currentSceneType;
+        return this.currentScene.getSceneType();
     }
     
     public BaseScene getCurrentScene(){
         return this.currentScene;
     }
     
+    public void createMainMenuScene() {
+        ResourcesManager.getInstance().loadMainMenuResources();
+        this.mainMenuScene = new MainMenuScene();
+        this.setScene(this.mainMenuScene);
+        this.disposeSplashScene();
+    }
+    
+    private void disposeMainMenuScene(){
+        ResourcesManager.getInstance().unloadMainMenuResources();
+        this.mainMenuScene.disposeScene();
+        this.mainMenuScene = null;
+    }
+    
     public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback) {
-        ResourcesManager.getInstance().loadSplashScreen();
+        ResourcesManager.getInstance().loadSplashResources();
         this.splashScene = new SplashScene();
         this.currentScene = this.splashScene;
         pOnCreateSceneCallback.onCreateSceneFinished(this.splashScene);
+    }
+    
+    private void disposeSplashScene(){
+        ResourcesManager.getInstance().unloadSplashResources();
+        this.splashScene.disposeScene();
+        this.splashScene = null;
     }
     
     public static SceneManager getInstance(){
