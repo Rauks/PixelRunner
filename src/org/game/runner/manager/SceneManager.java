@@ -1,0 +1,53 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.game.runner.manager;
+
+import org.andengine.engine.Engine;
+import org.game.runner.base.BaseScene;
+
+/**
+ *
+ * @author Karl
+ */
+public class SceneManager {
+    public enum SceneType{
+        SCENE_CREDITS,
+        SCENE_SPLASH,
+        SCENE_MENU,
+        SCENE_GAME,
+        SCENE_LOADING
+    }
+    
+    private static final SceneManager INSTANCE = new SceneManager();
+    
+    private BaseScene creditsScene;
+    private BaseScene splashScene;
+    private BaseScene menuScene;
+    private BaseScene gameScene;
+    private BaseScene loadingScene;
+    
+    private Engine engine = ResourcesManager.getInstance().engine;
+    private SceneType currentSceneType = SceneType.SCENE_SPLASH;
+    private BaseScene currentScene;
+    
+    
+    public void setScene(BaseScene scene){
+        engine.setScene(scene);
+        currentScene = scene;
+        currentSceneType = scene.getSceneType();
+    }
+    
+    public SceneType getCurrentSceneType(){
+        return currentSceneType;
+    }
+    
+    public BaseScene getCurrentScene(){
+        return currentScene;
+    }
+    
+    public static SceneManager getInstance(){
+        return INSTANCE;
+    }
+}
