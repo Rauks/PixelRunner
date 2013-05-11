@@ -41,13 +41,29 @@ public class AudioManager {
         }
     }
     
-    public void playModFile(final String dir, final String file){
+    public void play(final String dir, final String file){
         if(FileUtils.isExternalStorageReadable()){
             if(!FileUtils.isFileExistingOnExternalStorage(this.activity, dir + file)){
                 this.prepareModFile(dir, file);
             }
             this.mModPlayer.play(FileUtils.getAbsolutePathOnExternalStorage(this.activity, dir + file), this.looping);
         }
+    }
+    
+    public void pause(){
+        if(!this.mModPlayer.isPaused()){
+            this.mModPlayer.pause();
+        }
+    }
+    
+    public void resume(){
+        if(this.mModPlayer.isPaused()){
+            this.mModPlayer.pause();
+        }
+    }
+    
+    public void stop(){
+        this.mModPlayer.stop();
     }
     
     public void setLooping(boolean looping){
