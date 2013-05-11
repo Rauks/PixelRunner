@@ -5,6 +5,7 @@
 package org.game.runner.manager;
 
 import org.andengine.engine.Engine;
+import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
 
 /**
@@ -29,22 +30,23 @@ public class SceneManager {
     private BaseScene loadingScene;
     
     private Engine engine = ResourcesManager.getInstance().engine;
+    private GameActivity activity = ResourcesManager.getInstance().activity;
     private SceneType currentSceneType = SceneType.SCENE_SPLASH;
     private BaseScene currentScene;
     
     
     public void setScene(BaseScene scene){
-        engine.setScene(scene);
-        currentScene = scene;
-        currentSceneType = scene.getSceneType();
+        this.engine.setScene(scene);
+        this.currentScene = scene;
+        this.currentSceneType = scene.getSceneType();
     }
     
     public SceneType getCurrentSceneType(){
-        return currentSceneType;
+        return this.currentSceneType;
     }
     
     public BaseScene getCurrentScene(){
-        return currentScene;
+        return this.currentScene;
     }
     
     public static SceneManager getInstance(){
