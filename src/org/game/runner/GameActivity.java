@@ -46,6 +46,7 @@ public class GameActivity extends BaseGameActivity{
 
     @Override
     public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws IOException {
+        ResourcesManager.getInstance().loadSplashResources();
         SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);
     }
 
@@ -56,6 +57,7 @@ public class GameActivity extends BaseGameActivity{
             public void onTimePassed(final TimerHandler pTimerHandler) 
             {
                 GameActivity.this.mEngine.unregisterUpdateHandler(pTimerHandler);
+                ResourcesManager.getInstance().loadMenuResources();
                 SceneManager.getInstance().createSplashEndScene();
                 SceneManager.getInstance().disposeSplashScene();
             }

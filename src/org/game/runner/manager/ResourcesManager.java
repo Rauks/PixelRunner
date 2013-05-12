@@ -71,6 +71,7 @@ public class ResourcesManager {
         this.mainMenuParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_3.png", 0, 480);
         this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_4.png", 480, 480);
         this.mainMenuAutoParallaxBackgroundTexture.load();
+        AudioManager.getInstance().prepare("mfx/", "menu.xm");
     }
     
     public void unloadMenuResources(){
@@ -92,6 +93,14 @@ public class ResourcesManager {
     public void unloadSplashResources() {
         this.splashHeadphonesTexture.unload();
         this.splashHeadphones = null;
+    }
+
+    public void loadGameResources() {
+        
+    }
+
+    public void unloadGameResources() {
+        
     }
     
     public static ResourcesManager getInstance(){

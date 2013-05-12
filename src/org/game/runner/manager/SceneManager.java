@@ -5,10 +5,14 @@
 package org.game.runner.manager;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
 import org.game.runner.scene.CreditScene;
+import org.game.runner.scene.GameLevelScene;
+import org.game.runner.scene.LoadingScene;
 import org.game.runner.scene.MainMenuScene;
 import org.game.runner.scene.SplashEndScene;
 import org.game.runner.scene.SplashScene;
@@ -22,7 +26,7 @@ public class SceneManager {
         SCENE_SPLASH,
         SCENE_SPLASH_END,
         SCENE_MENU,
-        SCENE_GAME,
+        SCENE_GAME_LEVEL,
         SCENE_LOADING,
         SCENE_CREDITS}
     
@@ -32,7 +36,7 @@ public class SceneManager {
     private BaseScene splashScene;
     private BaseScene splashEndScene;
     private BaseScene mainMenuScene;
-    private BaseScene gameScene;
+    private BaseScene gameLevelScene;
     private BaseScene loadingScene;
     
     private Engine engine = ResourcesManager.getInstance().engine;
@@ -50,8 +54,8 @@ public class SceneManager {
             case SCENE_MENU:
                 setScene(this.mainMenuScene);
                 break;
-            case SCENE_GAME:
-                setScene(this.gameScene);
+            case SCENE_GAME_LEVEL:
+                setScene(this.gameLevelScene);
                 break;
             case SCENE_SPLASH:
                 setScene(this.splashScene);
@@ -78,6 +82,59 @@ public class SceneManager {
         return this.currentScene;
     }
     
+    public void loadGameLevelScene(){
+        this.createLoadingScene();
+        ResourcesManager.getInstance().unloadMenuResources();
+        this.disposeMainMenuScene();
+        this.engine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
+            @Override
+            public void onTimePassed(final TimerHandler pTimerHandler) 
+            {
+                SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
+                ResourcesManager.getInstance().loadGameResources();
+                SceneManager.this.createGameLevelScene();
+                SceneManager.this.disposeLoadingScene();
+            }
+        }));
+    }
+    
+    public void unloadGameLevelScene(){
+        this.createLoadingScene();
+        ResourcesManager.getInstance().unloadGameResources();
+        this.disposeGameLevelScene();
+        this.engine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
+            @Override
+            public void onTimePassed(final TimerHandler pTimerHandler) 
+            {
+                SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
+                ResourcesManager.getInstance().loadMenuResources();
+                SceneManager.this.createMainMenuScene();
+                AudioManager.getInstance().play("mfx/", "menu.xm");
+                SceneManager.this.disposeLoadingScene();
+            }
+        }));
+    }
+    
+    private void createLoadingScene() {
+        this.loadingScene = new LoadingScene();
+        setScene(this.loadingScene);
+    }
+    
+    private void disposeLoadingScene(){
+        this.loadingScene.disposeScene();
+        this.loadingScene = null;
+    }
+    
+    private void createGameLevelScene() {
+        this.gameLevelScene = new GameLevelScene();
+        setScene(this.gameLevelScene);
+    }
+    
+    private void disposeGameLevelScene(){
+        this.gameLevelScene.disposeScene();
+        this.gameLevelScene = null;
+    }
+    
     public void createMainMenuScene() {
         this.mainMenuScene = new MainMenuScene();
         this.setScene(this.mainMenuScene);
@@ -99,20 +156,16 @@ public class SceneManager {
     }
     
     public void createSplashEndScene() {
-        ResourcesManager.getInstance().loadMenuResources();
-        AudioManager.getInstance().prepare("mfx/", "menu.xm");
         this.splashEndScene = new SplashEndScene();
         this.setScene(this.splashEndScene);
     }
     
     public void disposeSplashEndScene(){
-        ResourcesManager.getInstance().unloadSplashResources();
         this.splashEndScene.disposeScene();
         this.splashEndScene = null;
     }
     
     public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback) {
-        ResourcesManager.getInstance().loadSplashResources();
         this.splashScene = new SplashScene();
         this.currentScene = this.splashScene;
         pOnCreateSceneCallback.onCreateSceneFinished(this.splashScene);

@@ -10,6 +10,7 @@ import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.game.runner.base.BaseSplashScene;
 import org.game.runner.manager.AudioManager;
+import org.game.runner.manager.ResourcesManager;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 
@@ -46,6 +47,7 @@ public class SplashEndScene extends BaseSplashScene implements IOnSceneTouchList
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
         if (pSceneTouchEvent.isActionUp()){
             SceneManager.getInstance().createMainMenuScene();
+            ResourcesManager.getInstance().unloadSplashResources();
             SceneManager.getInstance().disposeSplashEndScene();
             AudioManager.getInstance().play("mfx/", "menu.xm");
         }

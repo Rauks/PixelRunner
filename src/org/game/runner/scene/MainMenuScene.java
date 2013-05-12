@@ -61,6 +61,8 @@ public class MainMenuScene extends BaseMenuScene implements MenuScene.IOnMenuIte
     public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
         switch(pMenuItem.getID()){
             case MENUID_PLAY:
+                AudioManager.getInstance().stop();
+                SceneManager.getInstance().loadGameLevelScene();
                 return true;
             case MENUID_ARCADE:
                 return true;
