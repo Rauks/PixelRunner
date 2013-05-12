@@ -93,6 +93,7 @@ public class SceneManager {
                 SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadGameResources();
                 SceneManager.this.createGameLevelScene();
+                AudioManager.getInstance().play("mfx/", "arcade.xm");
                 SceneManager.this.disposeLoadingScene();
             }
         }));

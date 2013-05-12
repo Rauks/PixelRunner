@@ -35,11 +35,20 @@ public class ResourcesManager {
     public Font fontPixel_100;
     
     //Textures & Regions
+    private BitmapTextureAtlas testGamePlayerTexture;
+    public ITextureRegion testGamePlayer;
+    private BitmapTextureAtlas testGameParallaxBackgroundTexture;
+    public ITextureRegion testGameParallaxLayer1;
+    public ITextureRegion testGameParallaxLayer2;
+    public ITextureRegion testGameParallaxLayer3;
+    public ITextureRegion testGameParallaxLayer4;
+    
     private BitmapTextureAtlas mainMenuAutoParallaxBackgroundTexture;
     public ITextureRegion mainMenuParallaxLayer1;
     public ITextureRegion mainMenuParallaxLayer2;
     public ITextureRegion mainMenuParallaxLayer3;
     public ITextureRegion mainMenuParallaxLayer4;
+    
     private BitmapTextureAtlas splashHeadphonesTexture;
     public ITextureRegion splashHeadphones;
     
@@ -96,11 +105,16 @@ public class ResourcesManager {
     }
 
     public void loadGameResources() {
-        
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+        this.testGamePlayerTexture = new BitmapTextureAtlas(this.activity.getTextureManager(), 40, 40);
+        this.testGamePlayer = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.testGamePlayerTexture, this.activity, "test_body.png", 0, 0);
+        this.testGamePlayerTexture.load();
+        AudioManager.getInstance().prepare("mfx/", "arcade.xm");
     }
 
     public void unloadGameResources() {
-        
+        this.testGamePlayerTexture.unload();
+        this.testGamePlayer = null;
     }
     
     public static ResourcesManager getInstance(){
