@@ -65,10 +65,12 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
 
     @Override
     public void onPause() {
+        this.audioManager.pause();
     }
 
     @Override
     public void onResume() {
+        this.audioManager.resume();
     }
 
     @Override
