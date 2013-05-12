@@ -89,6 +89,7 @@ public class SceneManager {
     
     public void createSplashEndScene() {
         ResourcesManager.getInstance().loadMenuResources();
+        AudioManager.getInstance().prepare("mfx/", "menu.xm");
         this.splashEndScene = new SplashEndScene();
         this.setScene(this.splashEndScene);
     }

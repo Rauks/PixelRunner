@@ -25,7 +25,7 @@ public class AudioManager {
     private final ModPlayer mModPlayer = ModPlayer.getInstance();
     private boolean looping = true;
     
-    public void prepareModFile(final String dir, final String file){
+    public void prepare(final String dir, final String file){
         if(FileUtils.isExternalStorageReadable() && FileUtils.isExternalStorageWriteable() && !FileUtils.isFileExistingOnExternalStorage(this.activity, dir + file)) {
             AudioManager.this.activity.runOnUiThread(new Runnable() {
                 @Override
@@ -44,7 +44,7 @@ public class AudioManager {
     public void play(final String dir, final String file){
         if(FileUtils.isExternalStorageReadable()){
             if(!FileUtils.isFileExistingOnExternalStorage(this.activity, dir + file)){
-                this.prepareModFile(dir, file);
+                this.prepare(dir, file);
             }
             this.mModPlayer.play(FileUtils.getAbsolutePathOnExternalStorage(this.activity, dir + file), this.looping);
         }
