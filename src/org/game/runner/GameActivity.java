@@ -1,6 +1,5 @@
 package org.game.runner;
 
-import android.os.Bundle;
 import android.view.KeyEvent;
 import java.io.IOException;
 import org.andengine.engine.Engine;
@@ -35,7 +34,7 @@ public class GameActivity extends BaseGameActivity{
     
     @Override
     public Engine onCreateEngine(EngineOptions pEngineOptions) {
-        return new LimitedFPSEngine(pEngineOptions, 60);
+        return new LimitedFPSEngine(pEngineOptions, 30);
     }
     
     @Override
