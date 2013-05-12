@@ -4,11 +4,15 @@
  */
 package org.game.runner.scene;
 
+import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.game.runner.base.BaseMenuScene;
 import org.game.runner.base.BaseScene;
+import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 
@@ -16,7 +20,7 @@ import org.game.runner.manager.SceneManager.SceneType;
  *
  * @author Karl
  */
-public class CreditScene extends BaseMenuScene{
+public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
     private Text title;
     private Text prod;
     private Text prodNames;
@@ -33,9 +37,10 @@ public class CreditScene extends BaseMenuScene{
         this.thanksNames = new Text(this.camera.getWidth()/2, this.camera.getHeight()/2 - 130, resourcesManager.fontPixel_60, "MICHEL HASSENFORDER", vbom);
         attachChild(this.title);
         attachChild(this.prod);
-        attachChild(this.prodNames );
-        attachChild(this.thanks );
-        attachChild(this.thanksNames );
+        attachChild(this.prodNames);
+        attachChild(this.thanks);
+        attachChild(this.thanksNames);
+        this.setOnSceneTouchListener(this);
     }
 
     @Override
@@ -66,4 +71,11 @@ public class CreditScene extends BaseMenuScene{
         this.dispose();
     }
     
+    @Override
+    public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+        if (pSceneTouchEvent.isActionUp()){
+            this.onBackKeyPressed();
+        }
+    return false;
+    }
 }

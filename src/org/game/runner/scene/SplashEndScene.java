@@ -44,7 +44,7 @@ public class SplashEndScene extends BaseSplashScene implements IOnSceneTouchList
 
     @Override
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-        if (pSceneTouchEvent.isActionDown()){
+        if (pSceneTouchEvent.isActionUp()){
             SceneManager.getInstance().createMainMenuScene();
             SceneManager.getInstance().disposeSplashEndScene();
             AudioManager.getInstance().play("mfx/", "menu.xm");
