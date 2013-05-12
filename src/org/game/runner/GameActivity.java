@@ -47,7 +47,6 @@ public class GameActivity extends BaseGameActivity{
 
     @Override
     public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws IOException {
-        this.resourcesManager.loadForAll();
         SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);
     }
 

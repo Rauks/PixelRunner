@@ -18,12 +18,12 @@ import org.game.runner.scene.SplashScene;
  */
 public class SceneManager {
     public enum SceneType{
-        SCENE_CREDITS,
         SCENE_SPLASH,
+        SCENE_SPLASH_END,
         SCENE_MENU,
         SCENE_GAME,
         SCENE_LOADING,
-        SCENE_SPLASH_END}
+        SCENE_CREDITS}
     
     private static final SceneManager INSTANCE = new SceneManager();
     
@@ -78,25 +78,23 @@ public class SceneManager {
     }
     
     public void createMainMenuScene() {
-        ResourcesManager.getInstance().loadMainMenuResources();
         this.mainMenuScene = new MainMenuScene();
         this.setScene(this.mainMenuScene);
     }
     
     public void disposeMainMenuScene(){
-        ResourcesManager.getInstance().unloadMainMenuResources();
         this.mainMenuScene.disposeScene();
         this.mainMenuScene = null;
     }
     
     public void createSplashEndScene() {
-        ResourcesManager.getInstance().loadSplashEndResources();
+        ResourcesManager.getInstance().loadMenuResources();
         this.splashEndScene = new SplashEndScene();
         this.setScene(this.splashEndScene);
     }
     
     public void disposeSplashEndScene(){
-        ResourcesManager.getInstance().unloadSplashEndResources();
+        ResourcesManager.getInstance().unloadSplashResources();
         this.splashEndScene.disposeScene();
         this.splashEndScene = null;
     }
@@ -109,7 +107,6 @@ public class SceneManager {
     }
     
     public void disposeSplashScene(){
-        ResourcesManager.getInstance().unloadSplashResources();
         this.splashScene.disposeScene();
         this.splashScene = null;
     }

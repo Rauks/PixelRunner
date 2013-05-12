@@ -26,7 +26,7 @@ public class SplashEndScene extends BaseScene implements IOnSceneTouchListener{
     public void createScene() {
         this.setBackground(new Background(Color.BLACK));
         attachChild(new Text(this.camera.getWidth()/2, this.camera.getHeight()/2, resourcesManager.fontPixel_60, "PRESS TO START !", vbom));
-        this.headphones = new Sprite(170, 60, this.resourcesManager.splashEndHeadphones, this.vbom);
+        this.headphones = new Sprite(170, 60, this.resourcesManager.splashHeadphones, this.vbom);
         this.headphones.setScale(4);
         attachChild(this.headphones);
         attachChild(new Text(434, 70, resourcesManager.fontPixel_34, "FOR MAXIMUM AWESOME,", vbom));
