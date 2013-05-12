@@ -7,15 +7,12 @@ package org.game.runner.scene;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.scene.menu.MenuScene;
-import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
-import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
-import org.andengine.util.adt.color.Color;
-import org.game.runner.base.BaseScene;
+import org.game.runner.base.BaseMenuScene;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
 
@@ -23,41 +20,17 @@ import org.game.runner.manager.SceneManager;
  *
  * @author Karl
  */
-public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener {
-    private AutoParallaxBackground autoParallaxBackground;
-    private Sprite parallaxLayer1;
-    private Sprite parallaxLayer2;
-    private Sprite parallaxLayer3;
-    private Sprite parallaxLayer4;
-    
+public class MainMenuScene extends BaseMenuScene implements MenuScene.IOnMenuItemClickListener {
     private MenuScene menuChildScene;
     private final int MENUID_PLAY = 0;
-    private final int MENUID_OPTIONS = 1;
+    private final int MENUID_ARCADE = 1;
     private final int MENUID_CREDITS = 2;
 
     @Override
     public void createScene() {
-        this.createBackground();
+        super.createScene();
         this.createMenuChildScene();
         attachChild(new Text(this.camera.getWidth()/2, this.camera.getHeight()/2 + 150, resourcesManager.fontPixel_100, "PIXEL RUNNER", vbom));
-        this.audioManager.play("mfx/", "menu.xm");
-    }
-    
-    private void createBackground(){
-        this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5);
-        this.setBackground(autoParallaxBackground);
-        this.parallaxLayer1 = new Sprite(0, 0, this.resourcesManager.mainMenuParallaxLayer1, this.vbom);
-        this.parallaxLayer2 = new Sprite(0, 0, this.resourcesManager.mainMenuParallaxLayer2, this.vbom);
-        this.parallaxLayer3 = new Sprite(0, 0, this.resourcesManager.mainMenuParallaxLayer3, this.vbom);
-        this.parallaxLayer4 = new Sprite(0, 0, this.resourcesManager.mainMenuParallaxLayer4, this.vbom);
-        this.parallaxLayer1.setOffsetCenter(0, 0);
-        this.parallaxLayer2.setOffsetCenter(0, 0);
-        this.parallaxLayer3.setOffsetCenter(0, 0);
-        this.parallaxLayer4.setOffsetCenter(0, 0);
-        this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-10.0f, this.parallaxLayer1));
-        this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-15.0f, this.parallaxLayer2));
-        this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-20.0f, this.parallaxLayer3));
-        this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-25.0f, this.parallaxLayer4));
     }
     
     private void createMenuChildScene(){
@@ -65,7 +38,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
         this.menuChildScene.setPosition(0, 0);
         
         final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_PLAY, this.resourcesManager.fontPixel_60, "PLAY", vbom), 1.4f, 1);
-        final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_OPTIONS, this.resourcesManager.fontPixel_60, "OPTIONS", vbom), 1.4f, 1);
+        final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_ARCADE, this.resourcesManager.fontPixel_60, "ARCADE", vbom), 1.4f, 1);
         final IMenuItem creditsMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_CREDITS, this.resourcesManager.fontPixel_60, "CREDITS", vbom), 1.4f, 1);
 
         this.menuChildScene.addMenuItem(playMenuItem);
@@ -89,29 +62,21 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
         switch(pMenuItem.getID()){
             case MENUID_PLAY:
                 return true;
-            case MENUID_OPTIONS:
+            case MENUID_ARCADE:
                 return true;
             case MENUID_CREDITS:
+                SceneManager.getInstance().createCreditsScene();
+                SceneManager.getInstance().disposeMainMenuScene();
                 return true;
             default:
                 return false;
         }
     }
-
+    
     @Override
     public void onBackKeyPressed() {
-        AudioManager.getInstance().stop();
+        this.audioManager.stop();
         System.exit(0);    
-    }
-
-    @Override
-    public void onPause() {
-        this.audioManager.pause();
-    }
-
-    @Override
-    public void onResume() {
-        this.audioManager.resume();
     }
 
     @Override
@@ -121,14 +86,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
     @Override
     public void disposeScene() {
-        this.parallaxLayer1.detachSelf();
-        this.parallaxLayer1.dispose();
-        this.parallaxLayer2.detachSelf();
-        this.parallaxLayer2.dispose();
-        this.parallaxLayer3.detachSelf();
-        this.parallaxLayer3.dispose();
-        this.parallaxLayer4.detachSelf();
-        this.parallaxLayer4.dispose();
+        super.disposeScene();
+        this.menuChildScene.detachSelf();
+        this.menuChildScene.dispose();
         this.detachSelf();
         this.dispose();
     }

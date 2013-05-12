@@ -8,6 +8,7 @@ import org.andengine.engine.Engine;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
+import org.game.runner.scene.CreditScene;
 import org.game.runner.scene.MainMenuScene;
 import org.game.runner.scene.SplashEndScene;
 import org.game.runner.scene.SplashScene;
@@ -85,6 +86,16 @@ public class SceneManager {
     public void disposeMainMenuScene(){
         this.mainMenuScene.disposeScene();
         this.mainMenuScene = null;
+    }
+
+    public void createCreditsScene() {
+        this.creditsScene = new CreditScene();
+        this.setScene(this.creditsScene);
+    }
+
+    public void disposeCreditsScene() {
+        this.creditsScene.disposeScene();
+        this.creditsScene = null;
     }
     
     public void createSplashEndScene() {

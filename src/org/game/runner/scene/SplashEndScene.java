@@ -12,6 +12,7 @@ import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.color.Color;
 import org.game.runner.base.BaseScene;
+import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 
@@ -66,6 +67,7 @@ public class SplashEndScene extends BaseScene implements IOnSceneTouchListener{
         if (pSceneTouchEvent.isActionDown()){
             SceneManager.getInstance().createMainMenuScene();
             SceneManager.getInstance().disposeSplashEndScene();
+            AudioManager.getInstance().play("mfx/", "menu.xm");
         }
     return false;
     }
