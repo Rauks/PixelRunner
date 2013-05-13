@@ -24,8 +24,8 @@ public class EaseBroadcast implements IEaseFunction{
     
     @Override
     public float getPercentage(float pSecondsElapsed, float pDuration) {
-        final float t = pSecondsElapsed;
-        final float ts = pSecondsElapsed / pDuration * t;
+        final float t = pSecondsElapsed / pDuration;
+        final float ts = t * t;
 	final float tc = ts * t;
 	return (float)(-8.5*tc*ts + 24.5*ts*ts + -22*tc + 6*ts + t);
 	//return (float)(-4*tc*ts + 10.5*ts*ts + -6*tc + -2*ts + 2.5*t);
