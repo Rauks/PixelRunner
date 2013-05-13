@@ -111,7 +111,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         attachChild(this.chronoStart);
         
         //Physics engine
-        this.physicWorld = new FixedStepPhysicsWorld(30, new Vector2(0, -20), false);
+        this.physicWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -50), false);
         this.physicWorld.setContactListener(this.contactListener());
         this.registerUpdateHandler(this.physicWorld);
         final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
@@ -166,7 +166,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
                             //trap.registerEntityModifier(new MoveModifier(0.5f, RIGHT_LIMIT, trapY, LEFT_LIMIT, trapY));
                             PhysicsHandler handler = new PhysicsHandler(trap);
                             trap.registerUpdateHandler(handler);
-                            handler.setVelocity(-300, 0);
+                            handler.setVelocity(-500, 0);
                             break;
                     }
                 }
@@ -250,7 +250,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     }
     
     private void broadcast(final IEntity entity, final IEntityModifierListener listener){
-        entity.registerEntityModifier(new MoveModifier(0.8f, BROADCAST_RIGHT, BROADCAST_LEVEL, BROADCAST_LEFT, BROADCAST_LEVEL, new IEntityModifierListener() {
+        entity.registerEntityModifier(new MoveModifier(0.5f, BROADCAST_RIGHT, BROADCAST_LEVEL, BROADCAST_LEFT, BROADCAST_LEVEL, new IEntityModifierListener() {
             @Override
             public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                 entity.setVisible(true);
@@ -349,7 +349,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         if (pSceneTouchEvent.isActionDown()){
             //Jump
             if(this.jump < 2){
-                this.playerBody.setLinearVelocity(new Vector2(0, 10));
+                this.playerBody.setLinearVelocity(new Vector2(0, 15));
                 this.increaseJumpLevel();
             }
         }

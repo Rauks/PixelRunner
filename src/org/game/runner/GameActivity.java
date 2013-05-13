@@ -34,7 +34,7 @@ public class GameActivity extends BaseGameActivity{
     
     @Override
     public Engine onCreateEngine(EngineOptions pEngineOptions) {
-        return new LimitedFPSEngine(pEngineOptions, 30);
+        return new LimitedFPSEngine(pEngineOptions, 60);
     }
     
     @Override
