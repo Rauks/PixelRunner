@@ -9,14 +9,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.LogRecord;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.modifier.MoveModifier;
@@ -27,17 +25,14 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
-import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
+import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.IModifier;
-import org.andengine.util.modifier.ease.EaseCircularInOut;
-import org.andengine.util.modifier.ease.EaseQuintOut;
 import org.game.runner.base.BaseScene;
 import org.game.runner.game.LevelDescriptor;
 import org.game.runner.game.element.LevelElement;
@@ -60,20 +55,27 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     private final float BROADCAST_LEFT = -100;
     private final float BROADCAST_RIGHT = 1000;
     
+    //Broadcast
     private Text chrono3;
     private Text chrono2;
     private Text chrono1;
     private Text chronoStart;
     
+    //Graphics
     private Sprite player;
+    private Rectangle ground;
     
+    //Physic
     private PhysicsWorld physicWorld;
     private Body groundBody;
     private Body playerBody;
+    
+    //Level
+    private LevelDescriptor level;
     private TimerHandler levelReaderHandler;
     private ITimerCallback levelReaderAction;
-    private LevelDescriptor level;
     
+    //Detectors
     private ConcurrentLinkedQueue<IEntity> levelElements = new ConcurrentLinkedQueue<IEntity>();
     private Line removerLeft;
     private Line removerRight;
@@ -106,7 +108,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
         
         //Ground
-        Rectangle ground = new Rectangle(400, GROUND_LEVEL, GROUND_WIDTH, GROUND_THICKNESS, this.vbom);
+        this.ground = new Rectangle(400, GROUND_LEVEL, GROUND_WIDTH, GROUND_THICKNESS, this.vbom);
 	this.groundBody = PhysicsFactory.createBoxBody(this.physicWorld, ground, BodyDef.BodyType.StaticBody, wallFixtureDef);
         attachChild(ground);
         
@@ -190,12 +192,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         Log.d("PixelRunner", "Restart");
         AudioManager.getInstance().stop();
         this.unregisterUpdateHandler(this.levelReaderHandler);
-        for(IEntity element : GameLevelScene.this.levelElements){
-            GameLevelScene.this.levelElements.remove(element);
-            element.clearUpdateHandlers();
-            element.detachSelf();
-            element.dispose();
-        }
+        this.disposeLevelElements();
         this.start();
     }
     
@@ -279,9 +276,62 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     public SceneType getSceneType() {
         return SceneType.SCENE_GAME_LEVEL;
     }
+    
+    private void destroyPhysicsWorld(){
+        this.engine.runOnUpdateThread(new Runnable(){
+            public void run(){
+                PhysicsWorld world = GameLevelScene.this.physicWorld;
+                Iterator<Body> localIterator = GameLevelScene.this.physicWorld.getBodies();
+                while (true){
+                    if (!localIterator.hasNext()){
+                        world.clearForces();
+                        world.clearPhysicsConnectors();
+                        world.reset();
+                        world.dispose();
+                        System.gc();
+                        return;
+                    }
+                    try{
+                        final Body localBody = (Body) localIterator.next();
+                        world.destroyBody(localBody);
+                    }
+                    catch (Exception localException){
+                        Debug.e(localException);
+                    }
+                }
+            }
+        });
+    }
+    
+    private void disposeLevelElements(){
+        for(IEntity element : GameLevelScene.this.levelElements){
+            GameLevelScene.this.levelElements.remove(element);
+            element.clearUpdateHandlers();
+            element.detachSelf();
+            element.dispose();
+        }
+    }
 
     @Override
     public void disposeScene() {
+        this.destroyPhysicsWorld();
+        this.disposeLevelElements();
+        this.chrono3.detachSelf();
+        this.chrono3.dispose();
+        this.chrono2.detachSelf();
+        this.chrono2.dispose();
+        this.chrono1.detachSelf();
+        this.chrono1.dispose();
+        this.chronoStart.detachSelf();
+        this.chronoStart.dispose();
+        this.ground.detachSelf();
+        this.ground.dispose();
+        this.player.detachSelf();
+        this.player.dispose();
+        this.removerLeft.detachSelf();
+        this.removerLeft.dispose();
+        this.removerRight.detachSelf();
+        this.removerRight.dispose();
         this.detachSelf();
         this.dispose();
     }
