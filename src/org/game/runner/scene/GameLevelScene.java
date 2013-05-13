@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -20,6 +22,8 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.color.Color;
 import org.game.runner.base.BaseScene;
+import org.game.runner.game.LevelDescriptor;
+import org.game.runner.game.element.LevelElement;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
@@ -32,6 +36,13 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     private PhysicsWorld physicWorld;
     private Body groundBody;
     private Body testBody;
+    private TimerHandler levelReaderHandler;
+    private ITimerCallback levelReaderAction;
+    private LevelDescriptor level;
+    
+    public GameLevelScene(LevelDescriptor level){
+        this.level = level;
+    }
     
     @Override
     public void createScene() {
@@ -42,7 +53,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         
         final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
         
-        Rectangle ground = new Rectangle(400, 50, 800, 10, this.vbom);
+        Rectangle ground = new Rectangle(400, 50, 1000, 10, this.vbom);
 	this.groundBody = PhysicsFactory.createBoxBody(this.physicWorld, ground, BodyDef.BodyType.StaticBody, wallFixtureDef);
         
         Sprite test = new Sprite(400, 200, this.resourcesManager.testGamePlayer, this.vbom);
@@ -50,11 +61,39 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         test.setUserData(this.testBody);
         
         attachChild(ground);
-        
         attachChild(test);
+        
         this.physicWorld.registerPhysicsConnector(new PhysicsConnector(test, this.testBody, true, false));
         
+        this.levelReaderAction = new ITimerCallback(){                      
+            @Override
+            public void onTimePassed(final TimerHandler pTimerHandler){
+                if(!GameLevelScene.this.level.hasNext()){
+                    //End of level
+                    GameLevelScene.this.unregisterUpdateHandler(GameLevelScene.this.levelReaderHandler);
+                }
+                else{
+                    LevelElement next = GameLevelScene.this.level.getNext();
+                    switch(next.getType()){
+                        case TRAP_JUMP:
+                            Sprite trap = new Sprite(800, 75, GameLevelScene.this.resourcesManager.testGamePlayer, GameLevelScene.this.vbom);
+                            Body trapBody = PhysicsFactory.createBoxBody(GameLevelScene.this.physicWorld, trap, BodyDef.BodyType.KinematicBody, wallFixtureDef);
+                            trap.setUserData(trapBody);
+                            GameLevelScene.this.physicWorld.registerPhysicsConnector(new PhysicsConnector(trap, trapBody, true, false));
+                            attachChild(trap);
+                            trapBody.setLinearVelocity(new Vector2(-5, 0));
+                            break;
+                    }
+                }
+            }
+        };
+        
         this.setOnSceneTouchListener(this);
+    }
+    
+    public void start(){
+        this.level.start();
+        this.registerUpdateHandler(this.levelReaderHandler = new TimerHandler(5, true, this.levelReaderAction));
     }
 
     @Override

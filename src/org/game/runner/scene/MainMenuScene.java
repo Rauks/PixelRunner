@@ -13,6 +13,7 @@ import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.game.runner.base.BaseMenuScene;
+import org.game.runner.game.ArcadeLevelDescriptor;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
 
@@ -61,10 +62,10 @@ public class MainMenuScene extends BaseMenuScene implements MenuScene.IOnMenuIte
     public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
         switch(pMenuItem.getID()){
             case MENUID_PLAY:
-                AudioManager.getInstance().stop();
-                SceneManager.getInstance().loadGameLevelScene();
                 return true;
             case MENUID_ARCADE:
+                AudioManager.getInstance().stop();
+                SceneManager.getInstance().loadGameLevelScene(new ArcadeLevelDescriptor());
                 return true;
             case MENUID_CREDITS:
                 SceneManager.getInstance().createCreditsScene();

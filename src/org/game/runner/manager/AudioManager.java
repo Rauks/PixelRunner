@@ -70,6 +70,10 @@ public class AudioManager {
         this.looping = looping;
     }
     
+    public int getTempo(){
+        return this.mModPlayer.getPlayTempo();
+    }
+    
     public static AudioManager getInstance(){
         return INSTANCE;
     }

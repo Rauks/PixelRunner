@@ -10,6 +10,7 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
+import org.game.runner.game.LevelDescriptor;
 import org.game.runner.scene.CreditScene;
 import org.game.runner.scene.GameLevelScene;
 import org.game.runner.scene.LoadingScene;
@@ -82,7 +83,7 @@ public class SceneManager {
         return this.currentScene;
     }
     
-    public void loadGameLevelScene(){
+    public void loadGameLevelScene(final LevelDescriptor level){
         this.createLoadingScene();
         ResourcesManager.getInstance().unloadMenuResources();
         this.disposeMainMenuScene();
@@ -92,9 +93,10 @@ public class SceneManager {
             {
                 SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadGameResources();
-                SceneManager.this.createGameLevelScene();
+                SceneManager.this.createGameLevelScene(level);
                 AudioManager.getInstance().play("mfx/", "arcade.xm");
                 SceneManager.this.disposeLoadingScene();
+                ((GameLevelScene)SceneManager.getInstance().getCurrentScene()).start();
             }
         }));
     }
@@ -126,8 +128,8 @@ public class SceneManager {
         this.loadingScene = null;
     }
     
-    private void createGameLevelScene() {
-        this.gameLevelScene = new GameLevelScene();
+    private void createGameLevelScene(LevelDescriptor level) {
+        this.gameLevelScene = new GameLevelScene(level);
         setScene(this.gameLevelScene);
     }
     
