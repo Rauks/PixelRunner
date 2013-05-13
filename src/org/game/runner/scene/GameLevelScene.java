@@ -8,7 +8,12 @@ import android.util.Log;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.andengine.engine.handler.IUpdateHandler;
@@ -80,6 +85,9 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     private Line removerLeft;
     private Line removerRight;
     
+    //Gameplay
+    private int jump = 0;
+    
     public GameLevelScene(LevelDescriptor level){
         this.level = level;
     }
@@ -104,6 +112,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         
         //Physics engine
         this.physicWorld = new FixedStepPhysicsWorld(30, new Vector2(0, -20), false);
+        this.physicWorld.setContactListener(this.contactListener());
         this.registerUpdateHandler(this.physicWorld);
         final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
         
@@ -123,7 +132,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         //Player
         this.player = new Sprite(400, GROUND_LEVEL + GROUND_THICKNESS/2 + GameLevelScene.this.resourcesManager.testGamePlayer.getHeight()/2, this.resourcesManager.testGamePlayer, this.vbom);
 	this.playerBody = PhysicsFactory.createBoxBody(this.physicWorld, this.player, BodyDef.BodyType.DynamicBody, wallFixtureDef);
-        player.setUserData(this.playerBody);
+        this.playerBody.setUserData("player");
         attachChild(this.player);
         this.physicWorld.registerPhysicsConnector(new PhysicsConnector(this.player, this.playerBody, true, false));
         
@@ -241,7 +250,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     }
     
     private void broadcast(final IEntity entity, final IEntityModifierListener listener){
-        entity.registerEntityModifier(new MoveModifier(1f, BROADCAST_RIGHT, BROADCAST_LEVEL, BROADCAST_LEFT, BROADCAST_LEVEL, new IEntityModifierListener() {
+        entity.registerEntityModifier(new MoveModifier(0.8f, BROADCAST_RIGHT, BROADCAST_LEVEL, BROADCAST_LEFT, BROADCAST_LEVEL, new IEntityModifierListener() {
             @Override
             public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                 entity.setVisible(true);
@@ -338,9 +347,47 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
 
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
         if (pSceneTouchEvent.isActionDown()){
-            this.playerBody.setLinearVelocity(new Vector2(0, 10));
+            //Jump
+            if(this.jump < 2){
+                this.playerBody.setLinearVelocity(new Vector2(0, 10));
+                this.increaseJumpLevel();
+            }
         }
         return false;
     }
     
+    public void increaseJumpLevel(){
+        this.jump++;
+    }
+    
+    public void resetJumpLevel(){
+        this.jump = 0;
+    }
+    
+    private ContactListener contactListener(){
+        ContactListener contactListener = new ContactListener(){
+            @Override
+            public void beginContact(Contact contact){
+                final Fixture xA = contact.getFixtureA();
+                final Fixture xB = contact.getFixtureB();
+                //Player contacts
+                if (xA.getBody().equals(GameLevelScene.this.playerBody) || xB.getBody().equals(GameLevelScene.this.playerBody)){
+                    GameLevelScene.this.resetJumpLevel();
+                }
+            }
+
+            @Override
+            public void endContact(Contact contact){
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold){
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse){
+            }
+        };
+        return contactListener;
+    }
 }
