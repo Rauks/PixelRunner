@@ -92,9 +92,8 @@ public class SceneManager {
             public void onTimePassed(final TimerHandler pTimerHandler) 
             {
                 SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
-                ResourcesManager.getInstance().loadGameResources();
+                ResourcesManager.getInstance().loadGameResources(level);
                 SceneManager.this.createGameLevelScene(level);
-                AudioManager.getInstance().play("mfx/", "arcade.xm");
                 SceneManager.this.disposeLoadingScene();
                 ((GameLevelScene)SceneManager.getInstance().getCurrentScene()).start();
             }

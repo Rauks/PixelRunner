@@ -26,4 +26,9 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     public void start() {
         
     }
+
+    @Override
+    public String getMusic() {
+        return "arcade.xm";
+    }
 }

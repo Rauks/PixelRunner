@@ -22,7 +22,7 @@ public abstract class BaseSplashScene extends BaseScene{
     @Override
     public void createScene() {
         this.setBackground(new Background(Color.BLACK));
-        this.headphones = new Sprite(170, 60, this.resourcesManager.splashHeadphones, this.vbom);
+        this.headphones = new Sprite(165, 65, this.resourcesManager.splashHeadphones, this.vbom);
         this.headphones.setScale(4);
         this.advice = new Text(434, 65, resourcesManager.fontPixel_34, "FOR MAXIMUM AWESOME,\nHEADPHONES RECOMMENDED.", new TextOptions(HorizontalAlign.CENTER), vbom);
         attachChild(this.headphones);

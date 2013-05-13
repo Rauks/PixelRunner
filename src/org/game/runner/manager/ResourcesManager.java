@@ -16,6 +16,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.game.runner.GameActivity;
+import org.game.runner.game.LevelDescriptor;
 
 /**
  *
@@ -33,6 +34,7 @@ public class ResourcesManager {
     public Font fontPixel_34;
     public Font fontPixel_60;
     public Font fontPixel_100;
+    public Font fontPixel_200;
     
     //Textures & Regions
     private BitmapTextureAtlas testGamePlayerTexture;
@@ -70,6 +72,9 @@ public class ResourcesManager {
         final ITexture fontPixel100Texture = new BitmapTextureAtlas(this.activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         this.fontPixel_100 = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel100Texture, this.activity.getAssets(), "pixel.ttf", 100, false, Color.WHITE, 2, Color.BLACK);
         this.fontPixel_100.load();
+        final ITexture fontPixel200Texture = new BitmapTextureAtlas(this.activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        this.fontPixel_200 = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel200Texture, this.activity.getAssets(), "pixel.ttf", 200, false, Color.WHITE, 2, Color.BLACK);
+        this.fontPixel_200.load();
     }
     
     public void loadMenuResources(){
@@ -104,12 +109,12 @@ public class ResourcesManager {
         this.splashHeadphones = null;
     }
 
-    public void loadGameResources() {
+    public void loadGameResources(LevelDescriptor level) {
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
         this.testGamePlayerTexture = new BitmapTextureAtlas(this.activity.getTextureManager(), 40, 40);
         this.testGamePlayer = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.testGamePlayerTexture, this.activity, "test_body.png", 0, 0);
         this.testGamePlayerTexture.load();
-        AudioManager.getInstance().prepare("mfx/", "arcade.xm");
+        AudioManager.getInstance().prepare("mfx/", level.getMusic());
     }
 
     public void unloadGameResources() {

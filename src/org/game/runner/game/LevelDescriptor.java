@@ -14,4 +14,5 @@ public abstract class LevelDescriptor {
     public abstract void start();
     public abstract LevelElement getNext();
     public abstract boolean hasNext();
+    public abstract String getMusic();
 }
