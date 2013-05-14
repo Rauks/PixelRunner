@@ -5,6 +5,11 @@
 package org.game.runner.manager;
 
 import android.graphics.Color;
+import android.util.Log;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.opengl.font.Font;
@@ -16,8 +21,10 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.debug.Debug;
 import org.game.runner.GameActivity;
 import org.game.runner.game.LevelDescriptor;
+import org.game.runner.game.element.BackgroundElement;
 
 /**
  *
@@ -37,19 +44,24 @@ public class ResourcesManager {
     public Font fontPixel_100;
     public Font fontPixel_200;
     
-    //Textures & Regions
+    //Textures
     private BitmapTextureAtlas testTextureAtlas;
     public ITextureRegion test;
     
-    private BitmapTextureAtlas gameTextureAtlas;
+    //Texturess - Game
+    private BitmapTextureAtlas playerTextureAtlas;
     public ITiledTextureRegion player;
+    private BitmapTextureAtlas gameBackgroundTextureAtlas;
+    public Map<String, ITextureRegion> gameParallaxLayers = new HashMap<String, ITextureRegion>();
     
+    //Textures - Main
     private BitmapTextureAtlas menuTextureAtlas;
     public ITextureRegion mainMenuParallaxLayer1;
     public ITextureRegion mainMenuParallaxLayer2;
     public ITextureRegion mainMenuParallaxLayer3;
     public ITextureRegion mainMenuParallaxLayer4;
     
+    //Textures - Splash
     private BitmapTextureAtlas splashTextureAtlas;
     public ITextureRegion splashHeadphones;
     
@@ -72,12 +84,12 @@ public class ResourcesManager {
         this.fontPixel_100 = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel100Texture, this.activity.getAssets(), "pixel.ttf", 100, false, Color.WHITE, 2, Color.BLACK);
         this.fontPixel_100.load();
         final ITexture fontPixel200Texture = new BitmapTextureAtlas(this.activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        this.fontPixel_200 = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel200Texture, this.activity.getAssets(), "pixel.ttf", 200, false, Color.WHITE, 2, Color.BLACK);
+        this.fontPixel_200 = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel200Texture, this.activity.getAssets(), "pixel.ttf", 200, false, Color.WHITE, 5, Color.BLACK);
         this.fontPixel_200.load();
     }
     
     public void loadMenuResources(){
-	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/main/");
         this.menuTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 960, 960);
         this.mainMenuParallaxLayer1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_1.png", 0, 0);
         this.mainMenuParallaxLayer2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_2.png", 480, 0);
@@ -97,7 +109,7 @@ public class ResourcesManager {
 
     public void loadSplashResources() {
         this.loadFonts();
-	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/splash/");
         this.splashTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 960, 960);
         this.splashHeadphones = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.splashTextureAtlas, this.activity, "headphones.png", 0, 0);
         this.splashTextureAtlas.load();
@@ -114,17 +126,32 @@ public class ResourcesManager {
         this.test = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.testTextureAtlas, this.activity, "test_body.png", 0, 0);
         this.testTextureAtlas.load();
         
-        this.gameTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 1024, 1024);
-        this.player = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.gameTextureAtlas, this.activity, "player.png", 0, 0, 4, 4);
-        this.gameTextureAtlas.load();
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+        this.playerTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 224, 256);
+        this.player = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.playerTextureAtlas, this.activity, "player.png", 0, 0, 4, 4);
+        this.playerTextureAtlas.load();
+        
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/backgrounds/");
+        this.gameBackgroundTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), BackgroundElement.MAX_WIDTH, BackgroundElement.MAX_HEIGHT * LevelDescriptor.MAX_BACKGROUND_ELEMENTS);
+        int index = 0;
+        for(BackgroundElement background : level.getBackgrounds()){
+            if(!this.gameParallaxLayers.containsKey(background.getResourceName())){
+                this.gameParallaxLayers.put(background.getResourceName(), BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.gameBackgroundTextureAtlas, this.activity, background.getResourceName() + ".png", 0, index * BackgroundElement.MAX_HEIGHT));
+                index++;
+            }
+        }
+        this.gameBackgroundTextureAtlas.load();
+        
         AudioManager.getInstance().prepare("mfx/", level.getMusic());
     }
 
     public void unloadGameResources() {
         this.testTextureAtlas.unload();
         this.test = null;
-        this.gameTextureAtlas.unload();
+        this.playerTextureAtlas.unload();
         this.player = null;
+        this.gameBackgroundTextureAtlas.unload();
+        this.gameParallaxLayers.clear();
     }
     
     public static ResourcesManager getInstance(){

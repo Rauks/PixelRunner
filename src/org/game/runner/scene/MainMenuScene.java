@@ -4,13 +4,10 @@
  */
 package org.game.runner.scene;
 
-import org.andengine.entity.scene.background.AutoParallaxBackground;
-import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.game.runner.base.BaseMenuScene;
 import org.game.runner.game.ArcadeLevelDescriptor;

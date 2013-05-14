@@ -15,6 +15,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.physics.PhysicsHandler;
@@ -27,18 +29,22 @@ import org.andengine.entity.primitive.Line;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.IModifier;
 import org.game.runner.base.BaseScene;
 import org.game.runner.game.LevelDescriptor;
+import org.game.runner.game.element.BackgroundElement;
 import org.game.runner.game.element.LevelElement;
 import org.game.runner.game.player.Player;
 import org.game.runner.manager.AudioManager;
@@ -59,6 +65,10 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     private final float BROADCAST_LEVEL = 240;
     private final float BROADCAST_LEFT = -100;
     private final float BROADCAST_RIGHT = 1000;
+    
+    //Background
+    private AutoParallaxBackground autoParallaxBackground;
+    private List<Sprite> backgroundParallaxLayers = new LinkedList<Sprite>();
     
     //Broadcast
     private Text chrono3;
@@ -89,11 +99,12 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     
     public GameLevelScene(LevelDescriptor level){
         this.level = level;
+        this.createBackground();
+        this.createLevelSpwaner();
     }
     
     @Override
     public void createScene() {
-        this.setBackground(new Background(Color.BLACK));
         
         //Broadcast messages
         this.chrono3 = new Text(0, 0, resourcesManager.fontPixel_200, "3", vbom);
@@ -132,6 +143,20 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         this.player = new Player(400, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld);
         attachChild(this.player);
         
+        this.setOnSceneTouchListener(this);
+    }
+    private void createBackground(){
+        this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5);
+        this.setBackground(this.autoParallaxBackground);
+        Debug.d("PixelRunnerGameLevelScene", "Backgrounds to place : " + level.getBackgrounds());
+        for(BackgroundElement layer : this.level.getBackgrounds()){
+            Sprite layerSprite = new Sprite(layer.x, layer.y, this.resourcesManager.gameParallaxLayers.get(layer.getResourceName()), this.vbom);
+            this.backgroundParallaxLayers.add(layerSprite);
+            layerSprite.setOffsetCenter(0, 0);
+            this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-layer.speed, layerSprite));
+        }
+    }
+    private void createLevelSpwaner(){
         //Level elements
         this.levelReaderAction = new ITimerCallback(){                      
             @Override
@@ -188,8 +213,6 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
                 }
             }
         });
-        
-        this.setOnSceneTouchListener(this);
     }
     
     private void restart(){
@@ -332,6 +355,10 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         this.ground.dispose();
         this.player.detachSelf();
         this.player.dispose();
+        for(Sprite layer : this.backgroundParallaxLayers){
+            layer.detachSelf();
+            layer.dispose();
+        }
         this.removerLeft.detachSelf();
         this.removerLeft.dispose();
         this.removerRight.detachSelf();
