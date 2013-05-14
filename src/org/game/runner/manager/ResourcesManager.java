@@ -13,7 +13,9 @@ import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.game.runner.GameActivity;
 import org.game.runner.game.LevelDescriptor;
@@ -37,21 +39,19 @@ public class ResourcesManager {
     public Font fontPixel_200;
     
     //Textures & Regions
-    private BitmapTextureAtlas testGamePlayerTexture;
-    public ITextureRegion testGamePlayer;
-    private BitmapTextureAtlas testGameParallaxBackgroundTexture;
-    public ITextureRegion testGameParallaxLayer1;
-    public ITextureRegion testGameParallaxLayer2;
-    public ITextureRegion testGameParallaxLayer3;
-    public ITextureRegion testGameParallaxLayer4;
+    private BitmapTextureAtlas testTextureAtlas;
+    public ITextureRegion test;
     
-    private BitmapTextureAtlas mainMenuAutoParallaxBackgroundTexture;
+    private BuildableBitmapTextureAtlas gameTextureAtlas;
+    public ITiledTextureRegion player;
+    
+    private BitmapTextureAtlas menuTextureAtlas;
     public ITextureRegion mainMenuParallaxLayer1;
     public ITextureRegion mainMenuParallaxLayer2;
     public ITextureRegion mainMenuParallaxLayer3;
     public ITextureRegion mainMenuParallaxLayer4;
     
-    private BitmapTextureAtlas splashHeadphonesTexture;
+    private BitmapTextureAtlas splashTextureAtlas;
     public ITextureRegion splashHeadphones;
     
     public static void prepareManager(Engine engine, GameActivity activity, Camera camera, VertexBufferObjectManager vbom){
@@ -79,17 +79,17 @@ public class ResourcesManager {
     
     public void loadMenuResources(){
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-        this.mainMenuAutoParallaxBackgroundTexture = new BitmapTextureAtlas(this.activity.getTextureManager(), 960, 960);
-        this.mainMenuParallaxLayer1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_1.png", 0, 0);
-        this.mainMenuParallaxLayer2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_2.png", 480, 0);
-        this.mainMenuParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_3.png", 0, 480);
-        this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mainMenuAutoParallaxBackgroundTexture, this.activity, "menu_bg_4.png", 480, 480);
-        this.mainMenuAutoParallaxBackgroundTexture.load();
+        this.menuTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 960, 960);
+        this.mainMenuParallaxLayer1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_1.png", 0, 0);
+        this.mainMenuParallaxLayer2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_2.png", 480, 0);
+        this.mainMenuParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_3.png", 0, 480);
+        this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_4.png", 480, 480);
+        this.menuTextureAtlas.load();
         AudioManager.getInstance().prepare("mfx/", "menu.xm");
     }
     
     public void unloadMenuResources(){
-        this.mainMenuAutoParallaxBackgroundTexture.unload();
+        this.menuTextureAtlas.unload();
         mainMenuParallaxLayer1 = null;
         mainMenuParallaxLayer2 = null;
         mainMenuParallaxLayer3 = null;
@@ -99,27 +99,32 @@ public class ResourcesManager {
     public void loadSplashResources() {
         this.loadFonts();
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-        this.splashHeadphonesTexture = new BitmapTextureAtlas(this.activity.getTextureManager(), 960, 960);
-        this.splashHeadphones = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.splashHeadphonesTexture, this.activity, "headphones.png", 0, 0);
-        this.splashHeadphonesTexture.load();
+        this.splashTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 960, 960);
+        this.splashHeadphones = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.splashTextureAtlas, this.activity, "headphones.png", 0, 0);
+        this.splashTextureAtlas.load();
     }
 
     public void unloadSplashResources() {
-        this.splashHeadphonesTexture.unload();
+        this.splashTextureAtlas.unload();
         this.splashHeadphones = null;
     }
 
     public void loadGameResources(LevelDescriptor level) {
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-        this.testGamePlayerTexture = new BitmapTextureAtlas(this.activity.getTextureManager(), 40, 40);
-        this.testGamePlayer = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.testGamePlayerTexture, this.activity, "test_body.png", 0, 0);
-        this.testGamePlayerTexture.load();
+        this.testTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 40, 40);
+        this.test = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.testTextureAtlas, this.activity, "test_body.png", 0, 0);
+        this.testTextureAtlas.load();
+        
+        this.gameTextureAtlas = new BuildableBitmapTextureAtlas(this.activity.getTextureManager(), 1024, 1024, TextureOptions.NEAREST);
+        this.player = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.gameTextureAtlas, this.activity, "player.png", 4, 4);
         AudioManager.getInstance().prepare("mfx/", level.getMusic());
     }
 
     public void unloadGameResources() {
-        this.testGamePlayerTexture.unload();
-        this.testGamePlayer = null;
+        this.testTextureAtlas.unload();
+        this.test = null;
+        this.gameTextureAtlas.unload();
+        this.player = null;
     }
     
     public static ResourcesManager getInstance(){
