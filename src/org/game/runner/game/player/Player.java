@@ -21,9 +21,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 public class Player extends AnimatedSprite{
     final long[] PLAYER_ANIMATE_RUN = new long[]        { 80,     80,     80,     80                          };
     final int[] PLAYER_ANIMATE_RUN_FRAMES = new int[]   { 8,      9,      10,     9                           };
-    final long[] PLAYER_ANIMATE_JUMP = new long[]       { 1000                                                 };
+    final long[] PLAYER_ANIMATE_JUMP = new long[]       { 1000                                                };
     final int[] PLAYER_ANIMATE_JUMP_FRAMES = new int[]  { 12                                                  };
-    final long[] PLAYER_ANIMATE_ROLL = new long[]       { 100,    100,    100,    100,    100,    100,    100 };
+    final long[] PLAYER_ANIMATE_ROLL = new long[]       { 60,     60,     60,     60,     60,     60,     60  };
     final int[] PLAYER_ANIMATE_ROLL_FRAMES = new int[]  { 0,      1,      2,      3,      4,      5,      6   };
     
     private Body body;
