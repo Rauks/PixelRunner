@@ -13,7 +13,6 @@ import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -42,7 +41,7 @@ public class ResourcesManager {
     private BitmapTextureAtlas testTextureAtlas;
     public ITextureRegion test;
     
-    private BuildableBitmapTextureAtlas gameTextureAtlas;
+    private BitmapTextureAtlas gameTextureAtlas;
     public ITiledTextureRegion player;
     
     private BitmapTextureAtlas menuTextureAtlas;
@@ -115,8 +114,9 @@ public class ResourcesManager {
         this.test = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.testTextureAtlas, this.activity, "test_body.png", 0, 0);
         this.testTextureAtlas.load();
         
-        this.gameTextureAtlas = new BuildableBitmapTextureAtlas(this.activity.getTextureManager(), 1024, 1024, TextureOptions.NEAREST);
-        this.player = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.gameTextureAtlas, this.activity, "player.png", 4, 4);
+        this.gameTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 1024, 1024);
+        this.player = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.gameTextureAtlas, this.activity, "player.png", 0, 0, 4, 4);
+        this.gameTextureAtlas.load();
         AudioManager.getInstance().prepare("mfx/", level.getMusic());
     }
 

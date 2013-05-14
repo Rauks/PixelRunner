@@ -11,17 +11,17 @@ import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.game.runner.manager.ResourcesManager;
 
 /**
  *
  * @author Karl
  */
 public class Player extends AnimatedSprite{
-    final long[] PLAYER_ANIMATE_RUN = new long[]        { 100,    100,    100,    100                         };
+    final long[] PLAYER_ANIMATE_RUN = new long[]        { 80,     80,     80,     80                          };
     final int[] PLAYER_ANIMATE_RUN_FRAMES = new int[]   { 8,      9,      10,     9                           };
-    final long[] PLAYER_ANIMATE_JUMP = new long[]       { 100                                                 };
+    final long[] PLAYER_ANIMATE_JUMP = new long[]       { 1000                                                 };
     final int[] PLAYER_ANIMATE_JUMP_FRAMES = new int[]  { 12                                                  };
     final long[] PLAYER_ANIMATE_ROLL = new long[]       { 100,    100,    100,    100,    100,    100,    100 };
     final int[] PLAYER_ANIMATE_ROLL_FRAMES = new int[]  { 0,      1,      2,      3,      4,      5,      6   };
@@ -29,10 +29,10 @@ public class Player extends AnimatedSprite{
     private Body body;
     private int jump;
     
-    public Player(float pX, float pY, VertexBufferObjectManager vbo, PhysicsWorld physicWorld){
-        super(pX, pY, ResourcesManager.getInstance().player, vbo);
+    public Player(float pX, float pY, ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld physicWorld){
+        super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
         this.createPhysics(physicWorld);
-        this.jump = 0;
+        this.onGround();
     }
     
     private void createPhysics(PhysicsWorld physicWorld){        
@@ -79,5 +79,9 @@ public class Player extends AnimatedSprite{
     
     public void run(){
         this.animate(PLAYER_ANIMATE_RUN, PLAYER_ANIMATE_RUN_FRAMES, true);
+    }
+    
+    public Body getBody(){
+        return this.body;
     }
 }

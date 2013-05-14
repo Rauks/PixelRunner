@@ -31,7 +31,6 @@ import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
-import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
@@ -41,6 +40,7 @@ import org.andengine.util.modifier.IModifier;
 import org.game.runner.base.BaseScene;
 import org.game.runner.game.LevelDescriptor;
 import org.game.runner.game.element.LevelElement;
+import org.game.runner.game.player.Player;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
@@ -67,13 +67,12 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     private Text chronoStart;
     
     //Graphics
-    private Sprite player;
+    private Player player;
     private Rectangle ground;
     
     //Physic
     private PhysicsWorld physicWorld;
     private Body groundBody;
-    private Body playerBody;
     
     //Level
     private LevelDescriptor level;
@@ -118,23 +117,20 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         
         //Ground
         this.ground = new Rectangle(400, GROUND_LEVEL, GROUND_WIDTH, GROUND_THICKNESS, this.vbom);
-	this.groundBody = PhysicsFactory.createBoxBody(this.physicWorld, ground, BodyDef.BodyType.StaticBody, wallFixtureDef);
-        attachChild(ground);
+        attachChild(this.ground);
+	this.groundBody = PhysicsFactory.createBoxBody(this.physicWorld, this.ground, BodyDef.BodyType.StaticBody, wallFixtureDef);
         
         //Detectors
         this.removerLeft = new Line(LEFT_LIMIT, 0, LEFT_LIMIT, 480, vbom);
         this.removerLeft.setColor(Color.RED);
-        attachChild(removerLeft);
+        attachChild(this.removerLeft);
         this.removerRight = new Line(RIGHT_LIMIT, 0, RIGHT_LIMIT, 480, vbom);
         this.removerRight.setColor(Color.RED);
-        attachChild(removerRight);
+        attachChild(this.removerRight);
         
         //Player
-        this.player = new Sprite(400, GROUND_LEVEL + GROUND_THICKNESS/2 + GameLevelScene.this.resourcesManager.testGamePlayer.getHeight()/2, this.resourcesManager.testGamePlayer, this.vbom);
-	this.playerBody = PhysicsFactory.createBoxBody(this.physicWorld, this.player, BodyDef.BodyType.DynamicBody, wallFixtureDef);
-        this.playerBody.setUserData("player");
+        this.player = new Player(400, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld);
         attachChild(this.player);
-        this.physicWorld.registerPhysicsConnector(new PhysicsConnector(this.player, this.playerBody, true, false));
         
         //Level elements
         this.levelReaderAction = new ITimerCallback(){                      
@@ -149,8 +145,8 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
                     LevelElement next = GameLevelScene.this.level.getNext();
                     switch(next.getType()){
                         case TRAP_JUMP:
-                            final float trapY = GROUND_LEVEL + GROUND_THICKNESS/2 + GameLevelScene.this.resourcesManager.testGamePlayer.getHeight()/2;
-                            Sprite trap = new Sprite(800, trapY, GameLevelScene.this.resourcesManager.testGamePlayer, GameLevelScene.this.vbom){
+                            final float trapY = GROUND_LEVEL + GROUND_THICKNESS/2 + GameLevelScene.this.resourcesManager.test.getHeight()/2;
+                            Sprite trap = new Sprite(800, trapY, GameLevelScene.this.resourcesManager.test, GameLevelScene.this.vbom){
                                 @Override
                                 protected void onManagedUpdate(float pSecondsElapsed){
                                     super.onManagedUpdate(pSecondsElapsed);
@@ -193,7 +189,6 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
             }
         });
         
-        
         this.setOnSceneTouchListener(this);
     }
     
@@ -234,7 +229,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
                                     @Override
                                     public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                                         AudioManager.getInstance().play("mfx/", GameLevelScene.this.level.getMusic());
-                                        GameLevelScene.this.registerUpdateHandler(GameLevelScene.this.levelReaderHandler = new TimerHandler(2, true, GameLevelScene.this.levelReaderAction));
+                                        GameLevelScene.this.registerUpdateHandler(GameLevelScene.this.levelReaderHandler = new TimerHandler(1, true, GameLevelScene.this.levelReaderAction));
                                     }
                                     
                                     @Override
@@ -349,19 +344,10 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         if (pSceneTouchEvent.isActionDown()){
             //Jump
             if(this.jump < 2){
-                this.playerBody.setLinearVelocity(new Vector2(0, 15));
-                this.increaseJumpLevel();
+                this.player.jump();
             }
         }
         return false;
-    }
-    
-    public void increaseJumpLevel(){
-        this.jump++;
-    }
-    
-    public void resetJumpLevel(){
-        this.jump = 0;
     }
     
     private ContactListener contactListener(){
@@ -371,8 +357,8 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
                 final Fixture xA = contact.getFixtureA();
                 final Fixture xB = contact.getFixtureB();
                 //Player contacts
-                if (xA.getBody().equals(GameLevelScene.this.playerBody) || xB.getBody().equals(GameLevelScene.this.playerBody)){
-                    GameLevelScene.this.resetJumpLevel();
+                if (xA.getBody().equals(GameLevelScene.this.player.getBody()) || xB.getBody().equals(GameLevelScene.this.player.getBody())){
+                    GameLevelScene.this.player.onGround();
                 }
             }
 
