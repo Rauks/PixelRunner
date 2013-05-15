@@ -43,14 +43,12 @@ import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.IModifier;
-import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
 import org.game.runner.game.LevelDescriptor;
 import org.game.runner.game.element.BackgroundElement;
 import org.game.runner.game.element.LevelElement;
 import org.game.runner.game.player.Player;
 import org.game.runner.manager.AudioManager;
-import org.game.runner.manager.ResourcesManager;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 import org.game.runner.utils.EaseBroadcast;
@@ -256,9 +254,9 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         if(!this.activity.isMute()){
             this.engine.vibrate(100);
         }
+        this.player.rollBackJump();
         this.parallaxFactor = -10f;
         this.countScore = false;
-        this.resetScore();
         this.disposeLevelElements();
         this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
             @Override

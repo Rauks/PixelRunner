@@ -61,6 +61,13 @@ public class Player extends AnimatedSprite{
             this.increaseJumpLevel();
         }
     }
+    public void rollBackJump(){
+        this.jumpCount = 2;
+        this.jumping = true;
+        this.rolling = true;
+        this.animate(PLAYER_ANIMATE_ROLL, PLAYER_ANIMATE_ROLL_FRAMES, true);
+        this.body.setLinearVelocity(new Vector2(0, 25));
+    }
     
     public void roll(){
         if(!this.rolling){
