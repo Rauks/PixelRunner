@@ -53,7 +53,7 @@ public class Player extends AnimatedSprite{
         this.run();
     }
     public void jump(){
-        if(this.jumpCount < 2){
+        if(this.jumpCount < 2 && !this.rolling){
             this.jumping = true;
             this.rolling = false;
             this.animate(PLAYER_ANIMATE_JUMP, PLAYER_ANIMATE_JUMP_FRAMES, true);
