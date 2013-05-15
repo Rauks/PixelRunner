@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -66,15 +67,23 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     private final float BROADCAST_LEFT = -100;
     private final float BROADCAST_RIGHT = 1000;
     
-    //Background
-    private AutoParallaxBackground autoParallaxBackground;
-    private List<Sprite> backgroundParallaxLayers = new LinkedList<Sprite>();
+    //HUD
+    private HUD hud;
     
-    //Broadcast
+    //HUD Broadcast
     private Text chrono3;
     private Text chrono2;
     private Text chrono1;
     private Text chronoStart;
+    
+    //Level
+    private LevelDescriptor level;
+    private TimerHandler levelReaderHandler;
+    private ITimerCallback levelReaderAction;
+    
+    //Background
+    private AutoParallaxBackground autoParallaxBackground;
+    private List<Sprite> backgroundParallaxLayers = new LinkedList<Sprite>();
     
     //Graphics
     private Player player;
@@ -83,11 +92,6 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     //Physic
     private PhysicsWorld physicWorld;
     private Body groundBody;
-    
-    //Level
-    private LevelDescriptor level;
-    private TimerHandler levelReaderHandler;
-    private ITimerCallback levelReaderAction;
     
     //Detectors
     private ConcurrentLinkedQueue<IEntity> levelElements = new ConcurrentLinkedQueue<IEntity>();
@@ -101,25 +105,11 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         this.level = level;
         this.createBackground();
         this.createLevelSpwaner();
+        this.createHUD();
     }
     
     @Override
     public void createScene() {
-        
-        //Broadcast messages
-        this.chrono3 = new Text(0, 0, resourcesManager.fontPixel_200, "3", vbom);
-        this.chrono2 = new Text(0, 0, resourcesManager.fontPixel_200, "2", vbom);
-        this.chrono1 = new Text(0, 0, resourcesManager.fontPixel_200, "1", vbom);
-        this.chronoStart = new Text(0, 0, resourcesManager.fontPixel_200, "GO !", vbom);
-        this.chrono3.setVisible(false);
-        this.chrono2.setVisible(false);
-        this.chrono1.setVisible(false);
-        this.chronoStart.setVisible(false);
-        attachChild(this.chrono3);
-        attachChild(this.chrono2);
-        attachChild(this.chrono1);
-        attachChild(this.chronoStart);
-        
         //Physics engine
         this.physicWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -50), false);
         this.physicWorld.setContactListener(this.contactListener());
@@ -128,27 +118,26 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         
         //Ground
         this.ground = new Rectangle(400, GROUND_LEVEL, GROUND_WIDTH, GROUND_THICKNESS, this.vbom);
-        attachChild(this.ground);
+        this.attachChild(this.ground);
 	this.groundBody = PhysicsFactory.createBoxBody(this.physicWorld, this.ground, BodyDef.BodyType.StaticBody, wallFixtureDef);
         
         //Detectors
         this.removerLeft = new Line(LEFT_LIMIT, 0, LEFT_LIMIT, 480, vbom);
         this.removerLeft.setColor(Color.RED);
-        attachChild(this.removerLeft);
+        this.attachChild(this.removerLeft);
         this.removerRight = new Line(RIGHT_LIMIT, 0, RIGHT_LIMIT, 480, vbom);
         this.removerRight.setColor(Color.RED);
-        attachChild(this.removerRight);
+        this.attachChild(this.removerRight);
         
         //Player
         this.player = new Player(400, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld);
-        attachChild(this.player);
+        this.attachChild(this.player);
         
         this.setOnSceneTouchListener(this);
     }
     private void createBackground(){
         this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5);
         this.setBackground(this.autoParallaxBackground);
-        Debug.d("PixelRunnerGameLevelScene", "Backgrounds to place : " + level.getBackgrounds());
         for(BackgroundElement layer : this.level.getBackgrounds()){
             Sprite layerSprite = new Sprite(layer.x, layer.y, this.resourcesManager.gameParallaxLayers.get(layer.getResourceName()), this.vbom);
             this.backgroundParallaxLayers.add(layerSprite);
@@ -213,6 +202,24 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
                 }
             }
         });
+    }
+    private void createHUD(){
+        this.hud = new HUD();
+        this.camera.setHUD(this.hud);  
+        
+        //Broadcast messages
+        this.chrono3 = new Text(0, 0, resourcesManager.fontPixel_200, "3", vbom);
+        this.chrono2 = new Text(0, 0, resourcesManager.fontPixel_200, "2", vbom);
+        this.chrono1 = new Text(0, 0, resourcesManager.fontPixel_200, "1", vbom);
+        this.chronoStart = new Text(0, 0, resourcesManager.fontPixel_200, "GO !", vbom);
+        this.chrono3.setVisible(false);
+        this.chrono2.setVisible(false);
+        this.chrono1.setVisible(false);
+        this.chronoStart.setVisible(false);
+        this.hud.attachChild(this.chrono3);
+        this.hud.attachChild(this.chrono2);
+        this.hud.attachChild(this.chrono1);
+        this.hud.attachChild(this.chronoStart);
     }
     
     private void restart(){
@@ -346,12 +353,15 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     public void disposeScene() {
         this.destroyPhysicsWorld();
         this.disposeLevelElements();
+        
+        this.camera.setHUD(null);
         this.chrono3.detachSelf();
         this.chrono3.dispose();
         this.chrono2.detachSelf();
         this.chrono2.dispose();
         this.chrono1.detachSelf();
         this.chrono1.dispose();
+        
         this.chronoStart.detachSelf();
         this.chronoStart.dispose();
         this.ground.detachSelf();
@@ -372,9 +382,15 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
 
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
         if (pSceneTouchEvent.isActionDown()){
-            //Jump
-            if(this.jump < 2){
-                this.player.jump();
+            if(pSceneTouchEvent.getY() > 260){
+                //Jump
+                if(this.jump < 2){
+                    this.player.jump();
+                }
+            }
+            else if(pSceneTouchEvent.getY() < 220){
+                //Roll
+                this.player.roll();
             }
         }
         return false;
