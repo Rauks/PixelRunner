@@ -145,7 +145,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         };
         this.setBackground(this.autoParallaxBackground);
         for(BackgroundElement layer : this.level.getBackgrounds()){
-            Sprite layerSprite = new Sprite(layer.x, layer.y, this.resourcesManager.gameParallaxLayers.get(layer.getResourceName()), this.vbom);
+            Sprite layerSprite = new Sprite(layer.x, GROUND_LEVEL + layer.y, this.resourcesManager.gameParallaxLayers.get(layer.getResourceName()), this.vbom);
             this.backgroundParallaxLayers.add(layerSprite);
             layerSprite.setOffsetCenter(0, 0);
             this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-layer.speed, layerSprite));
@@ -244,8 +244,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
                 GameLevelScene.this.start();
             }
         }));
-    }
-    
+    }    
     public void start(){
         Log.d("PixelRunner", "Start");
         this.level.start();
