@@ -39,4 +39,14 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     public String getMusic() {
         return "arcade.xm";
     }
+
+    @Override
+    public float getSpawnTime() {
+        return 3;
+    }
+
+    @Override
+    public float getSpawnSpeed() {
+        return 500;
+    }
 }

@@ -36,4 +36,6 @@ public abstract class LevelDescriptor {
     public abstract LevelElement getNext();
     public abstract boolean hasNext();
     public abstract String getMusic();
+    public abstract float getSpawnTime();
+    public abstract float getSpawnSpeed();
 }

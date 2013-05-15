@@ -187,7 +187,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
                             //trap.registerEntityModifier(new MoveModifier(0.5f, RIGHT_LIMIT, trapY, LEFT_LIMIT, trapY));
                             PhysicsHandler handler = new PhysicsHandler(trap);
                             trap.registerUpdateHandler(handler);
-                            handler.setVelocity(-500, 0);
+                            handler.setVelocity(-GameLevelScene.this.level.getSpawnSpeed(), 0);
                             break;
                     }
                 }
@@ -255,7 +255,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
                                     @Override
                                     public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                                         AudioManager.getInstance().play("mfx/", GameLevelScene.this.level.getMusic());
-                                        GameLevelScene.this.registerUpdateHandler(GameLevelScene.this.levelReaderHandler = new TimerHandler(1, true, GameLevelScene.this.levelReaderAction));
+                                        GameLevelScene.this.registerUpdateHandler(GameLevelScene.this.levelReaderHandler = new TimerHandler(GameLevelScene.this.level.getSpawnTime(), true, GameLevelScene.this.levelReaderAction));
                                     }
                                     
                                     @Override
