@@ -14,10 +14,10 @@ import org.game.runner.game.element.LevelElement.LevelElementType;
  */
 public class ArcadeLevelDescriptor extends LevelDescriptor{
     public ArcadeLevelDescriptor(){
-        this.addBackgroundElement(new BackgroundElement(0, 240, "clouds_2", 10));
-        this.addBackgroundElement(new BackgroundElement(0, 220, "clouds_1", 15));
-        this.addBackgroundElement(new BackgroundElement(0, 50, "mountain_2", 20));
-        this.addBackgroundElement(new BackgroundElement(0, 50, "mountain_1", 25));
+        this.addBackgroundElement(new BackgroundElement(0, 240, "clouds_2", 20));
+        this.addBackgroundElement(new BackgroundElement(0, 220, "clouds_1", 25));
+        this.addBackgroundElement(new BackgroundElement(0, 50, "mountain_2", 30));
+        this.addBackgroundElement(new BackgroundElement(0, 50, "mountain_1", 35));
     }
     
     @Override

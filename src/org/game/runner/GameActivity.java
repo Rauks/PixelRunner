@@ -56,8 +56,7 @@ public class GameActivity extends BaseGameActivity{
         this.phoneAudioManager = (android.media.AudioManager)getSystemService(AUDIO_SERVICE);
         this.mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback(){
             @Override
-            public void onTimePassed(final TimerHandler pTimerHandler) 
-            {
+            public void onTimePassed(final TimerHandler pTimerHandler){
                 GameActivity.this.mEngine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadMenuResources();
                 SceneManager.getInstance().createSplashEndScene();

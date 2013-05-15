@@ -41,12 +41,14 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.IModifier;
+import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
 import org.game.runner.game.LevelDescriptor;
 import org.game.runner.game.element.BackgroundElement;
 import org.game.runner.game.element.LevelElement;
 import org.game.runner.game.player.Player;
 import org.game.runner.manager.AudioManager;
+import org.game.runner.manager.ResourcesManager;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 import org.game.runner.utils.EaseBroadcast;
@@ -82,6 +84,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     //Background
     private AutoParallaxBackground autoParallaxBackground;
     private List<Sprite> backgroundParallaxLayers = new LinkedList<Sprite>();
+    private float parallaxFactor = 1f;
     
     //Graphics
     private Player player;
@@ -134,7 +137,12 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         this.setOnSceneTouchListener(this);
     }
     private void createBackground(){
-        this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5);
+        this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5){
+            @Override
+            public void onUpdate(final float pSecondsElapsed) {
+		super.onUpdate(pSecondsElapsed * GameLevelScene.this.parallaxFactor);
+            }
+        };
         this.setBackground(this.autoParallaxBackground);
         for(BackgroundElement layer : this.level.getBackgrounds()){
             Sprite layerSprite = new Sprite(layer.x, layer.y, this.resourcesManager.gameParallaxLayers.get(layer.getResourceName()), this.vbom);
@@ -228,7 +236,14 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         AudioManager.getInstance().stop();
         this.unregisterUpdateHandler(this.levelReaderHandler);
         this.disposeLevelElements();
-        this.start();
+        this.parallaxFactor = -10f;
+        this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
+            @Override
+            public void onTimePassed(final TimerHandler pTimerHandler){
+                GameLevelScene.this.parallaxFactor = 1f;
+                GameLevelScene.this.start();
+            }
+        }));
     }
     
     public void start(){
