@@ -27,7 +27,9 @@ public class Player extends AnimatedSprite{
     final int[] PLAYER_ANIMATE_ROLL_FRAMES = new int[]  { 0,      1,      2,      3,      4,      5,      6   };
     
     private Body body;
-    private int jump;
+    private int jumpCount;
+    private boolean jumping;
+    private boolean rolling;
     
     public Player(float pX, float pY, ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld physicWorld){
         super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
@@ -42,39 +44,47 @@ public class Player extends AnimatedSprite{
     }
     
     private void increaseJumpLevel(){
-        this.jump++;
+        this.jumpCount++;
     }
     public void onGround(){
-        this.jump = 0;
+        this.jumping = false;
+        this.rolling = false;
+        this.jumpCount = 0;
         this.run();
     }
     public void jump(){
-        if(this.jump < 2){
-            this.body.setLinearVelocity(new Vector2(0, 15));
+        if(this.jumpCount < 2){
+            this.jumping = true;
+            this.rolling = false;
             this.animate(PLAYER_ANIMATE_JUMP, PLAYER_ANIMATE_JUMP_FRAMES, true);
+            this.body.setLinearVelocity(new Vector2(0, 15));
             this.increaseJumpLevel();
         }
     }
     
     public void roll(){
-        this.animate(PLAYER_ANIMATE_ROLL, PLAYER_ANIMATE_ROLL_FRAMES, false, new IAnimationListener() {
-            @Override
-            public void onAnimationStarted(AnimatedSprite pAnimatedSprite, int pInitialLoopCount) {
-            }
-            
-            @Override
-            public void onAnimationFrameChanged(AnimatedSprite pAnimatedSprite, int pOldFrameIndex, int pNewFrameIndex) {
-            }
-            
-            @Override
-            public void onAnimationLoopFinished(AnimatedSprite pAnimatedSprite, int pRemainingLoopCount, int pInitialLoopCount) {
-            }
-            
-            @Override
-            public void onAnimationFinished(AnimatedSprite pAnimatedSprite) {
-                Player.this.run();
-            }
-        });
+        if(!this.rolling){
+            this.animate(PLAYER_ANIMATE_ROLL, PLAYER_ANIMATE_ROLL_FRAMES, false, new IAnimationListener() {
+                @Override
+                public void onAnimationStarted(AnimatedSprite pAnimatedSprite, int pInitialLoopCount) {
+                    Player.this.rolling = true;
+                }
+
+                @Override
+                public void onAnimationFrameChanged(AnimatedSprite pAnimatedSprite, int pOldFrameIndex, int pNewFrameIndex) {
+                }
+
+                @Override
+                public void onAnimationLoopFinished(AnimatedSprite pAnimatedSprite, int pRemainingLoopCount, int pInitialLoopCount) {
+                }
+
+                @Override
+                public void onAnimationFinished(AnimatedSprite pAnimatedSprite) {
+                    Player.this.rolling = false;
+                    Player.this.run();
+                }
+            });
+        }
     }
     
     public void run(){
@@ -83,5 +93,13 @@ public class Player extends AnimatedSprite{
     
     public Body getBody(){
         return this.body;
+    }
+
+    public boolean isJumping() {
+        return this.jumping;
+    }
+
+    public boolean isRolling() {
+        return this.rolling;
     }
 }
