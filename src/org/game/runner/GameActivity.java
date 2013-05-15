@@ -18,7 +18,7 @@ import org.game.runner.manager.ResourcesManager;
 import org.game.runner.manager.SceneManager;
 
 public class GameActivity extends BaseGameActivity{
-    
+    private android.media.AudioManager phoneAudioManager;
     private Camera camera;
     private ResourcesManager resourcesManager;
     private SceneManager sceneManager;
@@ -53,6 +53,7 @@ public class GameActivity extends BaseGameActivity{
     @Override
     public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException {
         this.mEngine.enableVibrator(this);
+        this.phoneAudioManager = (android.media.AudioManager)getSystemService(AUDIO_SERVICE);
         this.mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback(){
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler) 
@@ -113,5 +114,9 @@ public class GameActivity extends BaseGameActivity{
             SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
         }
         return false; 
+    }
+    
+    public boolean isMute(){
+        return this.phoneAudioManager.getStreamVolume(android.media.AudioManager.STREAM_MUSIC) == 0;
     }
 }

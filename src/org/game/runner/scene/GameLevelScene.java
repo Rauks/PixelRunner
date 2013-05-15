@@ -217,7 +217,9 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     
     private void restart(){
         Log.d("PixelRunner", "Restart");
-	this.engine.vibrate(100);
+        if(!this.activity.isMute()){
+            this.engine.vibrate(100);
+        }
         AudioManager.getInstance().stop();
         this.unregisterUpdateHandler(this.levelReaderHandler);
         this.disposeLevelElements();
