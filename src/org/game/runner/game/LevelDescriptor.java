@@ -38,4 +38,5 @@ public abstract class LevelDescriptor {
     public abstract String getMusic();
     public abstract float getSpawnTime();
     public abstract float getSpawnSpeed();
+    public abstract boolean needScore();
 }

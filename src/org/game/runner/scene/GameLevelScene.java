@@ -34,10 +34,12 @@ import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.IModifier;
@@ -69,6 +71,9 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     
     //HUD
     private HUD hud;
+    private long score = 0;
+    private boolean countScore = false;
+    private Text scoreText;
     
     //HUD Broadcast
     private Text chrono3;
@@ -98,9 +103,6 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     private ConcurrentLinkedQueue<IEntity> levelElements = new ConcurrentLinkedQueue<IEntity>();
     private Line removerLeft;
     private Line removerRight;
-    
-    //Gameplay
-    private int jump = 0;
     
     public GameLevelScene(LevelDescriptor level){
         this.level = level;
@@ -226,6 +228,25 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         this.hud.attachChild(this.chrono2);
         this.hud.attachChild(this.chrono1);
         this.hud.attachChild(this.chronoStart);
+        
+        //Score
+        this.scoreText = new Text(20, 415, resourcesManager.fontPixel_60, "0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
+        this.scoreText.setAnchorCenter(0, 0); 
+        if(!this.level.needScore()){
+            this.scoreText.setVisible(false);
+        }
+        this.hud.attachChild(this.scoreText);
+    }
+    
+    private void addScore(int score){
+        if(this.countScore){
+            this.score += score;
+            this.scoreText.setText(String.valueOf((long)(this.score / 5)));
+        }
+    }
+    private void resetScore(){
+        this.score = 0;
+        this.scoreText.setText("0");
     }
     
     private void restart(){
@@ -235,8 +256,10 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         if(!this.activity.isMute()){
             this.engine.vibrate(100);
         }
-        this.disposeLevelElements();
         this.parallaxFactor = -10f;
+        this.countScore = false;
+        this.resetScore();
+        this.disposeLevelElements();
         this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
@@ -247,6 +270,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     }    
     public void start(){
         Log.d("PixelRunner", "Start");
+        this.resetScore();
         this.level.start();
         
         this.broadcast(this.chrono3, new IEntityModifierListener() {
@@ -274,6 +298,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
                                     @Override
                                     public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                                         AudioManager.getInstance().play("mfx/", GameLevelScene.this.level.getMusic());
+                                        GameLevelScene.this.countScore = true;
                                         GameLevelScene.this.registerUpdateHandler(GameLevelScene.this.levelReaderHandler = new TimerHandler(GameLevelScene.this.level.getSpawnTime(), true, GameLevelScene.this.levelReaderAction));
                                     }
                                     
@@ -373,6 +398,8 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         this.chrono2.dispose();
         this.chrono1.detachSelf();
         this.chrono1.dispose();
+        this.scoreText.detachSelf();
+        this.scoreText.dispose();
         
         this.chronoStart.detachSelf();
         this.chronoStart.dispose();
@@ -391,14 +418,18 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         this.detachSelf();
         this.dispose();
     }
+    
+    @Override
+    protected void onManagedUpdate(float pSecondsElapsed) {
+        super.onManagedUpdate(pSecondsElapsed);
+        this.addScore((int)(pSecondsElapsed*100));
+    }
 
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
         if (pSceneTouchEvent.isActionDown()){
             if(pSceneTouchEvent.getY() > 260){
                 //Jump
-                if(this.jump < 2){
-                    this.player.jump();
-                }
+                this.player.jump();
             }
             else if(pSceneTouchEvent.getY() < 220){
                 //Roll
