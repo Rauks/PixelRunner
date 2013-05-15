@@ -52,6 +52,7 @@ public class GameActivity extends BaseGameActivity{
 
     @Override
     public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException {
+        this.mEngine.enableVibrator(this);
         this.mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback(){
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler) 
