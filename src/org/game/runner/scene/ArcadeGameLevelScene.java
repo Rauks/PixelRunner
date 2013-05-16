@@ -6,32 +6,12 @@ package org.game.runner.scene;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.opengl.GLES20;
-import android.util.FloatMath;
-import java.util.Random;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import org.andengine.entity.IEntity;
-import org.andengine.entity.particle.Particle;
-import org.andengine.entity.particle.SpriteParticleSystem;
-import org.andengine.entity.particle.emitter.PointParticleEmitter;
-import org.andengine.entity.particle.initializer.BlendFunctionParticleInitializer;
-import org.andengine.entity.particle.initializer.ColorParticleInitializer;
-import org.andengine.entity.particle.initializer.ExpireParticleInitializer;
-import org.andengine.entity.particle.initializer.GravityParticleInitializer;
-import org.andengine.entity.particle.initializer.IParticleInitializer;
-import org.andengine.entity.particle.initializer.ScaleParticleInitializer;
-import org.andengine.entity.particle.initializer.VelocityParticleInitializer;
-import org.andengine.entity.particle.modifier.AlphaParticleModifier;
-import org.andengine.entity.particle.modifier.IParticleModifier;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
-import org.andengine.util.adt.color.Color;
 import org.game.runner.game.LevelDescriptor;
 import org.game.runner.game.player.Trail;
 import org.game.runner.manager.AudioManager;
-import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 
 /**
