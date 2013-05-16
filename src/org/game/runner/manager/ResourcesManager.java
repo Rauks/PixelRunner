@@ -52,8 +52,8 @@ public class ResourcesManager {
     //Texturess - Game
     private BitmapTextureAtlas playerTextureAtlas;
     public ITiledTextureRegion player;
-    private BitmapTextureAtlas fireworkTextureAtlas;
-    public ITextureRegion firework;
+    private BitmapTextureAtlas trailTextureAtlas;
+    public ITextureRegion trail;
     private BitmapTextureAtlas gameBackgroundTextureAtlas;
     public Map<String, ITextureRegion> gameParallaxLayers = new HashMap<String, ITextureRegion>();
     
@@ -136,9 +136,9 @@ public class ResourcesManager {
         this.playerTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 224, 256);
         this.player = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.playerTextureAtlas, this.activity, "player.png", 0, 0, 4, 4);
         this.playerTextureAtlas.load();
-        this.fireworkTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 2, 2);
-        this.firework = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.fireworkTextureAtlas, this.activity, "firework.png", 0, 0);
-        this.fireworkTextureAtlas.load();
+        this.trailTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 4, 4);
+        this.trail = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.trailTextureAtlas, this.activity, "trail.png", 0, 0);
+        this.trailTextureAtlas.load();
         
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/backgrounds/");
         this.gameBackgroundTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), BackgroundElement.MAX_WIDTH, BackgroundElement.MAX_HEIGHT * LevelDescriptor.MAX_BACKGROUND_ELEMENTS);
@@ -159,8 +159,8 @@ public class ResourcesManager {
         this.test = null;
         this.playerTextureAtlas.unload();
         this.player = null;
-        this.fireworkTextureAtlas.unload();
-        this.firework = null;
+        this.trailTextureAtlas.unload();
+        this.trail = null;
         this.gameBackgroundTextureAtlas.unload();
         this.gameParallaxLayers.clear();
     }

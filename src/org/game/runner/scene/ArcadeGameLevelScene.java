@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.opengl.GLES20;
 import android.util.FloatMath;
 import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.particle.Particle;
 import org.andengine.entity.particle.SpriteParticleSystem;
 import org.andengine.entity.particle.emitter.PointParticleEmitter;
@@ -57,14 +59,13 @@ public class ArcadeGameLevelScene extends GameLevelScene{
         this.scoreDb = this.activity.getSharedPreferences(HIGHSCORE_DB_NAME, Context.MODE_PRIVATE);
         this.scoreDbEditor = this.scoreDb.edit();
         this.createScoreOnHud();
+        
+        addFirework();
     }
     
     private void createScoreOnHud(){
         this.highScore = this.loadHighScore();
         this.highScore = 300; //Debug purpose
-        
-        SpriteParticleSystem sps = this.createFWParticleSystem(400, 240, Color.RED);
-        this.hud.attachChild(sps);
         
         this.scoreText = new Text(20, 415, resourcesManager.fontPixel_60, "0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
         this.scoreText.setAnchorCenter(0, 0);
@@ -77,30 +78,56 @@ public class ArcadeGameLevelScene extends GameLevelScene{
         this.scoreText.attachChild(this.highScoreText);
     }
     
-    private Random ranGen = new Random();
-    public SpriteParticleSystem createFWParticleSystem(int atX, int atY, Color color){
-        final SpriteParticleSystem particleSystem = new SpriteParticleSystem(new PointParticleEmitter(atX, atY), 40, 50, 60, this.resourcesManager.firework, this.vbom);
+    private ConcurrentLinkedQueue<IEntity> fireworkSpawners = new ConcurrentLinkedQueue<IEntity>();
+    private Random ranFireworkGen = new Random();
+    private SpriteParticleSystem createFWParticleSystem(int atX, int atY){
+        final SpriteParticleSystem particleSystem = new SpriteParticleSystem(new PointParticleEmitter(atX, atY), 15, 20, 40, this.resourcesManager.trail, this.vbom);
         particleSystem.addParticleInitializer(new BlendFunctionParticleInitializer<Sprite>(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE));
-        IParticleInitializer<Sprite> angvelocity = new VelocityParticleInitializer<Sprite>(-40, 40, -80, 80){
+        particleSystem.addParticleInitializer(new VelocityParticleInitializer<Sprite>(-320, -280, -2, 2));
+        particleSystem.addParticleInitializer(new ExpireParticleInitializer<Sprite>(0.5f));
+        particleSystem.addParticleInitializer(new IParticleInitializer<Sprite>() {
             @Override
-            public void onInitializeParticle(final Particle<Sprite> pParticle, final float pVelocityX, final float pVelocityY) {
-                float vel = 100;
-                int ang = ranGen.nextInt(359);
-                float fVelocityX = FloatMath.cos((float) (Math.toRadians(ang))) * vel;
-                float fVelocityY = FloatMath.sin((float) (Math.toRadians(ang))) * vel;
-                pParticle.getPhysicsHandler().setVelocity(fVelocityX, fVelocityY);
+            public void onInitializeParticle(Particle<Sprite> pParticle) {
+                Sprite pSprite = pParticle.getEntity();
+                pSprite.setPosition(pSprite.getX(), pSprite.getY() + ranFireworkGen.nextInt(64));
+                Color color;
+                switch(ranFireworkGen.nextInt(6)){
+                    case 0:
+                        color = Color.BLUE;
+                        break;
+                    case 1:
+                        color = Color.CYAN;
+                        break;
+                    case 2:
+                        color = Color.GREEN;
+                        break;
+                    case 3:
+                        color = Color.RED;
+                        break;
+                    case 4:
+                        color = Color.YELLOW;
+                        break;
+                    case 5:
+                        color = Color.PINK;
+                        break;
+                    default:
+                        color = Color.WHITE;
+                }
+                pSprite.setColor(color);
             }
-        };
-        particleSystem.addParticleInitializer(angvelocity);
-        //particleSystem.addParticleInitializer(new GravityParticleInitializer<Sprite>());
-        //int iColorSet = ranGen.nextInt(5) * 2;
-        //particleSystem.addParticleInitializer(new ScaleParticleInitializer<Sprite>(0.75f, 1.5f));
-
-        //particleSystem.addParticleInitializer(new RotationParticleInitializer<Sprite>(0.0f, 360.0f));
-        particleSystem.addParticleInitializer(new ColorParticleInitializer<Sprite>(color));
-        particleSystem.addParticleInitializer(new ExpireParticleInitializer<Sprite>(6.5f));
-        //particleSystem.addParticleModifier(new AlphaParticleModifier<Sprite>(2.5f, 6.5f, 0.95f, 0.05f));
+        });
         return particleSystem;
+    }
+    private void addFirework(){
+        SpriteParticleSystem sps = this.createFWParticleSystem(32, 0);
+        this.fireworkSpawners.add(sps);
+        this.player.attachChild(sps);
+    }
+    private void disposeFireworks(){
+        for(IEntity spawner : this.fireworkSpawners){
+            spawner.detachSelf();
+            spawner.dispose();
+        }
     }
     
     private void addScore(int score){
@@ -154,8 +181,11 @@ public class ArcadeGameLevelScene extends GameLevelScene{
     
     @Override
     public void disposeScene() {
+        this.disposeFireworks();
         this.scoreText.detachSelf();
         this.scoreText.dispose();
+        this.highScoreText.detachSelf();
+        this.highScoreText.dispose();
         super.disposeScene();
     }
 
