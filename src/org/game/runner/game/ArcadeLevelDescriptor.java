@@ -49,9 +49,4 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     public float getSpawnSpeed() {
         return 500;
     }
-
-    @Override
-    public boolean needScore() {
-        return true;
-    }
 }

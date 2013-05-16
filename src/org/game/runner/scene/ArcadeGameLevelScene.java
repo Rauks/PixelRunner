@@ -1,0 +1,127 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.game.runner.scene;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
+import org.andengine.util.adt.align.HorizontalAlign;
+import org.game.runner.game.LevelDescriptor;
+import org.game.runner.manager.AudioManager;
+import org.game.runner.manager.SceneManager;
+
+/**
+ *
+ * @author Karl
+ */
+public class ArcadeGameLevelScene extends GameLevelScene{
+    private static final String HIGHSCORE_DB_NAME = "highscore";
+    private static final String HIGHSCORE_LABEL = "score";
+    
+    private long score;
+    private boolean countScore = false;
+    private Text scoreText;
+    
+    private SharedPreferences scoreDb;
+    private SharedPreferences.Editor scoreDbEditor;
+    private long highScore;
+    private Text highScoreText;
+    
+    public ArcadeGameLevelScene(LevelDescriptor level){
+        super(level);
+        
+        this.scoreDb = this.activity.getSharedPreferences(HIGHSCORE_DB_NAME, Context.MODE_PRIVATE);
+        this.scoreDbEditor = this.scoreDb.edit();
+        this.createScoreOnHud();
+    }
+    
+    private void createScoreOnHud(){
+        //Score
+        this.score = 0;
+        this.highScore = this.loadHighScore();
+        
+        this.scoreText = new Text(20, 415, resourcesManager.fontPixel_60, "0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
+        this.scoreText.setAnchorCenter(0, 0);
+        this.scoreText.setText("0");
+        this.hud.attachChild(this.scoreText);
+        this.highScoreText = new Text(20, 415, resourcesManager.fontPixel_60_gray, "0123456789/", new TextOptions(HorizontalAlign.LEFT), vbom);
+        this.highScoreText.setAnchorCenter(0, 0);
+        this.highScoreText.setText("/" + String.valueOf(this.highScore/5));
+        this.highScoreText.setPosition(this.scoreText.getWidth(), 0);
+        this.scoreText.attachChild(this.highScoreText);
+    }
+    
+    private void addScore(int score){
+        if(this.countScore){
+            this.score += score;
+            this.scoreText.setText(String.valueOf(this.score/5));
+            this.highScoreText.setPosition(this.scoreText.getWidth(), 0);
+            if(this.highScore < this.score){
+                this.highScore = this.score;
+                this.highScoreText.setText("/" + String.valueOf(this.highScore/5));
+            }
+        }
+    }
+    private void resetScore(){
+        this.score = 0;
+        this.scoreText.setText("0");
+    }
+    
+    private boolean saveHighScore() {
+        this.scoreDbEditor.putLong(HIGHSCORE_LABEL, this.highScore);
+        return this.scoreDbEditor.commit();
+    }
+    private long loadHighScore() {
+            return this.scoreDb.getLong(HIGHSCORE_LABEL, 0);
+    }
+    
+    @Override
+    public void onBackKeyPressed() {
+        this.saveHighScore();
+        super.onBackKeyPressed();
+    }
+
+    @Override
+    public void onPause() {
+        this.saveHighScore();
+        super.onPause();
+    }
+    
+    
+    @Override
+    protected void onManagedUpdate(float pSecondsElapsed) {
+        super.onManagedUpdate(pSecondsElapsed);
+        this.addScore((int)(pSecondsElapsed*100));
+    }
+    
+    @Override
+    public void disposeScene() {
+        this.scoreText.detachSelf();
+        this.scoreText.dispose();
+        super.disposeScene();
+    }
+
+    @Override
+    protected void onRestartBegin() {
+        this.countScore = false;
+        this.saveHighScore();
+    }
+
+    @Override
+    protected void onRestartEnd() {
+        this.countScore = true;
+    }
+
+    @Override
+    protected void onStartBegin() {
+        this.resetScore();
+    }
+
+    @Override
+    protected void onStartEnd() {
+        this.countScore = true;
+    }
+}
