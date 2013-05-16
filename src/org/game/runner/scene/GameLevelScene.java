@@ -133,6 +133,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.player = new Player(400, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld);
         this.attachChild(this.player);
         this.playerTrail = new Trail(32, 0, 0, 64, Trail.ColorMode.WHITE, this.resourcesManager.trail, this.vbom);
+        this.playerTrail.hide();
         this.player.attachChild(this.playerTrail);
         
         this.setOnSceneTouchListener(this);
@@ -237,6 +238,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         if(!this.activity.isMute()){
             this.engine.vibrate(100);
         }
+        this.playerTrail.hide();
         this.player.rollBackJump();
         this.parallaxFactor = -10f;
         this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
@@ -253,7 +255,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     protected abstract void onRestartEnd();
     public void start(){
         Log.d("PixelRunner", "Start");
-        this.level.start();
+        this.level.init();
         this.onStartBegin();
         
         this.broadcast(this.chrono3, new IEntityModifierListener() {
@@ -281,6 +283,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                                     @Override
                                     public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                                         AudioManager.getInstance().play("mfx/", GameLevelScene.this.level.getMusic());
+                                        GameLevelScene.this.playerTrail.show();
                                         GameLevelScene.this.registerUpdateHandler(GameLevelScene.this.levelReaderHandler = new TimerHandler(GameLevelScene.this.level.getSpawnTime(), true, GameLevelScene.this.levelReaderAction));
                                         GameLevelScene.this.onStartEnd();
                                     }

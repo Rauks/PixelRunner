@@ -31,7 +31,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     }
 
     @Override
-    public void start() {
+    public void init() {
         
     }
 

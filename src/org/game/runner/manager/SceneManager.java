@@ -66,13 +66,17 @@ public class SceneManager {
         this.disposeMainMenuScene();
         this.engine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
             @Override
-            public void onTimePassed(final TimerHandler pTimerHandler) 
-            {
+            public void onTimePassed(final TimerHandler pTimerHandler){
                 SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadGameResources(level);
                 SceneManager.this.createGameLevelScene(type, level);
                 SceneManager.this.disposeLoadingScene();
-                ((GameLevelScene)SceneManager.getInstance().getCurrentScene()).start();
+                SceneManager.this.engine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
+                    @Override
+                    public void onTimePassed(final TimerHandler pTimerHandler){
+                        ((GameLevelScene)SceneManager.getInstance().getCurrentScene()).start();
+                    }
+                }));
             }
         }));
     }
@@ -83,8 +87,7 @@ public class SceneManager {
         this.disposeGameLevelScene();
         this.engine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
             @Override
-            public void onTimePassed(final TimerHandler pTimerHandler) 
-            {
+            public void onTimePassed(final TimerHandler pTimerHandler){
                 SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadMenuResources();
                 SceneManager.this.createMainMenuScene();
