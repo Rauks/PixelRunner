@@ -22,7 +22,7 @@ public class ArcadeGameLevelScene extends GameLevelScene{
     private static final String HIGHSCORE_DB_NAME = "highscore";
     private static final String HIGHSCORE_LABEL = "score";
     
-    private long score;
+    private long score = 0;
     private boolean countScore = false;
     private Text scoreText;
     
@@ -30,9 +30,12 @@ public class ArcadeGameLevelScene extends GameLevelScene{
     private SharedPreferences.Editor scoreDbEditor;
     private long highScore;
     private Text highScoreText;
+    private boolean isHigtscoring = false;
     
     public ArcadeGameLevelScene(LevelDescriptor level){
         super(level);
+        
+        AudioManager.getInstance().prepare("mfx/", "arcade_win.xm");
         
         this.scoreDb = this.activity.getSharedPreferences(HIGHSCORE_DB_NAME, Context.MODE_PRIVATE);
         this.scoreDbEditor = this.scoreDb.edit();
@@ -40,8 +43,6 @@ public class ArcadeGameLevelScene extends GameLevelScene{
     }
     
     private void createScoreOnHud(){
-        //Score
-        this.score = 0;
         this.highScore = this.loadHighScore();
         
         this.scoreText = new Text(20, 415, resourcesManager.fontPixel_60, "0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
@@ -61,12 +62,18 @@ public class ArcadeGameLevelScene extends GameLevelScene{
             this.scoreText.setText(String.valueOf(this.score/5));
             this.highScoreText.setPosition(this.scoreText.getWidth(), 0);
             if(this.highScore < this.score){
+                if(!this.isHigtscoring){
+                    this.isHigtscoring = true;
+                    AudioManager.getInstance().stop();
+                    AudioManager.getInstance().play("mfx/", "arcade_win.xm");
+                }
                 this.highScore = this.score;
                 this.highScoreText.setText("/" + String.valueOf(this.highScore/5));
             }
         }
     }
     private void resetScore(){
+        this.isHigtscoring = false;
         this.score = 0;
         this.scoreText.setText("0");
     }
