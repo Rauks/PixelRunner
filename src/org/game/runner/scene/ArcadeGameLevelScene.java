@@ -29,6 +29,7 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.game.runner.game.LevelDescriptor;
+import org.game.runner.game.player.Trail;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
@@ -63,7 +64,6 @@ public class ArcadeGameLevelScene extends GameLevelScene{
     
     private void createScoreOnHud(){
         this.highScore = this.loadHighScore();
-        this.highScore = 300; //Debug purpose
         
         this.scoreText = new Text(20, 415, resourcesManager.fontPixel_60, "0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
         this.scoreText.setAnchorCenter(0, 0);
@@ -86,6 +86,7 @@ public class ArcadeGameLevelScene extends GameLevelScene{
                     this.isHigtscoring = true;
                     AudioManager.getInstance().stop();
                     AudioManager.getInstance().play("mfx/", "arcade_win.xm");
+                    this.playerTrail.setColorMode(Trail.ColorMode.MULTICOLOR);
                 }
                 this.highScore = this.score;
                 this.highScoreText.setText("/" + String.valueOf(this.highScore/5));
@@ -147,6 +148,7 @@ public class ArcadeGameLevelScene extends GameLevelScene{
 
     @Override
     protected void onStartBegin() {
+        this.playerTrail.setColorMode(Trail.ColorMode.WHITE);
         this.resetScore();
     }
 
