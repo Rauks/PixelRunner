@@ -48,6 +48,7 @@ import org.game.runner.game.LevelDescriptor;
 import org.game.runner.game.element.BackgroundElement;
 import org.game.runner.game.element.LevelElement;
 import org.game.runner.game.player.Player;
+import org.game.runner.game.player.Trail;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
@@ -88,6 +89,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     
     //Graphics
     protected Player player;
+    protected Trail playerTrail;
     private Rectangle ground;
     
     //Physic
@@ -130,6 +132,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         //Player
         this.player = new Player(400, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld);
         this.attachChild(this.player);
+        this.playerTrail = new Trail(32, 0, 0, 64, Trail.ColorMode.WHITE, this.resourcesManager.trail, this.vbom);
+        this.player.attachChild(this.playerTrail);
         
         this.setOnSceneTouchListener(this);
     }
@@ -379,6 +383,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.chronoStart.dispose();
         this.ground.detachSelf();
         this.ground.dispose();
+        this.playerTrail.detachSelf();
+        this.playerTrail.dispose();
         this.player.detachSelf();
         this.player.dispose();
         for(Sprite layer : this.backgroundParallaxLayers){
