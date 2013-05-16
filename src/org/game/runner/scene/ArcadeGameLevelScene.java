@@ -12,6 +12,7 @@ import org.andengine.util.adt.align.HorizontalAlign;
 import org.game.runner.game.LevelDescriptor;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
+import org.game.runner.manager.SceneManager.SceneType;
 
 /**
  *
@@ -123,5 +124,10 @@ public class ArcadeGameLevelScene extends GameLevelScene{
     @Override
     protected void onStartEnd() {
         this.countScore = true;
+    }
+
+    @Override
+    public SceneType getSceneType() {
+        return SceneType.SCENE_GAME_ARCADE;
     }
 }

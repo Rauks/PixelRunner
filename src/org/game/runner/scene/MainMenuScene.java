@@ -13,6 +13,7 @@ import org.game.runner.base.BaseMenuScene;
 import org.game.runner.game.ArcadeLevelDescriptor;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
+import org.game.runner.manager.SceneManager.SceneType;
 
 /**
  *
@@ -62,7 +63,7 @@ public class MainMenuScene extends BaseMenuScene implements MenuScene.IOnMenuIte
                 return true;
             case MENUID_ARCADE:
                 AudioManager.getInstance().stop();
-                SceneManager.getInstance().loadGameLevelScene(new ArcadeLevelDescriptor());
+                SceneManager.getInstance().loadGameLevelScene(SceneType.SCENE_GAME_ARCADE, new ArcadeLevelDescriptor());
                 return true;
             case MENUID_CREDITS:
                 SceneManager.getInstance().createCreditsScene();

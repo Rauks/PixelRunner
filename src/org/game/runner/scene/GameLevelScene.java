@@ -326,11 +326,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     public void onResume() {
         this.audioManager.resume();
     }
-
-    @Override
-    public SceneType getSceneType() {
-        return SceneType.SCENE_GAME_LEVEL;
-    }
     
     private void destroyPhysicsWorld(){
         this.engine.runOnUpdateThread(new Runnable(){

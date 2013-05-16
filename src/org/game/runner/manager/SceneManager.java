@@ -8,6 +8,7 @@ import org.andengine.engine.Engine;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
+import org.andengine.util.debug.Debug;
 import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
 import org.game.runner.game.LevelDescriptor;
@@ -28,7 +29,7 @@ public class SceneManager {
         SCENE_SPLASH,
         SCENE_SPLASH_END,
         SCENE_MENU,
-        SCENE_GAME_LEVEL,
+        SCENE_GAME_ARCADE,
         SCENE_LOADING,
         SCENE_CREDITS}
     
@@ -59,7 +60,7 @@ public class SceneManager {
         return this.currentScene;
     }
     
-    public void loadGameLevelScene(final LevelDescriptor level){
+    public void loadGameLevelScene(final SceneType type, final LevelDescriptor level){
         this.createLoadingScene();
         ResourcesManager.getInstance().unloadMenuResources();
         this.disposeMainMenuScene();
@@ -69,7 +70,7 @@ public class SceneManager {
             {
                 SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadGameResources(level);
-                SceneManager.this.createGameLevelScene(level);
+                SceneManager.this.createGameLevelScene(type, level);
                 SceneManager.this.disposeLoadingScene();
                 ((GameLevelScene)SceneManager.getInstance().getCurrentScene()).start();
             }
@@ -103,8 +104,15 @@ public class SceneManager {
         this.loadingScene = null;
     }
     
-    private void createGameLevelScene(LevelDescriptor level) {
-        this.gameLevelScene = new ArcadeGameLevelScene(level);
+    private void createGameLevelScene(SceneType type, LevelDescriptor level) {
+        switch(type){
+            case SCENE_GAME_ARCADE:
+                this.gameLevelScene = new ArcadeGameLevelScene(level);
+                break;
+            default:
+                Debug.e("PixelRunner", "Not a gaming scene flag in scene manager loading.");
+                return;       
+        }        
         setScene(this.gameLevelScene);
     }
     
