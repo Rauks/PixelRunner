@@ -11,6 +11,7 @@ import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
 import org.game.runner.game.LevelDescriptor;
+import org.game.runner.scene.ArcadeGameLevelScene;
 import org.game.runner.scene.CreditScene;
 import org.game.runner.scene.GameLevelScene;
 import org.game.runner.scene.LoadingScene;
@@ -128,7 +129,7 @@ public class SceneManager {
     }
     
     private void createGameLevelScene(LevelDescriptor level) {
-        this.gameLevelScene = new GameLevelScene(level);
+        this.gameLevelScene = new ArcadeGameLevelScene(level);
         setScene(this.gameLevelScene);
     }
     

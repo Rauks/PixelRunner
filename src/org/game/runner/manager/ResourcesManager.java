@@ -41,6 +41,7 @@ public class ResourcesManager {
     //Fonts
     public Font fontPixel_34;
     public Font fontPixel_60;
+    public Font fontPixel_60_gray;
     public Font fontPixel_100;
     public Font fontPixel_200;
     
@@ -80,6 +81,9 @@ public class ResourcesManager {
         final ITexture fontPixel60Texture = new BitmapTextureAtlas(this.activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         this.fontPixel_60 = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel60Texture, this.activity.getAssets(), "pixel.ttf", 60, false, Color.WHITE, 2, Color.BLACK);
         this.fontPixel_60.load();
+        final ITexture fontPixel60GrayTexture = new BitmapTextureAtlas(this.activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        this.fontPixel_60_gray = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel60GrayTexture, this.activity.getAssets(), "pixel.ttf", 60, false, Color.GRAY, 2, Color.BLACK);
+        this.fontPixel_60_gray.load();
         final ITexture fontPixel100Texture = new BitmapTextureAtlas(this.activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         this.fontPixel_100 = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel100Texture, this.activity.getAssets(), "pixel.ttf", 100, false, Color.WHITE, 2, Color.BLACK);
         this.fontPixel_100.load();

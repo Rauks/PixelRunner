@@ -57,7 +57,7 @@ import org.game.runner.utils.EaseBroadcast;
  *
  * @author Karl
  */
-public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
+public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     private final float LEFT_LIMIT = 20;
     private final float RIGHT_LIMIT = 780;
     private final float GROUND_LEVEL = 50;
@@ -68,10 +68,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     private final float BROADCAST_RIGHT = 1000;
     
     //HUD
-    private HUD hud;
-    private long score = 0;
-    private boolean countScore = false;
-    private Text scoreText;
+    protected HUD hud;
     
     //HUD Broadcast
     private Text chrono3;
@@ -80,7 +77,7 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     private Text chronoStart;
     
     //Level
-    private LevelDescriptor level;
+    protected LevelDescriptor level;
     private TimerHandler levelReaderHandler;
     private ITimerCallback levelReaderAction;
     
@@ -90,11 +87,11 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     private float parallaxFactor = 1f;
     
     //Graphics
-    private Player player;
+    protected Player player;
     private Rectangle ground;
     
     //Physic
-    private PhysicsWorld physicWorld;
+    protected PhysicsWorld physicWorld;
     private Body groundBody;
     
     //Detectors
@@ -226,50 +223,34 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         this.hud.attachChild(this.chrono2);
         this.hud.attachChild(this.chrono1);
         this.hud.attachChild(this.chronoStart);
-        
-        //Score
-        this.scoreText = new Text(20, 415, resourcesManager.fontPixel_60, "0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
-        this.scoreText.setAnchorCenter(0, 0); 
-        if(!this.level.needScore()){
-            this.scoreText.setVisible(false);
-        }
-        this.hud.attachChild(this.scoreText);
-    }
-    
-    private void addScore(int score){
-        if(this.countScore){
-            this.score += score;
-            this.scoreText.setText(String.valueOf((long)(this.score / 5)));
-        }
-    }
-    private void resetScore(){
-        this.score = 0;
-        this.scoreText.setText("0");
     }
     
     private void restart(){
-        this.unregisterUpdateHandler(this.levelReaderHandler);
         Log.d("PixelRunner", "Restart");
+        this.onRestartBegin();
+        this.unregisterUpdateHandler(this.levelReaderHandler);
         AudioManager.getInstance().stop();
         if(!this.activity.isMute()){
             this.engine.vibrate(100);
         }
         this.player.rollBackJump();
         this.parallaxFactor = -10f;
-        this.countScore = false;
-        this.disposeLevelElements();
         this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
                 GameLevelScene.this.parallaxFactor = 1f;
+                GameLevelScene.this.onRestartEnd();
                 GameLevelScene.this.start();
             }
         }));
-    }    
+        this.disposeLevelElements();
+    }
+    protected abstract void onRestartBegin();
+    protected abstract void onRestartEnd();
     public void start(){
         Log.d("PixelRunner", "Start");
-        this.resetScore();
         this.level.start();
+        this.onStartBegin();
         
         this.broadcast(this.chrono3, new IEntityModifierListener() {
             @Override
@@ -296,8 +277,8 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
                                     @Override
                                     public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                                         AudioManager.getInstance().play("mfx/", GameLevelScene.this.level.getMusic());
-                                        GameLevelScene.this.countScore = true;
                                         GameLevelScene.this.registerUpdateHandler(GameLevelScene.this.levelReaderHandler = new TimerHandler(GameLevelScene.this.level.getSpawnTime(), true, GameLevelScene.this.levelReaderAction));
+                                        GameLevelScene.this.onStartEnd();
                                     }
                                     
                                     @Override
@@ -311,6 +292,8 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
             }
         });
     }
+    protected abstract void onStartBegin();
+    protected abstract void onStartEnd();
     
     private void broadcast(final IEntity entity, final IEntityModifierListener listener){
         entity.registerEntityModifier(new MoveModifier(0.5f, BROADCAST_RIGHT, BROADCAST_LEVEL, BROADCAST_LEFT, BROADCAST_LEVEL, new IEntityModifierListener() {
@@ -396,8 +379,6 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         this.chrono2.dispose();
         this.chrono1.detachSelf();
         this.chrono1.dispose();
-        this.scoreText.detachSelf();
-        this.scoreText.dispose();
         
         this.chronoStart.detachSelf();
         this.chronoStart.dispose();
@@ -415,12 +396,6 @@ public class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
         this.removerRight.dispose();
         this.detachSelf();
         this.dispose();
-    }
-    
-    @Override
-    protected void onManagedUpdate(float pSecondsElapsed) {
-        super.onManagedUpdate(pSecondsElapsed);
-        this.addScore((int)(pSecondsElapsed*100));
     }
 
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
