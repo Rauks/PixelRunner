@@ -51,31 +51,6 @@ public class SceneManager {
         this.engine.setScene(scene);
     }
     
-    public void setScene(SceneType sceneType){
-        switch (sceneType){
-            case SCENE_MENU:
-                setScene(this.mainMenuScene);
-                break;
-            case SCENE_GAME_LEVEL:
-                setScene(this.gameLevelScene);
-                break;
-            case SCENE_SPLASH:
-                setScene(this.splashScene);
-                break;
-            case SCENE_SPLASH_END:
-                setScene(this.splashEndScene);
-                break;
-            case SCENE_LOADING:
-                setScene(this.loadingScene);
-                break;
-            case SCENE_CREDITS:
-                setScene(this.creditsScene);
-                break;
-            default:
-                break;
-        }
-    }
-    
     public SceneType getCurrentSceneType(){
         return this.currentScene.getSceneType();
     }
