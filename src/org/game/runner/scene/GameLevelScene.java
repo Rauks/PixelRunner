@@ -51,7 +51,7 @@ import org.game.runner.game.player.Player;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
-import org.game.runner.utils.EaseBroadcast;
+import org.game.runner.utils.ease.EaseBroadcast;
 
 /**
  *

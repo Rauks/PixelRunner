@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.game.runner.utils;
+package org.game.runner.utils.ease;
 
 import org.andengine.util.modifier.ease.IEaseFunction;
 
