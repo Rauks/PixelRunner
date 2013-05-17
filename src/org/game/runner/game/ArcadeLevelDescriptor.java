@@ -4,9 +4,9 @@
  */
 package org.game.runner.game;
 
+import java.util.Random;
 import org.game.runner.game.element.BackgroundElement;
 import org.game.runner.game.element.LevelElement;
-import org.game.runner.game.element.LevelElement.LevelElementType;
 
 /**
  *
@@ -20,9 +20,24 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
         this.addBackgroundElement(new BackgroundElement(0, 0, "mountain_1", 35));
     }
     
+    private Random ranGen = new Random();
+    
     @Override
     public LevelElement getNext() {
-        return new LevelElement(LevelElementType.TRAP_JUMP);
+        switch(this.ranGen.nextInt(5)){
+            case 0:
+                return LevelElement.TRAP_JUMP;
+            case 1:
+                return LevelElement.BONUS_JUMP;
+            case 2:
+                return LevelElement.BONUS_LIFE;
+            case 3:
+                return LevelElement.BONUS_SLOW;
+            case 4:
+                return LevelElement.BONUS_SPEED;
+            default:
+                return LevelElement.TRAP_JUMP;
+        }
     }
 
     @Override

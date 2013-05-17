@@ -7,12 +7,14 @@ package org.game.runner.game.player;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.color.Color;
 
 /**
  *
@@ -111,5 +113,13 @@ public class Player extends AnimatedSprite{
 
     public boolean isRolling() {
         return this.rolling;
+    }
+    
+    @Override
+    public void setColor(Color color){
+        for(IEntity child : this.mChildren){
+            child.setColor(color);
+        }
+        super.setColor(color);
     }
 }

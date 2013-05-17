@@ -4,22 +4,26 @@
  */
 package org.game.runner.game.element;
 
+import org.andengine.util.adt.color.Color;
+
 /**
  *
  * @author Karl
  */
-public class LevelElement {
-    public enum LevelElementType{
-        TRAP_JUMP;
+public enum LevelElement {
+    TRAP_JUMP, BONUS_SPEED(Color.RED), BONUS_SLOW(Color.YELLOW), BONUS_LIFE(Color.GREEN), BONUS_JUMP(Color.BLUE);
+        
+    private Color color;
+    
+    private LevelElement(Color color){
+        this.color = color;
+    }
+    private LevelElement(){
+        this(Color.WHITE);
     }
     
-    private LevelElementType type;
-    
-    public LevelElement(LevelElementType type){
-        this.type = type;
+    public Color getColor(){
+        return this.color;
     }
     
-    public LevelElementType getType(){
-        return this.type;
-    }
 }

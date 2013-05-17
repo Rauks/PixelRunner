@@ -27,7 +27,7 @@ import org.game.runner.manager.ResourcesManager;
  */
 public class Trail extends SpriteParticleSystem{
     public enum ColorMode{
-        WHITE, MULTICOLOR
+        NORMAL, MULTICOLOR
     }
     
     private Random ranGen = new Random();
@@ -36,11 +36,12 @@ public class Trail extends SpriteParticleSystem{
     private int dY;
     private ColorMode colorMode;
     
-    public Trail(int pX, int pY, int dX, int dY, ColorMode colorMode, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager){
+    public Trail(int pX, int pY, int dX, int dY, ColorMode colorMode, IEntity attachTo, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager){
         super(new PointParticleEmitter(pX, pY), 15, 20, 40, pTextureRegion, pVertexBufferObjectManager);
         this.dX = dX;
         this.dY = dY;
         this.colorMode = colorMode;
+        attachTo.attachChild(this);
         this.initInitializers();
     }
     
@@ -64,7 +65,8 @@ public class Trail extends SpriteParticleSystem{
                         return Color.WHITE;
                 }
             default:
-                return Color.WHITE;
+            case NORMAL:
+                return this.getColor();
         }
     }
     

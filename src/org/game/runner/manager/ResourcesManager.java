@@ -45,10 +45,6 @@ public class ResourcesManager {
     public Font fontPixel_100;
     public Font fontPixel_200;
     
-    //Textures
-    private BitmapTextureAtlas testTextureAtlas;
-    public ITextureRegion test;
-    
     //Texturess - Game
     private BitmapTextureAtlas playerTextureAtlas;
     public ITiledTextureRegion player;
@@ -127,11 +123,6 @@ public class ResourcesManager {
     }
 
     public void loadGameResources(LevelDescriptor level) {
-	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-        this.testTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 40, 40);
-        this.test = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.testTextureAtlas, this.activity, "test_body.png", 0, 0);
-        this.testTextureAtlas.load();
-        
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
         this.playerTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 224, 256);
         this.player = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.playerTextureAtlas, this.activity, "player.png", 0, 0, 4, 4);
@@ -155,8 +146,6 @@ public class ResourcesManager {
     }
 
     public void unloadGameResources() {
-        this.testTextureAtlas.unload();
-        this.test = null;
         this.playerTextureAtlas.unload();
         this.player = null;
         this.trailTextureAtlas.unload();

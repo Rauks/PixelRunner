@@ -133,9 +133,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         //Player
         this.player = new Player(400, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld);
         this.attachChild(this.player);
-        this.playerTrail = new Trail(32, 0, 0, 64, Trail.ColorMode.WHITE, this.resourcesManager.trail, this.vbom);
+        this.playerTrail = new Trail(32, 0, 0, 64, Trail.ColorMode.NORMAL, this.player, this.resourcesManager.trail, this.vbom);
         this.playerTrail.hide();
-        this.player.attachChild(this.playerTrail);
         
         this.setOnSceneTouchListener(this);
     }
@@ -165,11 +164,66 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 }
                 else{
                     //Level elements spawn
-                    LevelElement next = GameLevelScene.this.level.getNext();
-                    switch(next.getType()){
+                    final float bonusSize = 30;
+                    final float baseY = GROUND_LEVEL + GROUND_THICKNESS/2 + bonusSize/2;
+                    IEntity element;
+                    final LevelElement lvlElement = GameLevelScene.this.level.getNext();
+                    switch(lvlElement){
+                        case BONUS_JUMP:
+                            element = new Rectangle(RIGHT_LIMIT, baseY + 4, bonusSize, bonusSize, GameLevelScene.this.vbom){
+                                @Override
+                                protected void onManagedUpdate(float pSecondsElapsed){
+                                    super.onManagedUpdate(pSecondsElapsed);
+                                    if(this.collidesWith(GameLevelScene.this.player)){
+                                        GameLevelScene.this.disposeLevelElement(this);
+                                        GameLevelScene.this.player.setColor(lvlElement.getColor());
+                                        //Not implemented yet
+                                    }
+                                }
+                            };
+                            break;
+                        case BONUS_LIFE:
+                            element = new Rectangle(RIGHT_LIMIT, baseY + 4, bonusSize, bonusSize, GameLevelScene.this.vbom){
+                                @Override
+                                protected void onManagedUpdate(float pSecondsElapsed){
+                                    super.onManagedUpdate(pSecondsElapsed);
+                                    if(this.collidesWith(GameLevelScene.this.player)){
+                                        GameLevelScene.this.disposeLevelElement(this);
+                                        GameLevelScene.this.player.setColor(lvlElement.getColor());
+                                        //Not implemented yet
+                                    }
+                                }
+                            };
+                            break;
+                        case BONUS_SLOW:
+                            element = new Rectangle(RIGHT_LIMIT, baseY + 4, bonusSize, bonusSize, GameLevelScene.this.vbom){
+                                @Override
+                                protected void onManagedUpdate(float pSecondsElapsed){
+                                    super.onManagedUpdate(pSecondsElapsed);
+                                    if(this.collidesWith(GameLevelScene.this.player)){
+                                        GameLevelScene.this.disposeLevelElement(this);
+                                        GameLevelScene.this.player.setColor(lvlElement.getColor());
+                                        GameLevelScene.this.setSpeedFactor(0.7f);
+                                    }
+                                }
+                            };
+                            break;
+                        case BONUS_SPEED:
+                            element = new Rectangle(RIGHT_LIMIT, baseY + 4, bonusSize, bonusSize, GameLevelScene.this.vbom){
+                                @Override
+                                protected void onManagedUpdate(float pSecondsElapsed){
+                                    super.onManagedUpdate(pSecondsElapsed);
+                                    if(this.collidesWith(GameLevelScene.this.player)){
+                                        GameLevelScene.this.disposeLevelElement(this);
+                                        GameLevelScene.this.player.setColor(lvlElement.getColor());
+                                        GameLevelScene.this.setSpeedFactor(1.3f);
+                                    }
+                                }
+                            };
+                            break;
+                        default:
                         case TRAP_JUMP:
-                            final float trapY = GROUND_LEVEL + GROUND_THICKNESS/2 + GameLevelScene.this.resourcesManager.test.getHeight()/2;
-                            Sprite trap = new Sprite(800, trapY, GameLevelScene.this.resourcesManager.test, GameLevelScene.this.vbom){
+                            element = new Rectangle(RIGHT_LIMIT, baseY, bonusSize, bonusSize, GameLevelScene.this.vbom){
                                 @Override
                                 protected void onManagedUpdate(float pSecondsElapsed){
                                     super.onManagedUpdate(pSecondsElapsed);
@@ -178,13 +232,14 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                                     }
                                 }
                             };
-                            GameLevelScene.this.levelElements.add(trap);
-                            GameLevelScene.this.attachChild(trap);
-                            PhysicsHandler handler = new PhysicsHandler(trap);
-                            trap.registerUpdateHandler(handler);
-                            handler.setVelocity(-GameLevelScene.this.level.getSpawnSpeed(), 0);
                             break;
                     }
+                    element.setColor(lvlElement.getColor());
+                    GameLevelScene.this.levelElements.add(element);
+                    GameLevelScene.this.attachChild(element);
+                    PhysicsHandler handler = new PhysicsHandler(element);
+                    element.registerUpdateHandler(handler);
+                    handler.setVelocity(-GameLevelScene.this.level.getSpawnSpeed(), 0);
                 }
             }
         };
@@ -239,6 +294,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             }
         });
         this.parallaxFactor = -10f;
+        this.setSpeedFactor(1f);
+        this.player.setColor(Color.WHITE);
         this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
@@ -358,12 +415,15 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         });
     }
     
+    private void disposeLevelElement(IEntity element){
+        GameLevelScene.this.levelElements.remove(element);
+        element.clearUpdateHandlers();
+        element.detachSelf();
+        element.dispose();
+    }
     private void disposeLevelElements(){
         for(IEntity element : GameLevelScene.this.levelElements){
-            GameLevelScene.this.levelElements.remove(element);
-            element.clearUpdateHandlers();
-            element.detachSelf();
-            element.dispose();
+            this.disposeLevelElement(element);
         }
     }
 

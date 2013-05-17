@@ -128,7 +128,7 @@ public class ArcadeGameLevelScene extends GameLevelScene{
 
     @Override
     protected void onStartBegin() {
-        this.playerTrail.setColorMode(Trail.ColorMode.WHITE);
+        this.playerTrail.setColorMode(Trail.ColorMode.NORMAL);
         this.resetScore();
     }
 
