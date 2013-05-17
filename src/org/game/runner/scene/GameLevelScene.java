@@ -47,6 +47,7 @@ import org.game.runner.base.BaseScene;
 import org.game.runner.game.LevelDescriptor;
 import org.game.runner.game.element.BackgroundElement;
 import org.game.runner.game.element.LevelElement;
+import org.game.runner.game.player.IPlayerActionCallback;
 import org.game.runner.game.player.Player;
 import org.game.runner.game.player.Trail;
 import org.game.runner.manager.AudioManager;
@@ -173,15 +174,12 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                                 protected void onManagedUpdate(float pSecondsElapsed){
                                     super.onManagedUpdate(pSecondsElapsed);
                                     if(this.collidesWith(GameLevelScene.this.player)){
-                                        Log.d("PixelRunner", "Player hit");
                                         GameLevelScene.this.restart();
                                     }
                                 }
                             };
                             GameLevelScene.this.levelElements.add(trap);
-                            Log.d("PixelRunner", "Spawn element");
                             GameLevelScene.this.attachChild(trap);
-                            //trap.registerEntityModifier(new MoveModifier(0.5f, RIGHT_LIMIT, trapY, LEFT_LIMIT, trapY));
                             PhysicsHandler handler = new PhysicsHandler(trap);
                             trap.registerUpdateHandler(handler);
                             handler.setVelocity(-GameLevelScene.this.level.getSpawnSpeed(), 0);
@@ -201,7 +199,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 //Level elements unspawn
                 for(IEntity element : GameLevelScene.this.levelElements){
                     if(element.collidesWith(GameLevelScene.this.removerLeft)){
-                        Log.d("PixelRunner", "Left unspawn");
                         GameLevelScene.this.levelElements.remove(element);
                         element.clearUpdateHandlers();
                         element.detachSelf();
@@ -235,11 +232,12 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.onRestartBegin();
         this.unregisterUpdateHandler(this.levelReaderHandler);
         AudioManager.getInstance().stop();
-        if(!this.activity.isMute()){
-            this.engine.vibrate(100);
-        }
         this.playerTrail.hide();
-        this.player.rollBackJump();
+        this.player.rollBackJump(new IPlayerActionCallback() {
+            public void onActionDone() {
+                GameLevelScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
+            }
+        });
         this.parallaxFactor = -10f;
         this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
             @Override
@@ -406,11 +404,19 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         if (pSceneTouchEvent.isActionDown()){
             if(pSceneTouchEvent.getY() > 250){
                 //Jump
-                this.player.jump();
+                this.player.jump(new IPlayerActionCallback() {
+                    public void onActionDone() {
+                        GameLevelScene.this.activity.vibrate(30);
+                    }
+                });
             }
             else if(pSceneTouchEvent.getY() < 230){
                 //Roll
-                this.player.roll();
+                this.player.roll(new IPlayerActionCallback() {
+                    public void onActionDone() {
+                        GameLevelScene.this.activity.vibrate(30);
+                    }
+                });
             }
         }
         return false;

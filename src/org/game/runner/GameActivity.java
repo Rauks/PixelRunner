@@ -115,6 +115,17 @@ public class GameActivity extends BaseGameActivity{
         return false; 
     }
     
+    public void vibrate(long pMilliseconds){
+        if(!this.isMute()){
+            this.mEngine.vibrate(pMilliseconds);
+        }
+    }
+    public void vibrate(long[] pMillisecondsPattern){
+        if(!this.isMute()){
+            this.mEngine.vibrate(pMillisecondsPattern, -1);
+        }
+    }
+    
     public boolean isMute(){
         return this.phoneAudioManager.getStreamVolume(android.media.AudioManager.STREAM_MUSIC) == 0;
     }

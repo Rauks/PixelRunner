@@ -52,24 +52,26 @@ public class Player extends AnimatedSprite{
         this.jumpCount = 0;
         this.run();
     }
-    public void jump(){
+    public void jump(final IPlayerActionCallback playerActionCallbask){
         if(this.jumpCount < 2 && !this.rolling){
             this.jumping = true;
             this.rolling = false;
             this.animate(PLAYER_ANIMATE_JUMP, PLAYER_ANIMATE_JUMP_FRAMES, true);
             this.body.setLinearVelocity(new Vector2(0, 15));
             this.increaseJumpLevel();
+            playerActionCallbask.onActionDone();
         }
     }
-    public void rollBackJump(){
+    public void rollBackJump(final IPlayerActionCallback playerActionCallbask){
         this.jumpCount = 2;
         this.jumping = true;
         this.rolling = true;
         this.animate(PLAYER_ANIMATE_ROLL, PLAYER_ANIMATE_ROLL_FRAMES, true);
         this.body.setLinearVelocity(new Vector2(0, 25));
+        playerActionCallbask.onActionDone();
     }
     
-    public void roll(){
+    public void roll(final IPlayerActionCallback playerActionCallbask){
         if(!this.rolling){
             this.animate(PLAYER_ANIMATE_ROLL, PLAYER_ANIMATE_ROLL_FRAMES, false, new IAnimationListener() {
                 @Override
@@ -91,6 +93,7 @@ public class Player extends AnimatedSprite{
                     Player.this.run();
                 }
             });
+            playerActionCallbask.onActionDone();
         }
     }
     
