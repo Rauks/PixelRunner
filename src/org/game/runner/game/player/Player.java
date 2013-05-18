@@ -37,8 +37,8 @@ public abstract class Player extends AnimatedSprite{
     public Player(float pX, float pY, ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld physicWorld){
         super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
         this.createPhysics(physicWorld);
-        this.speed = 1f;
-        this.onGround();
+        this.resetMovements();
+        this.resetBonus();
     }
     
     private void createPhysics(PhysicsWorld physicWorld){        
@@ -50,11 +50,15 @@ public abstract class Player extends AnimatedSprite{
     private void increaseJumpLevel(){
         this.jumpCount++;
     }
-    public void onGround(){
+    public void resetMovements(){
         this.jumping = false;
         this.rolling = false;
         this.jumpCount = 0;
         this.run();
+    }
+    public void resetBonus(){
+        this.setSpeed(1f);
+        this.setColor(Color.WHITE);
     }
     public void jump(){
         if(this.jumpCount < 2 && !this.rolling){

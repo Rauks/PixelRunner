@@ -136,8 +136,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             }
             @Override
             public void onRollBackJump() {
-                this.setSpeed(1f);
-                this.setColor(Color.WHITE);
+                this.reset();
                 GameLevelScene.this.restart();
                 GameLevelScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
             }
@@ -427,7 +426,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 final Fixture xB = contact.getFixtureB();
                 //Player contacts
                 if (xA.getBody().equals(GameLevelScene.this.player.getBody()) || xB.getBody().equals(GameLevelScene.this.player.getBody())){
-                    GameLevelScene.this.player.onGround();
+                    GameLevelScene.this.player.resetMovements();
                 }
             }
 
