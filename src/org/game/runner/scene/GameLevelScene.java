@@ -136,6 +136,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             }
             @Override
             public void onRollBackJump() {
+                this.setSpeed(1f);
+                this.setColor(Color.WHITE);
                 GameLevelScene.this.restart();
                 GameLevelScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
             }
@@ -228,15 +230,11 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     }
     
     private void restart(){
-        Log.d("PixelRunner", "Restart");
         this.onRestartBegin();
         this.unregisterUpdateHandler(this.levelReaderHandler);
         AudioManager.getInstance().stop();
         this.playerTrail.hide();
-        this.player.rollBackJump();
         this.parallaxFactor = -10f;
-        this.player.setSpeed(1f);
-        this.player.setColor(Color.WHITE);
         this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
