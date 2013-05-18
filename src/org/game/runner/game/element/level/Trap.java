@@ -26,10 +26,10 @@ public class Trap extends LevelElement{
             @Override
             protected void onManagedUpdate(float pSecondsElapsed){
                 super.onManagedUpdate(pSecondsElapsed);
-                if(action.playerCollideWith(this)){
-                    action.getPlayer().setColor(this.getColor());
-                    action.getPlayer().rollBackJump();
-                    action.onPlayerCollided();
+                if(player.collidesWith(this)){
+                    player.setColor(this.getColor());
+                    player.rollBackJump();
+                    player.hit(this);
                 }
             }
         };

@@ -27,10 +27,10 @@ public class BonusSpeed extends LevelElement{
             @Override
             protected void onManagedUpdate(float pSecondsElapsed){
                 super.onManagedUpdate(pSecondsElapsed);
-                if(action.playerCollideWith(this)){
-                    action.getPlayer().setColor(this.getColor());
-                    action.getPlayer().setSpeed(0.7f);
-                    action.onPlayerCollided();
+                if(player.collidesWith(this)){
+                    player.setColor(this.getColor());
+                    player.setSpeed(0.7f);
+                    player.hit(this);
                 }
             }
         };

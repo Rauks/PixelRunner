@@ -27,10 +27,10 @@ public class BonusLife  extends LevelElement{
             @Override
             protected void onManagedUpdate(float pSecondsElapsed){
                 super.onManagedUpdate(pSecondsElapsed);
-                if(action.playerCollideWith(this)){
-                    action.getPlayer().setColor(this.getColor());
+                if(player.collidesWith(this)){
+                    player.setColor(this.getColor());
                     //Not implemented yet
-                    action.onPlayerCollided();
+                    player.hit(this);
                 }
             }
         };

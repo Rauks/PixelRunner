@@ -45,7 +45,6 @@ import org.game.runner.base.BaseScene;
 import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.game.element.background.BackgroundElement;
 import org.game.runner.game.element.level.LevelElement;
-import org.game.runner.game.element.level.LevelElementCollisionCallback;
 import org.game.runner.game.player.Player;
 import org.game.runner.game.player.Trail;
 import org.game.runner.manager.AudioManager;
@@ -137,7 +136,12 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             }
             @Override
             public void onRollBackJump() {
+                GameLevelScene.this.restart();
                 GameLevelScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
+            }
+            @Override
+            protected void onHit(IEntity pOtherEntity) {
+                GameLevelScene.this.disposeLevelElement(pOtherEntity);
             }
         };
         this.attachChild(this.player);
@@ -192,15 +196,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
 
             @Override
             public void onUpdate(final float pSecondsElapsed) {
-                //Player element collision
-                for(IEntity element : GameLevelScene.this.levelElements){
-                    if(element.collidesWith(GameLevelScene.this.removerLeft)){
-                        if(element.collidesWith(GameLevelScene.this.player)){
-                            GameLevelScene.this.disposeLevelElement(element);
-                            GameLevelScene.this.player.setColor(lvlElement.getColor());
-                        }
-                    }
-                }
                 //Level elements unspawn
                 for(IEntity element : GameLevelScene.this.levelElements){
                     if(element.collidesWith(GameLevelScene.this.removerLeft)){

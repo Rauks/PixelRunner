@@ -15,6 +15,7 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
+import org.game.runner.game.element.level.LevelElement;
 
 /**
  *
@@ -113,6 +114,10 @@ public abstract class Player extends AnimatedSprite{
         this.animate(PLAYER_ANIMATE_RUN, PLAYER_ANIMATE_RUN_FRAMES, true);
     }
     
+    public void hit(IEntity pOtherEntity){
+        this.onHit(pOtherEntity);
+    }
+    
     public Body getBody(){
         return this.body;
     }
@@ -137,4 +142,5 @@ public abstract class Player extends AnimatedSprite{
     protected abstract void onJump();
     protected abstract void onRoll();
     protected abstract void onRollBackJump();
+    protected abstract void onHit(IEntity pOtherEntity);
 }

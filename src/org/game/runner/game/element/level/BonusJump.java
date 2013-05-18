@@ -22,15 +22,15 @@ public class BonusJump extends LevelElement{
     }
 
     @Override
-    public IEntity createEntity(float pX, float pY, float pWidth, float pHeight, VertexBufferObjectManager pVertexBufferObjectManager, final LevelElementCollisionCallback action) {
+    public IEntity createEntity(float pX, float pY, float pWidth, float pHeight, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
         IEntity entity = new Rectangle(pX, pY, pWidth, pHeight, pVertexBufferObjectManager){
             @Override
             protected void onManagedUpdate(float pSecondsElapsed){
                 super.onManagedUpdate(pSecondsElapsed);
-                if(action.playerCollideWith(this)){
-                    action.getPlayer().setColor(this.getColor());
+                if(player.collidesWith(this)){
+                    player.setColor(this.getColor());
                     //Not implemented yet
-                    action.onPlayerCollided();
+                    player.hit(this);
                 }
             }
         };
