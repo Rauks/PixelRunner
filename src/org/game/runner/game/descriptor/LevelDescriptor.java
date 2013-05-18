@@ -4,7 +4,6 @@
  */
 package org.game.runner.game.descriptor;
 
-import android.util.Log;
 import java.util.LinkedList;
 import java.util.List;
 import org.andengine.util.debug.Debug;

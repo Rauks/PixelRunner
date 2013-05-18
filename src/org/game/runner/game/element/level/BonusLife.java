@@ -9,7 +9,6 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.game.runner.game.player.Player;
-import org.game.runner.scene.GameLevelScene;
 
 /**
  *

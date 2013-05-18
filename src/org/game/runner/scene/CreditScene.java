@@ -11,8 +11,6 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.game.runner.base.BaseMenuScene;
-import org.game.runner.base.BaseScene;
-import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 

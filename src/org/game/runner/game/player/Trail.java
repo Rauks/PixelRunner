@@ -6,7 +6,6 @@ package org.game.runner.game.player;
 
 import android.opengl.GLES20;
 import java.util.Random;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.particle.Particle;
 import org.andengine.entity.particle.SpriteParticleSystem;
@@ -19,7 +18,6 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
-import org.game.runner.manager.ResourcesManager;
 
 /**
  *

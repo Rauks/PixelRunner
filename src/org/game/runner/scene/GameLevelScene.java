@@ -360,7 +360,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             }
         });
     }
-    
     private void disposeLevelElement(IEntity element){
         GameLevelScene.this.levelElements.remove(element);
         element.clearUpdateHandlers();

@@ -5,10 +5,7 @@
 package org.game.runner.manager;
 
 import android.graphics.Color;
-import android.util.Log;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
@@ -21,7 +18,6 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.debug.Debug;
 import org.game.runner.GameActivity;
 import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.game.element.background.BackgroundElement;
