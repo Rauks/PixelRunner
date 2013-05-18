@@ -25,8 +25,6 @@ public abstract class BaseScene extends Scene{
     protected VertexBufferObjectManager vbom;
     protected Camera camera;
     
-    private float speedFactor = 1f;
-    
     public BaseScene(){
         this.resourcesManager = ResourcesManager.getInstance();
         this.audioManager = AudioManager.getInstance();
@@ -35,19 +33,6 @@ public abstract class BaseScene extends Scene{
         this.vbom = resourcesManager.vbom;
         this.camera = resourcesManager.camera;
         createScene();
-    }
-    
-    public float getSpeedFactor() {
-        return this.speedFactor;
-    }
-
-    public void setSpeedFactor(float speedFactor) {
-        this.speedFactor = speedFactor;
-    }
-
-    @Override
-    protected void onManagedUpdate(float pSecondsElapsed) {
-        super.onManagedUpdate(pSecondsElapsed * this.speedFactor);
     }
     
     public abstract void createScene();

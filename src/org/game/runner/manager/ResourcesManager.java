@@ -23,8 +23,8 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 import org.game.runner.GameActivity;
-import org.game.runner.game.LevelDescriptor;
-import org.game.runner.game.element.BackgroundElement;
+import org.game.runner.game.descriptor.LevelDescriptor;
+import org.game.runner.game.element.background.BackgroundElement;
 
 /**
  *

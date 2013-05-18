@@ -34,25 +34,22 @@ import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
-import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.IModifier;
 import org.game.runner.base.BaseScene;
-import org.game.runner.game.LevelDescriptor;
-import org.game.runner.game.element.BackgroundElement;
-import org.game.runner.game.element.LevelElement;
-import org.game.runner.game.player.IPlayerActionCallback;
+import org.game.runner.game.descriptor.LevelDescriptor;
+import org.game.runner.game.element.background.BackgroundElement;
+import org.game.runner.game.element.level.LevelElement;
+import org.game.runner.game.element.level.LevelElementCollisionCallback;
 import org.game.runner.game.player.Player;
 import org.game.runner.game.player.Trail;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
-import org.game.runner.manager.SceneManager.SceneType;
 import org.game.runner.utils.ease.EaseBroadcast;
 
 /**
@@ -71,32 +68,26 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     
     //HUD
     protected HUD hud;
-    
     //HUD Broadcast
     private Text chrono3;
     private Text chrono2;
     private Text chrono1;
     private Text chronoStart;
-    
     //Level
     protected LevelDescriptor level;
     private TimerHandler levelReaderHandler;
     private ITimerCallback levelReaderAction;
-    
     //Background
     private AutoParallaxBackground autoParallaxBackground;
     private List<Sprite> backgroundParallaxLayers = new LinkedList<Sprite>();
     private float parallaxFactor = 1f;
-    
     //Graphics
     protected Player player;
     protected Trail playerTrail;
     private Rectangle ground;
-    
     //Physic
     protected PhysicsWorld physicWorld;
     private Body groundBody;
-    
     //Detectors
     private ConcurrentLinkedQueue<IEntity> levelElements = new ConcurrentLinkedQueue<IEntity>();
     private Line removerLeft;
@@ -131,7 +122,24 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.attachChild(this.removerRight);
         
         //Player
-        this.player = new Player(400, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld);
+        this.player = new Player(400, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld) {
+            @Override
+            public void onSpeedChange(float speed) {
+                GameLevelScene.this.activity.vibrate(30);
+            }
+            @Override
+            public void onJump() {
+                GameLevelScene.this.activity.vibrate(30);
+            }
+            @Override
+            public void onRoll() {
+                GameLevelScene.this.activity.vibrate(30);
+            }
+            @Override
+            public void onRollBackJump() {
+                GameLevelScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
+            }
+        };
         this.attachChild(this.player);
         this.playerTrail = new Trail(32, 0, 0, 64, Trail.ColorMode.NORMAL, this.player, this.resourcesManager.trail, this.vbom);
         this.playerTrail.hide();
@@ -166,75 +174,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     //Level elements spawn
                     final float bonusSize = 30;
                     final float baseY = GROUND_LEVEL + GROUND_THICKNESS/2 + bonusSize/2;
-                    IEntity element;
                     final LevelElement lvlElement = GameLevelScene.this.level.getNext();
-                    switch(lvlElement){
-                        case BONUS_JUMP:
-                            element = new Rectangle(RIGHT_LIMIT, baseY + 4, bonusSize, bonusSize, GameLevelScene.this.vbom){
-                                @Override
-                                protected void onManagedUpdate(float pSecondsElapsed){
-                                    super.onManagedUpdate(pSecondsElapsed);
-                                    if(this.collidesWith(GameLevelScene.this.player)){
-                                        GameLevelScene.this.disposeLevelElement(this);
-                                        GameLevelScene.this.player.setColor(lvlElement.getColor());
-                                        //Not implemented yet
-                                    }
-                                }
-                            };
-                            break;
-                        case BONUS_LIFE:
-                            element = new Rectangle(RIGHT_LIMIT, baseY + 4, bonusSize, bonusSize, GameLevelScene.this.vbom){
-                                @Override
-                                protected void onManagedUpdate(float pSecondsElapsed){
-                                    super.onManagedUpdate(pSecondsElapsed);
-                                    if(this.collidesWith(GameLevelScene.this.player)){
-                                        GameLevelScene.this.disposeLevelElement(this);
-                                        GameLevelScene.this.player.setColor(lvlElement.getColor());
-                                        //Not implemented yet
-                                    }
-                                }
-                            };
-                            break;
-                        case BONUS_SLOW:
-                            element = new Rectangle(RIGHT_LIMIT, baseY + 4, bonusSize, bonusSize, GameLevelScene.this.vbom){
-                                @Override
-                                protected void onManagedUpdate(float pSecondsElapsed){
-                                    super.onManagedUpdate(pSecondsElapsed);
-                                    if(this.collidesWith(GameLevelScene.this.player)){
-                                        GameLevelScene.this.disposeLevelElement(this);
-                                        GameLevelScene.this.player.setColor(lvlElement.getColor());
-                                        GameLevelScene.this.setSpeedFactor(0.7f);
-                                    }
-                                }
-                            };
-                            break;
-                        case BONUS_SPEED:
-                            element = new Rectangle(RIGHT_LIMIT, baseY + 4, bonusSize, bonusSize, GameLevelScene.this.vbom){
-                                @Override
-                                protected void onManagedUpdate(float pSecondsElapsed){
-                                    super.onManagedUpdate(pSecondsElapsed);
-                                    if(this.collidesWith(GameLevelScene.this.player)){
-                                        GameLevelScene.this.disposeLevelElement(this);
-                                        GameLevelScene.this.player.setColor(lvlElement.getColor());
-                                        GameLevelScene.this.setSpeedFactor(1.3f);
-                                    }
-                                }
-                            };
-                            break;
-                        default:
-                        case TRAP_JUMP:
-                            element = new Rectangle(RIGHT_LIMIT, baseY, bonusSize, bonusSize, GameLevelScene.this.vbom){
-                                @Override
-                                protected void onManagedUpdate(float pSecondsElapsed){
-                                    super.onManagedUpdate(pSecondsElapsed);
-                                    if(this.collidesWith(GameLevelScene.this.player)){
-                                        GameLevelScene.this.restart();
-                                    }
-                                }
-                            };
-                            break;
-                    }
-                    element.setColor(lvlElement.getColor());
+                    final IEntity element = lvlElement.createEntity(RIGHT_LIMIT, baseY, bonusSize, bonusSize, GameLevelScene.this.vbom, GameLevelScene.this.player);
                     GameLevelScene.this.levelElements.add(element);
                     GameLevelScene.this.attachChild(element);
                     PhysicsHandler handler = new PhysicsHandler(element);
@@ -251,6 +192,15 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
 
             @Override
             public void onUpdate(final float pSecondsElapsed) {
+                //Player element collision
+                for(IEntity element : GameLevelScene.this.levelElements){
+                    if(element.collidesWith(GameLevelScene.this.removerLeft)){
+                        if(element.collidesWith(GameLevelScene.this.player)){
+                            GameLevelScene.this.disposeLevelElement(element);
+                            GameLevelScene.this.player.setColor(lvlElement.getColor());
+                        }
+                    }
+                }
                 //Level elements unspawn
                 for(IEntity element : GameLevelScene.this.levelElements){
                     if(element.collidesWith(GameLevelScene.this.removerLeft)){
@@ -288,13 +238,9 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.unregisterUpdateHandler(this.levelReaderHandler);
         AudioManager.getInstance().stop();
         this.playerTrail.hide();
-        this.player.rollBackJump(new IPlayerActionCallback() {
-            public void onActionDone() {
-                GameLevelScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
-            }
-        });
+        this.player.rollBackJump();
         this.parallaxFactor = -10f;
-        this.setSpeedFactor(1f);
+        this.player.setSpeed(1f);
         this.player.setColor(Color.WHITE);
         this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
             @Override
@@ -388,6 +334,11 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     public void onResume() {
         this.audioManager.resume();
     }
+
+    @Override
+    protected void onManagedUpdate(float pSecondsElapsed) {
+        super.onManagedUpdate(pSecondsElapsed * this.player.getSpeed());
+    }
     
     private void destroyPhysicsWorld(){
         this.engine.runOnUpdateThread(new Runnable(){
@@ -464,19 +415,11 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         if (pSceneTouchEvent.isActionDown()){
             if(pSceneTouchEvent.getY() > 250){
                 //Jump
-                this.player.jump(new IPlayerActionCallback() {
-                    public void onActionDone() {
-                        GameLevelScene.this.activity.vibrate(30);
-                    }
-                });
+                this.player.jump();
             }
             else if(pSceneTouchEvent.getY() < 230){
                 //Roll
-                this.player.roll(new IPlayerActionCallback() {
-                    public void onActionDone() {
-                        GameLevelScene.this.activity.vibrate(30);
-                    }
-                });
+                this.player.roll();
             }
         }
         return false;

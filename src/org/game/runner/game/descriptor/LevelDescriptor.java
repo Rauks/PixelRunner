@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.game.runner.game;
+package org.game.runner.game.descriptor;
 
 import android.util.Log;
 import java.util.LinkedList;
 import java.util.List;
 import org.andengine.util.debug.Debug;
-import org.game.runner.game.element.BackgroundElement;
-import org.game.runner.game.element.LevelElement;
+import org.game.runner.game.element.background.BackgroundElement;
+import org.game.runner.game.element.level.LevelElement;
 
 /**
  *

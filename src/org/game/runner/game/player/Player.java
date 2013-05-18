@@ -20,7 +20,7 @@ import org.andengine.util.adt.color.Color;
  *
  * @author Karl
  */
-public class Player extends AnimatedSprite{
+public abstract class Player extends AnimatedSprite{
     final long[] PLAYER_ANIMATE_RUN = new long[]        { 80,     80,     80,     80                          };
     final int[] PLAYER_ANIMATE_RUN_FRAMES = new int[]   { 8,      9,      10,     9                           };
     final long[] PLAYER_ANIMATE_JUMP = new long[]       { 1000                                                };
@@ -32,10 +32,12 @@ public class Player extends AnimatedSprite{
     private int jumpCount;
     private boolean jumping;
     private boolean rolling;
+    private float speed;
     
     public Player(float pX, float pY, ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld physicWorld){
         super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
         this.createPhysics(physicWorld);
+        this.speed = 1f;
         this.onGround();
     }
     
@@ -54,26 +56,34 @@ public class Player extends AnimatedSprite{
         this.jumpCount = 0;
         this.run();
     }
-    public void jump(final IPlayerActionCallback playerActionCallbask){
+    public void jump(){
         if(this.jumpCount < 2 && !this.rolling){
             this.jumping = true;
             this.rolling = false;
             this.animate(PLAYER_ANIMATE_JUMP, PLAYER_ANIMATE_JUMP_FRAMES, true);
             this.body.setLinearVelocity(new Vector2(0, 15));
             this.increaseJumpLevel();
-            playerActionCallbask.onActionDone();
+            this.onJump();
         }
     }
-    public void rollBackJump(final IPlayerActionCallback playerActionCallbask){
+
+    public float getSpeed() {
+        return this.speed;
+    }
+    public void setSpeed(float speed){
+        this.speed = speed;
+        this.onSpeedChange(speed);
+    }
+    public void rollBackJump(){
         this.jumpCount = 2;
         this.jumping = true;
         this.rolling = true;
         this.animate(PLAYER_ANIMATE_ROLL, PLAYER_ANIMATE_ROLL_FRAMES, true);
         this.body.setLinearVelocity(new Vector2(0, 25));
-        playerActionCallbask.onActionDone();
+        this.onRollBackJump();
     }
     
-    public void roll(final IPlayerActionCallback playerActionCallbask){
+    public void roll(){
         if(!this.rolling){
             this.animate(PLAYER_ANIMATE_ROLL, PLAYER_ANIMATE_ROLL_FRAMES, false, new IAnimationListener() {
                 @Override
@@ -95,7 +105,7 @@ public class Player extends AnimatedSprite{
                     Player.this.run();
                 }
             });
-            playerActionCallbask.onActionDone();
+            this.onRoll();
         }
     }
     
@@ -122,4 +132,9 @@ public class Player extends AnimatedSprite{
         }
         super.setColor(color);
     }
+    
+    protected abstract void onSpeedChange(float speed);
+    protected abstract void onJump();
+    protected abstract void onRoll();
+    protected abstract void onRollBackJump();
 }

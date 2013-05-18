@@ -10,7 +10,7 @@ import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.text.Text;
 import org.game.runner.base.BaseMenuScene;
-import org.game.runner.game.ArcadeLevelDescriptor;
+import org.game.runner.game.descriptor.ArcadeLevelDescriptor;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;

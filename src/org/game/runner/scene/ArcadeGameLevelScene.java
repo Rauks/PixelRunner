@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
-import org.game.runner.game.LevelDescriptor;
+import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.game.player.Trail;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager.SceneType;

@@ -2,11 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.game.runner.game;
+package org.game.runner.game.descriptor;
 
 import java.util.Random;
-import org.game.runner.game.element.BackgroundElement;
-import org.game.runner.game.element.LevelElement;
+import org.game.runner.game.element.background.BackgroundElement;
+import org.game.runner.game.element.level.BonusJump;
+import org.game.runner.game.element.level.BonusLife;
+import org.game.runner.game.element.level.BonusSlow;
+import org.game.runner.game.element.level.BonusSpeed;
+import org.game.runner.game.element.level.LevelElement;
+import org.game.runner.game.element.level.Trap;
 
 /**
  *
@@ -24,19 +29,20 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     
     @Override
     public LevelElement getNext() {
-        switch(this.ranGen.nextInt(5)){
+        switch(this.ranGen.nextInt(7)){
             case 0:
-                return LevelElement.TRAP_JUMP;
+                return new BonusJump();
             case 1:
-                return LevelElement.BONUS_JUMP;
+                return new BonusLife();
             case 2:
-                return LevelElement.BONUS_LIFE;
+                return new BonusSlow();
             case 3:
-                return LevelElement.BONUS_SLOW;
-            case 4:
-                return LevelElement.BONUS_SPEED;
+                return new BonusSpeed();
             default:
-                return LevelElement.TRAP_JUMP;
+            case 4:
+            case 5:
+            case 6:
+                return new Trap();
         }
     }
 
