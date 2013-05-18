@@ -103,8 +103,13 @@ public class SceneManager {
     }
     
     private void disposeLoadingScene(){
-        this.loadingScene.disposeScene();
-        this.loadingScene = null;
+        this.activity.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                SceneManager.this.loadingScene.disposeScene();
+                SceneManager.this.loadingScene = null;
+            }
+        });
     }
     
     private void createGameLevelScene(SceneType type, LevelDescriptor level) {
@@ -120,8 +125,13 @@ public class SceneManager {
     }
     
     private void disposeGameLevelScene(){
-        this.gameLevelScene.disposeScene();
-        this.gameLevelScene = null;
+        this.activity.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                SceneManager.this.gameLevelScene.disposeScene();
+                SceneManager.this.gameLevelScene = null;
+            }
+        });
     }
     
     public void createMainMenuScene() {
@@ -130,8 +140,13 @@ public class SceneManager {
     }
     
     public void disposeMainMenuScene(){
-        this.mainMenuScene.disposeScene();
-        this.mainMenuScene = null;
+        this.activity.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                SceneManager.this.mainMenuScene.disposeScene();
+                SceneManager.this.mainMenuScene = null;
+            }
+        });
     }
 
     public void createCreditsScene() {
@@ -140,8 +155,13 @@ public class SceneManager {
     }
 
     public void disposeCreditsScene() {
-        this.creditsScene.disposeScene();
-        this.creditsScene = null;
+        this.activity.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                SceneManager.this.creditsScene.disposeScene();
+                SceneManager.this.creditsScene = null;
+            }
+        });
     }
     
     public void createSplashEndScene() {
@@ -150,8 +170,13 @@ public class SceneManager {
     }
     
     public void disposeSplashEndScene(){
-        this.splashEndScene.disposeScene();
-        this.splashEndScene = null;
+        this.activity.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                SceneManager.this.splashEndScene.disposeScene();
+                SceneManager.this.splashEndScene = null;
+            }
+        });
     }
     
     public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback) {
@@ -161,8 +186,13 @@ public class SceneManager {
     }
     
     public void disposeSplashScene(){
-        this.splashScene.disposeScene();
-        this.splashScene = null;
+        this.activity.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                SceneManager.this.splashScene.disposeScene();
+                SceneManager.this.splashScene = null;
+            }
+        });
     }
     
     public static SceneManager getInstance(){
