@@ -14,6 +14,7 @@ import org.andengine.entity.particle.initializer.BlendFunctionParticleInitialize
 import org.andengine.entity.particle.initializer.ExpireParticleInitializer;
 import org.andengine.entity.particle.initializer.IParticleInitializer;
 import org.andengine.entity.particle.initializer.VelocityParticleInitializer;
+import org.andengine.entity.particle.modifier.AlphaParticleModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -71,7 +72,8 @@ public class Trail extends SpriteParticleSystem{
     private void initInitializers(){
         this.addParticleInitializer(new BlendFunctionParticleInitializer<Sprite>(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE));
         this.addParticleInitializer(new VelocityParticleInitializer<Sprite>(-320, -280, -2, 2));
-        this.addParticleInitializer(new ExpireParticleInitializer<Sprite>(0.5f));
+        this.addParticleInitializer(new ExpireParticleInitializer<Sprite>(1f));
+        this.addParticleModifier( new AlphaParticleModifier<Sprite>(0.5f, 1f, 1f, 0f) );
         this.addParticleInitializer(new IParticleInitializer<Sprite>() {
             @Override
             public void onInitializeParticle(Particle<Sprite> pParticle) {
