@@ -41,6 +41,7 @@ public class Trail extends SpriteParticleSystem{
         this.dY = dY;
         this.colorMode = colorMode;
         attachTo.attachChild(this);
+        this.setZIndex(attachTo.getZIndex() - 1);
         this.initInitializers();
     }
     

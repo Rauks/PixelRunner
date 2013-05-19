@@ -236,6 +236,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.onRestartBegin();
         this.unregisterUpdateHandler(this.levelReaderHandler);
         AudioManager.getInstance().stop();
+        this.player.resetBonus();
         this.playerTrail.hide();
         this.parallaxFactor = -10f;
         this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
@@ -251,7 +252,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     protected abstract void onRestartBegin();
     protected abstract void onRestartEnd();
     public void start(){
-        Log.d("PixelRunner", "Start");
         this.level.init();
         this.onStartBegin();
         
