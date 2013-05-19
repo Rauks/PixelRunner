@@ -43,6 +43,8 @@ public abstract class Player extends AnimatedSprite{
     
     private float speed;
     
+    private boolean hasLife;
+    
     public Player(float pX, float pY, ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld physicWorld){
         super(pX, pY, pTiledTextureRegion, pVertexBufferObjectManager);
         this.createPhysics(physicWorld);
@@ -68,6 +70,7 @@ public abstract class Player extends AnimatedSprite{
     public void resetBonus(){
         this.jumpMode = JumpMode.DOUBLE;
         this.speed = 1f;
+        this.hasLife = false;
         this.setColor(Color.WHITE);
     }
     public void jump(){
@@ -147,6 +150,13 @@ public abstract class Player extends AnimatedSprite{
         this.onHit(pOtherEntity);
     }
     
+    public void getLife(){
+        this.hasLife = true;
+    }
+    public boolean hasLife(){
+        return this.hasLife;
+    }
+    
     public Body getBody(){
         return this.body;
     }
@@ -169,6 +179,7 @@ public abstract class Player extends AnimatedSprite{
     
     protected abstract void onSpeedChange(float speed);
     protected abstract void onJump();
+    protected abstract void onGetLife();
     protected abstract void onJumpModeChange();
     protected abstract void onRoll();
     protected abstract void onRollBackJump();

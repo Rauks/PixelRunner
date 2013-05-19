@@ -131,6 +131,10 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 GameLevelScene.this.activity.vibrate(30);
             }
             @Override
+            protected void onGetLife() {
+                GameLevelScene.this.activity.vibrate(30);
+            }
+            @Override
             public void onJump() {
                 GameLevelScene.this.activity.vibrate(30);
             }

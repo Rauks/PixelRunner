@@ -28,8 +28,13 @@ public class Trap extends LevelElement{
                 super.onManagedUpdate(pSecondsElapsed);
                 if(player.collidesWith(this)){
                     player.setColor(this.getColor());
-                    player.rollBackJump();
                     player.hit(this);
+                    if(player.hasLife()){
+                        player.resetBonus();
+                    }
+                    else{
+                        player.rollBackJump();
+                    }
                 }
             }
         };

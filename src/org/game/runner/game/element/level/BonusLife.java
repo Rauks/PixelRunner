@@ -29,7 +29,7 @@ public class BonusLife  extends LevelElement{
                 if(player.collidesWith(this)){
                     player.resetBonus();
                     player.setColor(this.getColor());
-                    //Not implemented yet
+                    player.getLife();
                     player.hit(this);
                 }
             }
