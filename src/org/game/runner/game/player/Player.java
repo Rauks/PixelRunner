@@ -102,10 +102,20 @@ public abstract class Player extends AnimatedSprite{
     public void setSpeed(float speed){
         this.speed = speed;
         this.onSpeedChange(speed);
+        this.onBonus();
     }
     public void setJumpMode(JumpMode jumpMode){
         this.jumpMode = jumpMode;
         this.onJumpModeChange();
+        this.onBonus();
+    }
+    public void getLife(){
+        this.hasLife = true;
+        this.onGetLife();
+        this.onBonus();
+    }
+    public boolean hasLife(){
+        return this.hasLife;
     }
     public void rollBackJump(){
         this.jumpCount = 2;
@@ -115,7 +125,6 @@ public abstract class Player extends AnimatedSprite{
         this.body.setLinearVelocity(new Vector2(0, 25));
         this.onRollBackJump();
     }
-    
     public void roll(){
         if(!this.rolling){
             this.animate(PLAYER_ANIMATE_ROLL, PLAYER_ANIMATE_ROLL_FRAMES, false, new IAnimationListener() {
@@ -141,20 +150,11 @@ public abstract class Player extends AnimatedSprite{
             this.onRoll();
         }
     }
-    
     public void run(){
         this.animate(PLAYER_ANIMATE_RUN, PLAYER_ANIMATE_RUN_FRAMES, true);
     }
-    
     public void hit(IEntity pOtherEntity){
         this.onHit(pOtherEntity);
-    }
-    
-    public void getLife(){
-        this.hasLife = true;
-    }
-    public boolean hasLife(){
-        return this.hasLife;
     }
     
     public Body getBody(){
@@ -183,5 +183,6 @@ public abstract class Player extends AnimatedSprite{
     protected abstract void onJumpModeChange();
     protected abstract void onRoll();
     protected abstract void onRollBackJump();
+    protected abstract void onBonus();
     protected abstract void onHit(IEntity pOtherEntity);
 }

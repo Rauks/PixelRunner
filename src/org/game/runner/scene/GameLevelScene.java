@@ -76,6 +76,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     protected LevelDescriptor level;
     private TimerHandler levelReaderHandler;
     private ITimerCallback levelReaderAction;
+    private TimerHandler bonusPickHandler;
+    private ITimerCallback bonusPickAction;
     //Background
     private AutoParallaxBackground autoParallaxBackground;
     private List<Sprite> backgroundParallaxLayers = new LinkedList<Sprite>();
@@ -121,6 +123,12 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.attachChild(this.removerRight);
         
         //Player
+        this.bonusPickAction = new ITimerCallback(){                      
+            @Override
+            public void onTimePassed(final TimerHandler pTimerHandler){
+                GameLevelScene.this.player.resetBonus();
+            }
+        };
         this.player = new Player(400, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld) {
             @Override
             public void onSpeedChange(float speed) {
@@ -151,6 +159,10 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             @Override
             protected void onHit(IEntity pOtherEntity) {
                 GameLevelScene.this.disposeLevelElement(pOtherEntity);
+            }
+            @Override
+            protected void onBonus() {
+                GameLevelScene.this.player.registerUpdateHandler(GameLevelScene.this.bonusPickHandler = new TimerHandler(10, GameLevelScene.this.bonusPickAction));
             }
         };
         this.attachChild(this.player);
