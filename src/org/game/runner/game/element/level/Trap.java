@@ -6,6 +6,7 @@ package org.game.runner.game.element.level;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.game.runner.game.player.Player;
@@ -21,8 +22,8 @@ public class Trap extends LevelElement{
     }
 
     @Override
-    public IEntity createEntity(float pX, float pY, float pWidth, float pHeight, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
-        IEntity entity = new Rectangle(pX, pY, pWidth, pHeight, pVertexBufferObjectManager){
+    public IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player, final PhysicsWorld physicsWorld) {
+        IEntity entity = new Rectangle(pX, pY, TRAP_WIDTH, TRAP_HEIGHT, pVertexBufferObjectManager){
             @Override
             protected void onManagedUpdate(float pSecondsElapsed){
                 super.onManagedUpdate(pSecondsElapsed);
