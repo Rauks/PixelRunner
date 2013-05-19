@@ -27,10 +27,10 @@ public class BonusJump extends LevelElement{
             protected void onManagedUpdate(float pSecondsElapsed){
                 super.onManagedUpdate(pSecondsElapsed);
                 if(player.collidesWith(this)){
+                    player.hit(this);
                     player.resetBonus();
                     player.setColor(this.getColor());
                     player.setJumpMode(Player.JumpMode.INFINITE);
-                    player.hit(this);
                 }
             }
         };

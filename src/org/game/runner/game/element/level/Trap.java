@@ -27,8 +27,8 @@ public class Trap extends LevelElement{
             protected void onManagedUpdate(float pSecondsElapsed){
                 super.onManagedUpdate(pSecondsElapsed);
                 if(player.collidesWith(this)){
-                    player.setColor(this.getColor());
                     player.hit(this);
+                    player.setColor(this.getColor());
                     if(player.hasLife()){
                         player.resetBonus();
                     }

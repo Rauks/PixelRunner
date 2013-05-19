@@ -24,8 +24,11 @@ import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.modifier.MoveModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.primitive.Line;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
@@ -97,6 +100,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     public GameLevelScene(LevelDescriptor level){
         this.level = level;
         this.createBackground();
+        this.createPlayer();
         this.createLevelSpwaner();
         this.createHUD();
     }
@@ -122,13 +126,24 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.removerRight.setColor(Color.RED);
         this.attachChild(this.removerRight);
         
-        //Player
-        this.bonusPickAction = new ITimerCallback(){                      
+        this.setOnSceneTouchListener(this);
+    }
+    private void createBackground(){
+        this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5){
             @Override
-            public void onTimePassed(final TimerHandler pTimerHandler){
-                GameLevelScene.this.player.resetBonus();
+            public void onUpdate(final float pSecondsElapsed) {
+		super.onUpdate(pSecondsElapsed * GameLevelScene.this.parallaxFactor);
             }
         };
+        this.setBackground(this.autoParallaxBackground);
+        for(BackgroundElement layer : this.level.getBackgrounds()){
+            Sprite layerSprite = new Sprite(layer.x, GROUND_LEVEL + layer.y, this.resourcesManager.gameParallaxLayers.get(layer.getResourceName()), this.vbom);
+            this.backgroundParallaxLayers.add(layerSprite);
+            layerSprite.setOffsetCenter(0, 0);
+            this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-layer.speed, layerSprite));
+        }
+    }
+    private void createPlayer(){
         this.player = new Player(400, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld) {
             @Override
             public void onSpeedChange(float speed) {
@@ -158,33 +173,42 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             }
             @Override
             protected void onHit(IEntity pOtherEntity) {
+                GameLevelScene.this.player.clearUpdateHandlers();
+                GameLevelScene.this.player.clearEntityModifiers();
                 GameLevelScene.this.disposeLevelElement(pOtherEntity);
             }
             @Override
             protected void onBonus() {
-                GameLevelScene.this.player.registerUpdateHandler(GameLevelScene.this.bonusPickHandler = new TimerHandler(10, GameLevelScene.this.bonusPickAction));
+                GameLevelScene.this.player.registerUpdateHandler(GameLevelScene.this.bonusPickHandler = new TimerHandler(8, GameLevelScene.this.bonusPickAction));
+            }
+        };
+        this.bonusPickAction = new ITimerCallback(){                      
+            @Override
+            public void onTimePassed(final TimerHandler pTimerHandler) {
+                GameLevelScene.this.player.registerEntityModifier(new SequenceEntityModifier(new IEntityModifierListener() {
+                        @Override
+                        public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {}
+                        @Override
+                        public void onModifierFinished(final IModifier<IEntity> pEntityModifier, final IEntity pEntity) {
+                                GameLevelScene.this.player.resetBonus();
+                        }
+                    },
+                    new ColorModifier(0.4f, GameLevelScene.this.player.getColor(), Color.WHITE),
+                    new ColorModifier(0.4f, Color.WHITE, GameLevelScene.this.player.getColor()),
+                    new ColorModifier(0.3f, GameLevelScene.this.player.getColor(), Color.WHITE),
+                    new ColorModifier(0.3f, Color.WHITE, GameLevelScene.this.player.getColor()),
+                    new ColorModifier(0.2f, GameLevelScene.this.player.getColor(), Color.WHITE),
+                    new ColorModifier(0.2f, Color.WHITE, GameLevelScene.this.player.getColor()),
+                    new ColorModifier(0.1f, GameLevelScene.this.player.getColor(), Color.WHITE),
+                    new ColorModifier(0.1f, Color.WHITE, GameLevelScene.this.player.getColor()),
+                    new ColorModifier(0.1f, GameLevelScene.this.player.getColor(), Color.WHITE),
+                    new ColorModifier(0.1f, Color.WHITE, GameLevelScene.this.player.getColor()))
+                 );
             }
         };
         this.attachChild(this.player);
         this.playerTrail = new Trail(32, 0, 0, 64, Trail.ColorMode.NORMAL, this.player, this.resourcesManager.trail, this.vbom);
         this.playerTrail.hide();
-        
-        this.setOnSceneTouchListener(this);
-    }
-    private void createBackground(){
-        this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5){
-            @Override
-            public void onUpdate(final float pSecondsElapsed) {
-		super.onUpdate(pSecondsElapsed * GameLevelScene.this.parallaxFactor);
-            }
-        };
-        this.setBackground(this.autoParallaxBackground);
-        for(BackgroundElement layer : this.level.getBackgrounds()){
-            Sprite layerSprite = new Sprite(layer.x, GROUND_LEVEL + layer.y, this.resourcesManager.gameParallaxLayers.get(layer.getResourceName()), this.vbom);
-            this.backgroundParallaxLayers.add(layerSprite);
-            layerSprite.setOffsetCenter(0, 0);
-            this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-layer.speed, layerSprite));
-        }
     }
     private void createLevelSpwaner(){
         //Level elements
@@ -253,6 +277,9 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.unregisterUpdateHandler(this.levelReaderHandler);
         AudioManager.getInstance().stop();
         this.player.resetBonus();
+        this.player.setAlpha(1f);
+        this.player.clearUpdateHandlers();
+        this.player.clearEntityModifiers();
         this.playerTrail.hide();
         this.parallaxFactor = -10f;
         this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
