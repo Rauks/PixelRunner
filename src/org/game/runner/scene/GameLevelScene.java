@@ -35,6 +35,7 @@ import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.extension.debugdraw.DebugRenderer;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -91,10 +92,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     //Physic
     protected PhysicsWorld physicWorld;
     private Body groundBody;
-    //Detectors
+    //Elements memory
     private ConcurrentLinkedQueue<Shape> levelElements = new ConcurrentLinkedQueue<Shape>();
-    private Rectangle removerLeft;
-    private Rectangle removerRight;
     
     public GameLevelScene(LevelDescriptor level){
         this.level = level;
@@ -126,21 +125,17 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                  || xB.getBody().getUserData().equals("player") && xA.getBody().getUserData().equals("ground")){
                     GameLevelScene.this.player.resetMovements();
                 }
-                if(xA.getBody().getUserData().equals("remover") && xB.getBody().getUserData() instanceof LevelElement){
-                    xB.getBody().setActive(false);
-                    GameLevelScene.this.disposeLevelElement(((LevelElement)xB.getBody().getUserData()).getBuildedShape());
-                }
-                if(xB.getBody().getUserData().equals("remover") && xA.getBody().getUserData() instanceof LevelElement){
-                    xB.getBody().setActive(false);
-                    GameLevelScene.this.disposeLevelElement(((LevelElement)xA.getBody().getUserData()).getBuildedShape());
-                }
                 if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
                     xB.getBody().setActive(false);
-                    ((LevelElement)xB.getBody().getUserData()).playerAction(GameLevelScene.this.player);
+                    LevelElement element = (LevelElement)xB.getBody().getUserData();
+                    GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
+                    element.playerAction(GameLevelScene.this.player);
                 }
                 if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
-                    xB.getBody().setActive(false);
-                    ((LevelElement)xA.getBody().getUserData()).playerAction(GameLevelScene.this.player);
+                    xA.getBody().setActive(false);
+                    LevelElement element = (LevelElement)xB.getBody().getUserData();
+                    GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
+                    element.playerAction(GameLevelScene.this.player);
                 }
             }
             @Override
@@ -154,6 +149,10 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             }
         });
         this.registerUpdateHandler(this.physicWorld);
+        
+        //Debug only
+        DebugRenderer debug = new DebugRenderer(this.physicWorld, this.vbom);
+        this.attachChild(debug);
     }
     private void createBackground(){
         this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5){
@@ -200,9 +199,13 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             }
             @Override
             protected void onBonus() {
-                GameLevelScene.this.player.clearUpdateHandlers();
-                GameLevelScene.this.player.clearEntityModifiers();
-                GameLevelScene.this.player.registerUpdateHandler(GameLevelScene.this.bonusPickHandler = new TimerHandler(8, GameLevelScene.this.bonusPickAction));
+                this.registerUpdateHandler(GameLevelScene.this.bonusPickHandler = new TimerHandler(8, GameLevelScene.this.bonusPickAction));
+            }
+
+            @Override
+            protected void onBonusReset() {
+                this.clearUpdateHandlers();
+                this.clearEntityModifiers();
             }
         };
         this.player.getBody().setUserData("player");
@@ -240,9 +243,9 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     }
     private void createGround(){
         this.ground = new Rectangle(400, GROUND_LEVEL, GROUND_WIDTH, GROUND_THICKNESS, this.vbom);
-        this.attachChild(this.ground);
 	this.groundBody = PhysicsFactory.createBoxBody(this.physicWorld, this.ground, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
         this.groundBody.setUserData("ground");
+        this.attachChild(this.ground);
     }
     private void createLevelSpwaner(){
         //Level elements
@@ -260,29 +263,19 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     lvlElement.build(RIGHT_LIMIT - 50, baseY, GameLevelScene.this.vbom, GameLevelScene.this.player, GameLevelScene.this.physicWorld);
                     GameLevelScene.this.attachChild(lvlElement.getBuildedShape());
                     GameLevelScene.this.levelElements.add(lvlElement.getBuildedShape());
-                    lvlElement.getBuildedBody().setUserData("lvlElement");
+                    lvlElement.getBuildedBody().setUserData(lvlElement);
                     lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-20, 0));
-                    Debug.d("Spawn");
+                    Debug.d("Spawn : " + lvlElement);
+                    GameLevelScene.this.engine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback(){
+                        @Override
+                        public void onTimePassed(final TimerHandler pTimerHandler){
+                            Debug.d("End of life for " + lvlElement);
+                            GameLevelScene.this.disposeLevelElement(lvlElement.getBuildedShape());
+                        }
+                    }));
                 }
             }
         };
-        
-        //Detectors
-        this.removerLeft = new Rectangle(LEFT_LIMIT, 240, 1, 480, vbom);
-        this.removerLeft.setColor(Color.RED);
-        Body removerLeftBody = PhysicsFactory.createBoxBody(physicWorld, this.removerLeft, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
-        removerLeftBody.setFixedRotation(true);
-        removerLeftBody.setUserData("remover");
-        this.physicWorld.registerPhysicsConnector(new PhysicsConnector(this.removerLeft, removerLeftBody, true, false));
-        this.attachChild(this.removerLeft);
-        
-        this.removerRight = new Rectangle(RIGHT_LIMIT, 240, 1, 480, vbom);
-        this.removerRight.setColor(Color.RED);
-        Body removerRightBody = PhysicsFactory.createBoxBody(physicWorld, this.removerRight, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
-        removerRightBody.setFixedRotation(true);
-        removerRightBody.setUserData("remover");
-        this.physicWorld.registerPhysicsConnector(new PhysicsConnector(this.removerRight, removerRightBody, true, false));
-        this.attachChild(this.removerRight);
     }
     private void createHUD(){
         this.hud = new HUD();
@@ -432,10 +425,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             layer.detachSelf();
             layer.dispose();
         }
-        this.removerLeft.detachSelf();
-        this.removerLeft.dispose();
-        this.removerRight.detachSelf();
-        this.removerRight.dispose();
         this.detachSelf();
         this.dispose();
     }
@@ -479,9 +468,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                      GameLevelScene.this.physicWorld.destroyBody(body);
                 }
                 element.detachSelf();
-                if(!element.isDisposed()){
-                    element.dispose();
-                }
                 Debug.d("Disposed in : " + this);
             }
         });

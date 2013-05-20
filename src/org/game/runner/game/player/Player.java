@@ -72,6 +72,7 @@ public abstract class Player extends AnimatedSprite{
         this.speed = 1f;
         this.hasLife = false;
         this.setColor(Color.WHITE);
+        this.onBonusReset();
     }
     public void jump(){
         switch(this.jumpMode){
@@ -181,4 +182,5 @@ public abstract class Player extends AnimatedSprite{
     protected abstract void onRoll();
     protected abstract void onRollBackJump();
     protected abstract void onBonus();
+    protected abstract void onBonusReset();
 }
