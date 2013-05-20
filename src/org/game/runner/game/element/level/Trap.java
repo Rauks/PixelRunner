@@ -6,6 +6,7 @@ package org.game.runner.game.element.level;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.shape.Shape;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.game.runner.game.player.Player;
@@ -21,14 +22,13 @@ public class Trap extends LevelElement{
     }
 
     @Override
-    public IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
+    public Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
         return new Rectangle(pX, pY, TRAP_WIDTH, TRAP_HEIGHT, pVertexBufferObjectManager);
     }
 
     @Override
-    protected void palyerAction(Player player, IEntity entity) {
-        player.hit(entity);
-        player.setColor(entity.getColor());
+    public void playerAction(Player player) {
+        player.setColor(this.getColor());
         if(player.hasLife()){
             player.resetBonus();
         }

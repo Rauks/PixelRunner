@@ -153,9 +153,6 @@ public abstract class Player extends AnimatedSprite{
     public void run(){
         this.animate(PLAYER_ANIMATE_RUN, PLAYER_ANIMATE_RUN_FRAMES, true);
     }
-    public void hit(IEntity pOtherEntity){
-        this.onHit(pOtherEntity);
-    }
     
     public Body getBody(){
         return this.body;
@@ -184,5 +181,4 @@ public abstract class Player extends AnimatedSprite{
     protected abstract void onRoll();
     protected abstract void onRollBackJump();
     protected abstract void onBonus();
-    protected abstract void onHit(IEntity pOtherEntity);
 }

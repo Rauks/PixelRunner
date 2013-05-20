@@ -32,9 +32,11 @@ import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.AutoParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.input.touch.TouchEvent;
@@ -90,9 +92,9 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     protected PhysicsWorld physicWorld;
     private Body groundBody;
     //Detectors
-    private ConcurrentLinkedQueue<IEntity> levelElements = new ConcurrentLinkedQueue<IEntity>();
-    private Line removerLeft;
-    private Line removerRight;
+    private ConcurrentLinkedQueue<Shape> levelElements = new ConcurrentLinkedQueue<Shape>();
+    private Rectangle removerLeft;
+    private Rectangle removerRight;
     
     public GameLevelScene(LevelDescriptor level){
         this.level = level;
@@ -118,9 +120,27 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             public void beginContact(Contact contact){
                 final Fixture xA = contact.getFixtureA();
                 final Fixture xB = contact.getFixtureB();
+                
                 //Player contacts
-                if (xA.getBody().equals(GameLevelScene.this.player.getBody()) || xB.getBody().equals(GameLevelScene.this.player.getBody())){
+                if (xA.getBody().getUserData().equals("player") && xB.getBody().getUserData().equals("ground")
+                 || xB.getBody().getUserData().equals("player") && xA.getBody().getUserData().equals("ground")){
                     GameLevelScene.this.player.resetMovements();
+                }
+                if(xA.getBody().getUserData().equals("remover") && xB.getBody().getUserData() instanceof LevelElement){
+                    xB.getBody().setActive(false);
+                    GameLevelScene.this.disposeLevelElement(((LevelElement)xB.getBody().getUserData()).getBuildedShape());
+                }
+                if(xB.getBody().getUserData().equals("remover") && xA.getBody().getUserData() instanceof LevelElement){
+                    xB.getBody().setActive(false);
+                    GameLevelScene.this.disposeLevelElement(((LevelElement)xA.getBody().getUserData()).getBuildedShape());
+                }
+                if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
+                    xB.getBody().setActive(false);
+                    ((LevelElement)xB.getBody().getUserData()).playerAction(GameLevelScene.this.player);
+                }
+                if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
+                    xB.getBody().setActive(false);
+                    ((LevelElement)xA.getBody().getUserData()).playerAction(GameLevelScene.this.player);
                 }
             }
             @Override
@@ -179,16 +199,13 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 GameLevelScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
             }
             @Override
-            protected void onHit(IEntity pOtherEntity) {
+            protected void onBonus() {
                 GameLevelScene.this.player.clearUpdateHandlers();
                 GameLevelScene.this.player.clearEntityModifiers();
-                GameLevelScene.this.disposeLevelElement(pOtherEntity);
-            }
-            @Override
-            protected void onBonus() {
                 GameLevelScene.this.player.registerUpdateHandler(GameLevelScene.this.bonusPickHandler = new TimerHandler(8, GameLevelScene.this.bonusPickAction));
             }
         };
+        this.player.getBody().setUserData("player");
         this.bonusPickAction = new ITimerCallback(){                      
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler) {
@@ -225,6 +242,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.ground = new Rectangle(400, GROUND_LEVEL, GROUND_WIDTH, GROUND_THICKNESS, this.vbom);
         this.attachChild(this.ground);
 	this.groundBody = PhysicsFactory.createBoxBody(this.physicWorld, this.ground, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+        this.groundBody.setUserData("ground");
     }
     private void createLevelSpwaner(){
         //Level elements
@@ -239,39 +257,32 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     //Level elements spawn
                     final float baseY = GROUND_LEVEL + GROUND_THICKNESS/2 + LevelElement.BONUS_HEIGHT/2;
                     final LevelElement lvlElement = GameLevelScene.this.level.getNext();
-                    final IEntity element = lvlElement.getEntity(RIGHT_LIMIT, baseY, GameLevelScene.this.vbom, GameLevelScene.this.player);
-                    GameLevelScene.this.levelElements.add(element);
-                    GameLevelScene.this.attachChild(element);
-                    PhysicsHandler handler = new PhysicsHandler(element);
-                    element.registerUpdateHandler(handler);
-                    handler.setVelocity(-GameLevelScene.this.level.getSpawnSpeed(), 0);
+                    lvlElement.build(RIGHT_LIMIT - 50, baseY, GameLevelScene.this.vbom, GameLevelScene.this.player, GameLevelScene.this.physicWorld);
+                    GameLevelScene.this.attachChild(lvlElement.getBuildedShape());
+                    GameLevelScene.this.levelElements.add(lvlElement.getBuildedShape());
+                    lvlElement.getBuildedBody().setUserData("lvlElement");
+                    lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-20, 0));
+                    Debug.d("Spawn");
                 }
             }
         };
         
         //Detectors
-        this.removerLeft = new Line(LEFT_LIMIT, 0, LEFT_LIMIT, 480, vbom);
+        this.removerLeft = new Rectangle(LEFT_LIMIT, 240, 1, 480, vbom);
         this.removerLeft.setColor(Color.RED);
+        Body removerLeftBody = PhysicsFactory.createBoxBody(physicWorld, this.removerLeft, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+        removerLeftBody.setFixedRotation(true);
+        removerLeftBody.setUserData("remover");
+        this.physicWorld.registerPhysicsConnector(new PhysicsConnector(this.removerLeft, removerLeftBody, true, false));
         this.attachChild(this.removerLeft);
-        this.removerRight = new Line(RIGHT_LIMIT, 0, RIGHT_LIMIT, 480, vbom);
-        this.removerRight.setColor(Color.RED);
-        this.attachChild(this.removerRight);
         
-        //Detectors checking
-        this.registerUpdateHandler(new IUpdateHandler() {
-            @Override
-            public void reset() { }
-
-            @Override
-            public void onUpdate(final float pSecondsElapsed) {
-                //Level elements unspawn
-                for(IEntity element : GameLevelScene.this.levelElements){
-                    if(element.collidesWith(GameLevelScene.this.removerLeft)){
-                        GameLevelScene.this.disposeLevelElement(element);
-                    }
-                }
-            }
-        });
+        this.removerRight = new Rectangle(RIGHT_LIMIT, 240, 1, 480, vbom);
+        this.removerRight.setColor(Color.RED);
+        Body removerRightBody = PhysicsFactory.createBoxBody(physicWorld, this.removerRight, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+        removerRightBody.setFixedRotation(true);
+        removerRightBody.setUserData("remover");
+        this.physicWorld.registerPhysicsConnector(new PhysicsConnector(this.removerRight, removerRightBody, true, false));
+        this.attachChild(this.removerRight);
     }
     private void createHUD(){
         this.hud = new HUD();
@@ -453,16 +464,30 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             }
         });
     }
-    private void disposeLevelElement(IEntity element){
-        GameLevelScene.this.levelElements.remove(element);
-        element.clearUpdateHandlers();
-        element.detachSelf();
-        if(!element.isDisposed()){
-            element.dispose();
-        }
+    private void disposeLevelElement(final Shape element){
+        this.levelElements.remove(element);
+        Debug.d("Dispose request for : " + this.levelElements);
+        final PhysicsConnector physicsConnector = this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(element);
+        this.engine.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() 
+            {
+                if (physicsConnector != null){
+                     Body body = physicsConnector.getBody();
+                     GameLevelScene.this.physicWorld.unregisterPhysicsConnector(physicsConnector);
+                     body.setActive(false);
+                     GameLevelScene.this.physicWorld.destroyBody(body);
+                }
+                element.detachSelf();
+                if(!element.isDisposed()){
+                    element.dispose();
+                }
+                Debug.d("Disposed in : " + this);
+            }
+        });
     }
     private void disposeLevelElements(){
-        for(IEntity element : GameLevelScene.this.levelElements){
+        for(Shape element : GameLevelScene.this.levelElements){
             this.disposeLevelElement(element);
         }
     }

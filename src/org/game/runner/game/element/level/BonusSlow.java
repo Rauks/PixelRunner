@@ -6,6 +6,7 @@ package org.game.runner.game.element.level;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.shape.Shape;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.game.runner.game.player.Player;
@@ -21,15 +22,14 @@ public class BonusSlow extends LevelElement{
     }
 
     @Override
-    public IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
+    public Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
         return new Rectangle(pX, pY, BONUS_WIDTH, BONUS_HEIGHT, pVertexBufferObjectManager);
     }
 
     @Override
-    protected void palyerAction(Player player, IEntity entity) {
-        player.hit(entity);
+    public void playerAction(Player player) {
         player.resetBonus();
-        player.setColor(entity.getColor());
+        player.setColor(this.getColor());
         player.setSpeed(0.7f);
     }
 }
