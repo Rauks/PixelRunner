@@ -30,24 +30,25 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     
     @Override
     public LevelElement getNext() {
-        return new Platform(1);
-        /*
-        switch(this.ranGen.nextInt(7)){
+        switch(this.ranGen.nextInt(10)){
             case 0:
-                return new BonusJump();
+                return new BonusJump(0);
             case 1:
-                return new BonusLife();
+                return new BonusLife(0);
             case 2:
-                return new BonusSlow();
+                return new BonusSlow(0);
             case 3:
-                return new BonusSpeed();
-            default:
+                return new BonusSpeed(0);
             case 4:
             case 5:
             case 6:
-                return new Trap();
+                return new Platform(1);
+            default:
+            case 7:
+            case 8:
+            case 9:
+                return new Trap(0);
         }
-        */
     }
 
     @Override

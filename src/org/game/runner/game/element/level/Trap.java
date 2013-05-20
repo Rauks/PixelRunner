@@ -17,6 +17,10 @@ import org.andengine.util.debug.Debug;
  * @author Karl
  */
 public class Trap extends LevelElement{
+    public Trap(int level){
+        super(level);
+    }
+    
     @Override
     public Color getColor() {
         return Color.WHITE;

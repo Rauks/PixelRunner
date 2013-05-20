@@ -16,6 +16,10 @@ import org.game.runner.game.player.Player;
  * @author Karl
  */
 public class BonusSlow extends LevelElement{
+    public BonusSlow(int level){
+        super(level);
+    }
+    
     @Override
     public Color getColor() {
         return Color.YELLOW;

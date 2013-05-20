@@ -16,6 +16,10 @@ import org.game.runner.game.player.Player;
  * @author Karl
  */
 public class BonusLife  extends LevelElement{
+    public BonusLife(int level){
+        super(level);
+    }
+    
     @Override
     public Color getColor() {
         return Color.GREEN;

@@ -17,19 +17,8 @@ import org.game.runner.game.player.Player;
 public class Platform extends LevelElement {
     private int level = 1;
     
-    /**
-     * @param level Range from 1 to 3. 
-     */
     public Platform(int level){
-        if(level > 3){
-            this.level = 3;
-        }
-        else if(level < 1){
-            this.level = 1;
-        }
-        else{
-            this.level = level;
-        }
+        super(level < 1 ? 1 : level);
     }
     
     @Override
@@ -39,11 +28,16 @@ public class Platform extends LevelElement {
 
     @Override
     protected Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, Player player) {
-        return new Rectangle(pX, pY + this.level*PLATFORM_LEVEL_HIGH, PLATFORM_WIDTH, PLATFORM_THICKNESS, pVertexBufferObjectManager);
+        return new Rectangle(pX, pY, PLATFORM_WIDTH, PLATFORM_THICKNESS, pVertexBufferObjectManager);
     }
 
     @Override
     protected void playerAction(Player player) {
         /* Nothing */
+    }
+    
+    @Override
+    public boolean isPlatform(){
+        return true;
     }
 }

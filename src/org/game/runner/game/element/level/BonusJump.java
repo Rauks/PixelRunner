@@ -16,6 +16,10 @@ import org.game.runner.game.player.Player;
  * @author Karl
  */
 public class BonusJump extends LevelElement{
+    public BonusJump(int level){
+        super(level);
+    }
+    
     @Override
     public Color getColor() {
         return Color.BLUE;
