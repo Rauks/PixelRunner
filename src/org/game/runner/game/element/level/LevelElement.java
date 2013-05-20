@@ -4,6 +4,7 @@
  */
 package org.game.runner.game.element.level;
 
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -24,5 +25,23 @@ public abstract class LevelElement {
     
     
     public abstract Color getColor();
-    public abstract IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player);
+    protected abstract IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player);
+    protected abstract void palyerAction(Player player, IEntity entity);
+    
+    public IEntity getEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player){
+        final IEntity entity = this.createEntity(pX, pY, pVertexBufferObjectManager, player);
+        entity.setColor(this.getColor());
+        entity.registerUpdateHandler(new IUpdateHandler() {
+            @Override
+            public void reset() { }
+
+            @Override
+            public void onUpdate(final float pSecondsElapsed) {
+                if(entity.collidesWith(player)) {
+                    LevelElement.this.palyerAction(player, entity);
+                }
+            }
+        });
+        return entity;
+    }
 }

@@ -24,22 +24,14 @@ public class BonusJump extends LevelElement{
 
     @Override
     public IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
-        final IEntity entity = new Rectangle(pX, pY, BONUS_WIDTH, BONUS_HEIGHT, pVertexBufferObjectManager);
-        entity.registerUpdateHandler(new IUpdateHandler() {
-            @Override
-            public void reset() { }
+        return new Rectangle(pX, pY, BONUS_WIDTH, BONUS_HEIGHT, pVertexBufferObjectManager);
+    }
 
-            @Override
-            public void onUpdate(final float pSecondsElapsed) {
-                if(entity.collidesWith(player)) {
-                    player.hit(entity);
-                    player.resetBonus();
-                    player.setColor(entity.getColor());
-                    player.setJumpMode(Player.JumpMode.INFINITE);
-                }
-            }
-        });
-        entity.setColor(this.getColor());
-        return entity;
+    @Override
+    protected void palyerAction(Player player, IEntity entity) {
+        player.hit(entity);
+        player.resetBonus();
+        player.setColor(entity.getColor());
+        player.setJumpMode(Player.JumpMode.INFINITE);
     }
 }

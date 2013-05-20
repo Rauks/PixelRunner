@@ -24,26 +24,18 @@ public class Trap extends LevelElement{
 
     @Override
     public IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
-        final IEntity entity = new Rectangle(pX, pY, TRAP_WIDTH, TRAP_HEIGHT, pVertexBufferObjectManager);
-        entity.registerUpdateHandler(new IUpdateHandler() {
-            @Override
-            public void reset() { }
+        return new Rectangle(pX, pY, TRAP_WIDTH, TRAP_HEIGHT, pVertexBufferObjectManager);
+    }
 
-            @Override
-            public void onUpdate(final float pSecondsElapsed) {
-                if(entity.collidesWith(player)) {
-                    player.hit(entity);
-                    player.setColor(entity.getColor());
-                    if(player.hasLife()){
-                        player.resetBonus();
-                    }
-                    else{
-                        player.rollBackJump();
-                    }
-                }
-            }
-        });
-        entity.setColor(this.getColor());
-        return entity;
+    @Override
+    protected void palyerAction(Player player, IEntity entity) {
+        player.hit(entity);
+        player.setColor(entity.getColor());
+        if(player.hasLife()){
+            player.resetBonus();
+        }
+        else{
+            player.rollBackJump();
+        }
     }
 }
