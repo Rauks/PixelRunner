@@ -99,35 +99,46 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     
     public GameLevelScene(LevelDescriptor level){
         this.level = level;
+        
         this.createBackground();
-        this.createPlayer();
         this.createLevelSpwaner();
-        this.createHUD();
     }
     
     @Override
     public void createScene() {
-        //Physics engine
-        this.physicWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -50), false);
-        this.physicWorld.setContactListener(this.contactListener());
-        this.registerUpdateHandler(this.physicWorld);
-        final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
+        this.initPhysics();
         
-        //Ground
-        this.ground = new Rectangle(400, GROUND_LEVEL, GROUND_WIDTH, GROUND_THICKNESS, this.vbom);
-        this.attachChild(this.ground);
-	this.groundBody = PhysicsFactory.createBoxBody(this.physicWorld, this.ground, BodyDef.BodyType.StaticBody, wallFixtureDef);
-        
-        //Detectors
-        this.removerLeft = new Line(LEFT_LIMIT, 0, LEFT_LIMIT, 480, vbom);
-        this.removerLeft.setColor(Color.RED);
-        this.attachChild(this.removerLeft);
-        this.removerRight = new Line(RIGHT_LIMIT, 0, RIGHT_LIMIT, 480, vbom);
-        this.removerRight.setColor(Color.RED);
-        this.attachChild(this.removerRight);
+        this.createPlayer();
+        this.createGround();
+        this.createHUD();
         
         this.setOnSceneTouchListener(this);
     }
+    public void initPhysics(){
+        this.physicWorld = new FixedStepPhysicsWorld(60, new Vector2(0, -50), false);
+        this.physicWorld.setContactListener(new ContactListener(){
+            @Override
+            public void beginContact(Contact contact){
+                final Fixture xA = contact.getFixtureA();
+                final Fixture xB = contact.getFixtureB();
+                //Player contacts
+                if (xA.getBody().equals(GameLevelScene.this.player.getBody()) || xB.getBody().equals(GameLevelScene.this.player.getBody())){
+                    GameLevelScene.this.player.resetMovements();
+                }
+            }
+            @Override
+            public void endContact(Contact contact){
+            }
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold){
+            }
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse){
+            }
+        });
+        this.registerUpdateHandler(this.physicWorld);
+    }
+    
     private void createBackground(){
         this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5){
             @Override
@@ -214,6 +225,11 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.playerTrail = new Trail(32, 0, 0, 64, Trail.ColorMode.NORMAL, this.player, this.resourcesManager.trail, this.vbom);
         this.playerTrail.hide();
     }
+    private void createGround(){
+        this.ground = new Rectangle(400, GROUND_LEVEL, GROUND_WIDTH, GROUND_THICKNESS, this.vbom);
+        this.attachChild(this.ground);
+	this.groundBody = PhysicsFactory.createBoxBody(this.physicWorld, this.ground, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+    }
     private void createLevelSpwaner(){
         //Level elements
         this.levelReaderAction = new ITimerCallback(){                      
@@ -236,6 +252,14 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 }
             }
         };
+        
+        //Detectors
+        this.removerLeft = new Line(LEFT_LIMIT, 0, LEFT_LIMIT, 480, vbom);
+        this.removerLeft.setColor(Color.RED);
+        this.attachChild(this.removerLeft);
+        this.removerRight = new Line(RIGHT_LIMIT, 0, RIGHT_LIMIT, 480, vbom);
+        this.removerRight.setColor(Color.RED);
+        this.attachChild(this.removerRight);
         
         //Detectors checking
         this.registerUpdateHandler(new IUpdateHandler() {
@@ -282,6 +306,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.player.clearEntityModifiers();
         this.playerTrail.hide();
         this.parallaxFactor = -10f;
+        this.disposeLevelElements();
         this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
@@ -290,7 +315,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 GameLevelScene.this.start();
             }
         }));
-        this.disposeLevelElements();
     }
     protected abstract void onRestartBegin();
     protected abstract void onRestartEnd();
@@ -463,32 +487,5 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             }
         }
         return false;
-    }
-    
-    private ContactListener contactListener(){
-        ContactListener contactListener = new ContactListener(){
-            @Override
-            public void beginContact(Contact contact){
-                final Fixture xA = contact.getFixtureA();
-                final Fixture xB = contact.getFixtureB();
-                //Player contacts
-                if (xA.getBody().equals(GameLevelScene.this.player.getBody()) || xB.getBody().equals(GameLevelScene.this.player.getBody())){
-                    GameLevelScene.this.player.resetMovements();
-                }
-            }
-
-            @Override
-            public void endContact(Contact contact){
-            }
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold){
-            }
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse){
-            }
-        };
-        return contactListener;
     }
 }
