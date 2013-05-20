@@ -20,11 +20,6 @@ public class Trap extends LevelElement{
     public Trap(int level){
         super(level);
     }
-    
-    @Override
-    public Color getColor() {
-        return Color.WHITE;
-    }
 
     @Override
     protected Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {

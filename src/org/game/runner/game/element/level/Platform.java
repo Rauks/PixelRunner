@@ -23,7 +23,7 @@ public class Platform extends LevelElement {
     
     @Override
     public Color getColor() {
-        return Color.WHITE;
+        return new Color(0.4f, 0.4f, 0.4f);
     }
 
     @Override

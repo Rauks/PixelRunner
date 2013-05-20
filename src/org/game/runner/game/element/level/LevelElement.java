@@ -29,6 +29,7 @@ public abstract class LevelElement{
     public static final int PLATFORM_THICKNESS = 10;
     public static final int PLATFORM_WIDTH = 150;
     public static final int LEVEL_HIGH = 30;
+    public static final Color COLOR_DEFAULT = Color.WHITE;
     
     private Body body;
     private Shape shape;
@@ -60,7 +61,9 @@ public abstract class LevelElement{
         return this.shape;
     }
     
-    public abstract Color getColor();
+    public Color getColor(){
+        return COLOR_DEFAULT;
+    }
     protected abstract Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player);
     protected abstract void playerAction(Player player);
     public void doPlayerAction(Player player){

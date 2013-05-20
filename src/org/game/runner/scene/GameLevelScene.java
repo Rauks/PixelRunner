@@ -63,7 +63,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     private final float RIGHT_SPAWN = 850;
     private final float GROUND_LEVEL = 50;
     private final float GROUND_WIDTH = 1000;
-    private final float GROUND_THICKNESS = 10;
+    private final float GROUND_THICKNESS = LevelElement.PLATFORM_THICKNESS;
     private final float BROADCAST_LEVEL = 240;
     private final float BROADCAST_LEFT = -100;
     private final float BROADCAST_RIGHT = 1000;
@@ -128,7 +128,11 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
                     if(element.isPlatform()){
-                        if(xA.getBody().getLinearVelocity().y < 0.5){
+                        float playerY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - GameLevelScene.this.player.getHeight() / 2;
+                        float elementY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
+                        
+                        if (playerY >= elementY && xA.getBody().getLinearVelocity().y < 0.5) {
+                            element.getBuildedShape().registerEntityModifier(new ColorModifier(.3f, element.getBuildedShape().getColor(), LevelElement.COLOR_DEFAULT));
                             GameLevelScene.this.player.resetMovements();
                         }
                     }
@@ -141,7 +145,11 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
                     if(element.isPlatform()){
-                        if(xB.getBody().getLinearVelocity().y < 0.5){
+                        float playerY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - GameLevelScene.this.player.getHeight() / 2;
+                        float elementY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
+                        
+                        if (playerY >= elementY && xB.getBody().getLinearVelocity().y < 0.5) {
+                            element.getBuildedShape().registerEntityModifier(new ColorModifier(.3f, element.getBuildedShape().getColor(), LevelElement.COLOR_DEFAULT));
                             GameLevelScene.this.player.resetMovements();
                         }
                     }
@@ -194,9 +202,10 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         
         this.registerUpdateHandler(this.physicWorld);
         
-        //Debug only
+        /*
         DebugRenderer debug = new DebugRenderer(this.physicWorld, this.vbom);
         this.attachChild(debug);
+        */
     }
     private void createBackground(){
         this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5){
@@ -287,6 +296,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     }
     private void createGround(){
         this.ground = new Rectangle(400, GROUND_LEVEL, GROUND_WIDTH, GROUND_THICKNESS, this.vbom);
+        this.ground.setColor(LevelElement.COLOR_DEFAULT);
 	this.groundBody = PhysicsFactory.createBoxBody(this.physicWorld, this.ground, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
         this.groundBody.setUserData("ground");
         this.attachChild(this.ground);
@@ -308,7 +318,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     GameLevelScene.this.attachChild(lvlElement.getBuildedShape());
                     GameLevelScene.this.levelElements.add(lvlElement.getBuildedShape());
                     lvlElement.getBuildedBody().setUserData(lvlElement);
-                    lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-10, 0));
+                    lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-15, 0));
                     GameLevelScene.this.engine.registerUpdateHandler(new TimerHandler(6f, new ITimerCallback(){
                         @Override
                         public void onTimePassed(final TimerHandler pTimerHandler){
