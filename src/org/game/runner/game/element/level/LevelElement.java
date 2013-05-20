@@ -48,5 +48,9 @@ public abstract class LevelElement{
     
     public abstract Color getColor();
     protected abstract Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player);
-    public abstract void playerAction(Player player);
+    protected abstract void playerAction(Player player);
+    public void doPlayerAction(Player player){
+        player.resetBonus();
+        this.playerAction(player);
+    }
 }

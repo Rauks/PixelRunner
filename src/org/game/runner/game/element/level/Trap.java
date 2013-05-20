@@ -22,12 +22,12 @@ public class Trap extends LevelElement{
     }
 
     @Override
-    public Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
+    protected Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
         return new Rectangle(pX, pY, TRAP_WIDTH, TRAP_HEIGHT, pVertexBufferObjectManager);
     }
 
     @Override
-    public void playerAction(Player player) {
+    protected void playerAction(Player player) {
         player.setColor(this.getColor());
         if(player.hasLife()){
             player.resetBonus();

@@ -22,12 +22,12 @@ public class BonusJump extends LevelElement{
     }
 
     @Override
-    public Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
+    protected Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
         return new Rectangle(pX, pY, BONUS_WIDTH, BONUS_HEIGHT, pVertexBufferObjectManager);
     }
 
     @Override
-    public void playerAction(Player player) {
+    protected void playerAction(Player player) {
         player.resetBonus();
         player.setColor(this.getColor());
         player.setJumpMode(Player.JumpMode.INFINITE);

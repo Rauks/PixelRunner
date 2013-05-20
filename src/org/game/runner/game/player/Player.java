@@ -21,6 +21,7 @@ import org.andengine.util.adt.color.Color;
  * @author Karl
  */
 public abstract class Player extends AnimatedSprite{
+
     public enum JumpMode{
         DOUBLE, INFINITE
     }
@@ -68,11 +69,14 @@ public abstract class Player extends AnimatedSprite{
         this.run();
     }
     public void resetBonus(){
+        this.endBonus();
+        this.onBonusReset();
+    }
+    public void endBonus() {
         this.jumpMode = JumpMode.DOUBLE;
         this.speed = 1f;
         this.hasLife = false;
         this.setColor(Color.WHITE);
-        this.onBonusReset();
     }
     public void jump(){
         switch(this.jumpMode){

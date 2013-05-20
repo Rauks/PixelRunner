@@ -129,13 +129,13 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     xB.getBody().setActive(false);
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
                     GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
-                    element.playerAction(GameLevelScene.this.player);
+                    element.doPlayerAction(GameLevelScene.this.player);
                 }
                 if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
                     xA.getBody().setActive(false);
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
                     GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
-                    element.playerAction(GameLevelScene.this.player);
+                    element.doPlayerAction(GameLevelScene.this.player);
                 }
             }
             @Override
@@ -217,7 +217,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                         public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {}
                         @Override
                         public void onModifierFinished(final IModifier<IEntity> pEntityModifier, final IEntity pEntity) {
-                                GameLevelScene.this.player.resetBonus();
+                            GameLevelScene.this.player.endBonus();
                         }
                     },
                     new ColorModifier(0.4f, GameLevelScene.this.player.getColor(), Color.WHITE),
