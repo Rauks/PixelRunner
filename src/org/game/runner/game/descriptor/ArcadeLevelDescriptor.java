@@ -31,16 +31,13 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     public LevelElement getNext() {
         switch(this.ranGen.nextInt(7)){
             case 0:
-                //return new BonusJump();
-                return new BonusLife();
+                return new BonusJump();
             case 1:
                 return new BonusLife();
             case 2:
-                //return new BonusSlow();
-                return new BonusLife();
+                return new BonusSlow();
             case 3:
-                //return new BonusSpeed();
-                return new BonusLife();
+                return new BonusSpeed();
             default:
             case 4:
             case 5:
