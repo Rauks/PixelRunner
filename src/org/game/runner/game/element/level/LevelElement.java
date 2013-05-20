@@ -27,7 +27,7 @@ public abstract class LevelElement{
     public static final int TRAP_HEIGHT = 30;
     public static final int TRAP_WIDTH = 30;
     public static final int PLATFORM_THICKNESS = 10;
-    public static final int PLATFORM_WIDTH = 150;
+    public static final int PLATFORM_WIDTH = 200;
     public static final int LEVEL_HIGH = 30;
     public static final Color COLOR_DEFAULT = Color.WHITE;
     
