@@ -312,7 +312,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 }
                 else{
                     //Level elements spawn
-                    final float baseY = GROUND_LEVEL + GROUND_THICKNESS/2 + LevelElement.BONUS_HEIGHT/2;
+                    final float baseY = GROUND_LEVEL + GROUND_THICKNESS/2;
                     final LevelElement lvlElement = GameLevelScene.this.level.getNext();
                     lvlElement.build(RIGHT_SPAWN, baseY, GameLevelScene.this.vbom, GameLevelScene.this.player, GameLevelScene.this.physicWorld);
                     GameLevelScene.this.attachChild(lvlElement.getBuildedShape());

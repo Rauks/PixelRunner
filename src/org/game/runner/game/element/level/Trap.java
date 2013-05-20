@@ -18,12 +18,12 @@ import org.andengine.util.debug.Debug;
  */
 public class Trap extends LevelElement{
     public Trap(int level){
-        super(level);
+        super(level, TRAP_WIDTH, TRAP_HEIGHT);
     }
 
     @Override
     protected Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
-        return new Rectangle(pX, pY, TRAP_WIDTH, TRAP_HEIGHT, pVertexBufferObjectManager);
+        return new Rectangle(pX, pY, this.getWidth(), this.getHeigth(), pVertexBufferObjectManager);
     }
 
     @Override

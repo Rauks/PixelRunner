@@ -18,7 +18,7 @@ public class Platform extends LevelElement {
     private int level = 1;
     
     public Platform(int level){
-        super(level < 1 ? 1 : level);
+        super(level < 1 ? 1 : level, PLATFORM_WIDTH, PLATFORM_THICKNESS);
     }
     
     @Override
@@ -28,7 +28,7 @@ public class Platform extends LevelElement {
 
     @Override
     protected Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, Player player) {
-        return new Rectangle(pX, pY, PLATFORM_WIDTH, PLATFORM_THICKNESS, pVertexBufferObjectManager);
+        return new Rectangle(pX, pY, this.getWidth(), this.getHeigth(), pVertexBufferObjectManager);
     }
 
     @Override

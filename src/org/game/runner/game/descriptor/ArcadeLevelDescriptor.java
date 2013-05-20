@@ -41,8 +41,9 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
                 return new BonusSpeed(0);
             case 4:
             case 5:
-            case 6:
                 return new Platform(1);
+            case 6:
+                return new Platform(2);
             default:
             case 7:
             case 8:

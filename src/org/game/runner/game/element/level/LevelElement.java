@@ -35,7 +35,10 @@ public abstract class LevelElement{
     private Shape shape;
     private int level;
     
-    public LevelElement(int level){
+    private float heigth;
+    private float width;
+    
+    public LevelElement(int level, float width, float heigth){
         if(level > 5){
             this.level = 5;
         }
@@ -45,10 +48,20 @@ public abstract class LevelElement{
         else{
             this.level = level;
         }
+        this.heigth = heigth;
+        this.width = width;
+    }
+
+    protected float getHeigth() {
+        return this.heigth;
+    }
+
+    protected float getWidth() {
+        return this.width;
     }
     
     public void build(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player, PhysicsWorld physicWorld){
-        this.shape = this.buildShape(pX, pY + this.level*LEVEL_HIGH, pVertexBufferObjectManager, player);
+        this.shape = this.buildShape(pX, pY + this.heigth/2 + this.level*LEVEL_HIGH, pVertexBufferObjectManager, player);
         this.shape.setColor(this.getColor());
         this.body = PhysicsFactory.createBoxBody(physicWorld, this.shape, BodyDef.BodyType.KinematicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
         this.body.setFixedRotation(true);

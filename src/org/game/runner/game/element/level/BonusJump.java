@@ -18,7 +18,7 @@ import org.game.runner.game.player.Player;
  */
 public class BonusJump extends LevelElement{
     public BonusJump(int level){
-        super(level);
+        super(level, BONUS_WIDTH, BONUS_HEIGHT);
     }
     
     @Override
@@ -28,7 +28,7 @@ public class BonusJump extends LevelElement{
 
     @Override
     protected Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
-        return new Rectangle(pX, pY, BONUS_WIDTH, BONUS_HEIGHT, pVertexBufferObjectManager);
+        return new Rectangle(pX, pY, this.getWidth(), this.getHeigth(), pVertexBufferObjectManager);
     }
 
     @Override
