@@ -63,7 +63,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
 
     @Override
     public float getSpawnTime() {
-        return 3;
+        return 1;
     }
 
     @Override
