@@ -247,10 +247,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 //Level elements unspawn
                 for(IEntity element : GameLevelScene.this.levelElements){
                     if(element.collidesWith(GameLevelScene.this.removerLeft)){
-                        GameLevelScene.this.levelElements.remove(element);
-                        element.clearUpdateHandlers();
-                        element.detachSelf();
-                        element.dispose();
+                        GameLevelScene.this.disposeLevelElement(element);
                     }
                 }
             }
