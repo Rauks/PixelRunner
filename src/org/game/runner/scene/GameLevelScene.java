@@ -59,8 +59,7 @@ import org.game.runner.utils.ease.EaseBroadcast;
  * @author Karl
  */
 public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
-    private final float LEFT_LIMIT = 20;
-    private final float RIGHT_LIMIT = 780;
+    private final float RIGHT_SPAWN = 850;
     private final float GROUND_LEVEL = 50;
     private final float GROUND_WIDTH = 1000;
     private final float GROUND_THICKNESS = 10;
@@ -260,16 +259,14 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     //Level elements spawn
                     final float baseY = GROUND_LEVEL + GROUND_THICKNESS/2 + LevelElement.BONUS_HEIGHT/2;
                     final LevelElement lvlElement = GameLevelScene.this.level.getNext();
-                    lvlElement.build(RIGHT_LIMIT - 50, baseY, GameLevelScene.this.vbom, GameLevelScene.this.player, GameLevelScene.this.physicWorld);
+                    lvlElement.build(RIGHT_SPAWN, baseY, GameLevelScene.this.vbom, GameLevelScene.this.player, GameLevelScene.this.physicWorld);
                     GameLevelScene.this.attachChild(lvlElement.getBuildedShape());
                     GameLevelScene.this.levelElements.add(lvlElement.getBuildedShape());
                     lvlElement.getBuildedBody().setUserData(lvlElement);
                     lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-20, 0));
-                    Debug.d("Spawn : " + lvlElement);
                     GameLevelScene.this.engine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback(){
                         @Override
                         public void onTimePassed(final TimerHandler pTimerHandler){
-                            Debug.d("End of life for " + lvlElement);
                             GameLevelScene.this.disposeLevelElement(lvlElement.getBuildedShape());
                         }
                     }));
@@ -455,7 +452,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     }
     private void disposeLevelElement(final Shape element){
         this.levelElements.remove(element);
-        Debug.d("Dispose request for : " + this.levelElements);
         final PhysicsConnector physicsConnector = this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(element);
         this.engine.runOnUpdateThread(new Runnable() {
             @Override
@@ -468,7 +464,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                      GameLevelScene.this.physicWorld.destroyBody(body);
                 }
                 element.detachSelf();
-                Debug.d("Disposed in : " + this);
             }
         });
     }

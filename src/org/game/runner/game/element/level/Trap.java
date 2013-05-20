@@ -10,6 +10,7 @@ import org.andengine.entity.shape.Shape;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.game.runner.game.player.Player;
+import org.andengine.util.debug.Debug;
 
 /**
  *
