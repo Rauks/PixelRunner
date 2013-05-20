@@ -61,6 +61,7 @@ import org.game.runner.utils.ease.EaseBroadcast;
  */
 public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
     private final float RIGHT_SPAWN = 850;
+    private final float PLAYER_X = 250;
     private final float GROUND_LEVEL = 50;
     private final float GROUND_WIDTH = 1000;
     private final float GROUND_THICKNESS = LevelElement.PLATFORM_THICKNESS;
@@ -197,15 +198,13 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             }
         });
         
-	Body retention = PhysicsFactory.createBoxBody(this.physicWorld, 400, 240, 1, 400, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
-        retention.setUserData("retention");
-        
         this.registerUpdateHandler(this.physicWorld);
         
         /*
         DebugRenderer debug = new DebugRenderer(this.physicWorld, this.vbom);
         this.attachChild(debug);
         */
+        
     }
     private void createBackground(){
         this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5){
@@ -223,7 +222,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         }
     }
     private void createPlayer(){
-        this.player = new Player(400, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld) {
+        this.player = new Player(PLAYER_X, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld) {
             @Override
             public void onSpeedChange(float speed) {
                 GameLevelScene.this.activity.vibrate(30);
@@ -293,6 +292,9 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.attachChild(this.player);
         this.playerTrail = new Trail(32, 0, 0, 64, Trail.ColorMode.NORMAL, this.player, this.resourcesManager.trail, this.vbom);
         this.playerTrail.hide();
+        
+	Body retention = PhysicsFactory.createBoxBody(this.physicWorld, PLAYER_X - this.player.getWidth()/2, 250, 1, 400, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+        retention.setUserData("retention");
     }
     private void createGround(){
         this.ground = new Rectangle(400, GROUND_LEVEL, GROUND_WIDTH, GROUND_THICKNESS, this.vbom);
