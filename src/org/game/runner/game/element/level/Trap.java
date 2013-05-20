@@ -4,6 +4,7 @@
  */
 package org.game.runner.game.element.level;
 
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
@@ -23,13 +24,16 @@ public class Trap extends LevelElement{
 
     @Override
     public IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
-        IEntity entity = new Rectangle(pX, pY, TRAP_WIDTH, TRAP_HEIGHT, pVertexBufferObjectManager){
+        final IEntity entity = new Rectangle(pX, pY, TRAP_WIDTH, TRAP_HEIGHT, pVertexBufferObjectManager);
+        entity.registerUpdateHandler(new IUpdateHandler() {
             @Override
-            protected void onManagedUpdate(float pSecondsElapsed){
-                super.onManagedUpdate(pSecondsElapsed);
-                if(player.collidesWith(this)){
-                    player.hit(this);
-                    player.setColor(this.getColor());
+            public void reset() { }
+
+            @Override
+            public void onUpdate(final float pSecondsElapsed) {
+                if(entity.collidesWith(player)) {
+                    player.hit(entity);
+                    player.setColor(entity.getColor());
                     if(player.hasLife()){
                         player.resetBonus();
                     }
@@ -38,7 +42,7 @@ public class Trap extends LevelElement{
                     }
                 }
             }
-        };
+        });
         entity.setColor(this.getColor());
         return entity;
     }
