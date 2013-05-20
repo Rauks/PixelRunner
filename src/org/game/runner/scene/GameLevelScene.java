@@ -166,8 +166,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                         float playerY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - GameLevelScene.this.player.getHeight() / 2;
                         float elementY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
                         
-                        Debug.d(playerY + " : "  + elementY);
-
                         if (playerY < elementY) {
                             contact.setEnabled(false);
                         }
@@ -179,7 +177,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     if(element.isPlatform()){
                         float playerY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - GameLevelScene.this.player.getHeight() / 2;
                         float elementY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
-                        Debug.d(playerY + " : "  + elementY);
 
                         if (playerY < elementY) {
                             contact.setEnabled(false);
