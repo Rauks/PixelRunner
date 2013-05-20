@@ -22,7 +22,7 @@ public class BonusSlow extends LevelElement{
     }
 
     @Override
-    public IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player, final PhysicsWorld physicsWorld) {
+    public IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
         IEntity entity = new Rectangle(pX, pY, BONUS_WIDTH, BONUS_HEIGHT, pVertexBufferObjectManager){
             @Override
             protected void onManagedUpdate(float pSecondsElapsed){

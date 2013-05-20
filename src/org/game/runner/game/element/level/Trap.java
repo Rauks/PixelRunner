@@ -22,7 +22,7 @@ public class Trap extends LevelElement{
     }
 
     @Override
-    public IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player, final PhysicsWorld physicsWorld) {
+    public IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
         IEntity entity = new Rectangle(pX, pY, TRAP_WIDTH, TRAP_HEIGHT, pVertexBufferObjectManager){
             @Override
             protected void onManagedUpdate(float pSecondsElapsed){

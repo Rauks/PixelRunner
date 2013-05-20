@@ -24,5 +24,5 @@ public abstract class LevelElement {
     
     
     public abstract Color getColor();
-    public abstract IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player, final PhysicsWorld physicsWorld);
+    public abstract IEntity createEntity(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player);
 }
