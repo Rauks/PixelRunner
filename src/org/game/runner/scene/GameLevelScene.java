@@ -124,20 +124,24 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                  || xB.getBody().getUserData().equals("player") && xA.getBody().getUserData().equals("ground")){
                     GameLevelScene.this.player.resetMovements();
                 }
-                /*
                 if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
+                    GameLevelScene.this.player.resetMovements();
+                /*
                     xB.getBody().setActive(false);
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
                     GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
                     element.doPlayerAction(GameLevelScene.this.player);
+                */
                 }
                 if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
+                    GameLevelScene.this.player.resetMovements();
+                /*
                     xA.getBody().setActive(false);
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
                     GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
                     element.doPlayerAction(GameLevelScene.this.player);
-                }
                 */
+                }
             }
             @Override
             public void endContact(Contact contact){
@@ -149,21 +153,21 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 
                 if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
-                    float playerY = xA.getBody().getPosition().y - GameLevelScene.this.player.getHeight() / 2;
-                    float elementY = xB.getBody().getPosition().y - element.getBuildedShape().getHeight() / 2;
+                    float playerY = xA.getBody().getPosition().y;
+                    float elementY = xB.getBody().getPosition().y;
                     
                     float distance = playerY - elementY;
-                    if (distance < 0) {
+                    if (distance < 1) {
                         contact.setEnabled(false);
                     }
                 }
                 if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
                     LevelElement element = (LevelElement)xA.getBody().getUserData();
-                    float playerY = xB.getBody().getPosition().y - GameLevelScene.this.player.getHeight() / 2;
-                    float elementY = xA.getBody().getPosition().y - element.getBuildedShape().getHeight() / 2;
+                    float playerY = xB.getBody().getPosition().y;
+                    float elementY = xA.getBody().getPosition().y;
                     
                     float distance = playerY - elementY;
-                    if (distance > 0) {
+                    if (distance < 1) {
                         contact.setEnabled(false);
                     }
                 }
@@ -172,6 +176,10 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             public void postSolve(Contact contact, ContactImpulse impulse){
             }
         });
+        
+	Body retention = PhysicsFactory.createBoxBody(this.physicWorld, 400, 240, 1, 400, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+        retention.setUserData("retention");
+        
         this.registerUpdateHandler(this.physicWorld);
         
         //Debug only
@@ -288,7 +296,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     GameLevelScene.this.attachChild(lvlElement.getBuildedShape());
                     GameLevelScene.this.levelElements.add(lvlElement.getBuildedShape());
                     lvlElement.getBuildedBody().setUserData(lvlElement);
-                    lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-20, 0));
+                    lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-10, 0));
                     GameLevelScene.this.engine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback(){
                         @Override
                         public void onTimePassed(final TimerHandler pTimerHandler){

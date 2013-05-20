@@ -27,7 +27,8 @@ public abstract class LevelElement{
     public static final int TRAP_HEIGHT = 30;
     public static final int TRAP_WIDTH = 30;
     public static final int PLATFORM_THICKNESS = 10;
-    public static final int PLATFORM_WIDTH = 50;
+    public static final int PLATFORM_WIDTH = 200;
+    public static final int PLATFORM_LEVEL_HIGH = 50;
     
     private Body body;
     private Shape shape;

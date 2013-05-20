@@ -11,6 +11,7 @@ import org.game.runner.game.element.level.BonusLife;
 import org.game.runner.game.element.level.BonusSlow;
 import org.game.runner.game.element.level.BonusSpeed;
 import org.game.runner.game.element.level.LevelElement;
+import org.game.runner.game.element.level.Platform;
 import org.game.runner.game.element.level.Trap;
 
 /**
@@ -29,6 +30,8 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     
     @Override
     public LevelElement getNext() {
+        return new Platform(1);
+        /*
         switch(this.ranGen.nextInt(7)){
             case 0:
                 return new BonusJump();
@@ -44,6 +47,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
             case 6:
                 return new Trap();
         }
+        */
     }
 
     @Override
