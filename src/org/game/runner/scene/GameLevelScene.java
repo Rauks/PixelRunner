@@ -40,6 +40,7 @@ import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
@@ -125,22 +126,30 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     GameLevelScene.this.player.resetMovements();
                 }
                 if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
-                    GameLevelScene.this.player.resetMovements();
-                /*
-                    xB.getBody().setActive(false);
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
-                    GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
-                    element.doPlayerAction(GameLevelScene.this.player);
-                */
+                    if(element.isPlatform()){
+                        if(xA.getBody().getLinearVelocity().y < 0.5){
+                            GameLevelScene.this.player.resetMovements();
+                        }
+                    }
+                    else{
+                        xB.getBody().setActive(false);
+                        GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
+                        element.doPlayerAction(GameLevelScene.this.player);
+                    }
                 }
                 if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
-                    GameLevelScene.this.player.resetMovements();
-                /*
-                    xA.getBody().setActive(false);
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
-                    GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
-                    element.doPlayerAction(GameLevelScene.this.player);
-                */
+                    if(element.isPlatform()){
+                        if(xB.getBody().getLinearVelocity().y < 0.5){
+                            GameLevelScene.this.player.resetMovements();
+                        }
+                    }
+                    else{
+                        xA.getBody().setActive(false);
+                        GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
+                        element.doPlayerAction(GameLevelScene.this.player);
+                    }
                 }
             }
             @Override
@@ -153,22 +162,28 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 
                 if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
-                    float playerY = xA.getBody().getPosition().y;
-                    float elementY = xB.getBody().getPosition().y;
-                    
-                    float distance = playerY - elementY;
-                    if (distance < 1) {
-                        contact.setEnabled(false);
+                    if(element.isPlatform()){
+                        float playerY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - GameLevelScene.this.player.getHeight() / 2;
+                        float elementY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
+                        
+                        Debug.d(playerY + " : "  + elementY);
+
+                        if (playerY < elementY) {
+                            contact.setEnabled(false);
+                        }
                     }
+                    
                 }
                 if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
                     LevelElement element = (LevelElement)xA.getBody().getUserData();
-                    float playerY = xB.getBody().getPosition().y;
-                    float elementY = xA.getBody().getPosition().y;
-                    
-                    float distance = playerY - elementY;
-                    if (distance < 1) {
-                        contact.setEnabled(false);
+                    if(element.isPlatform()){
+                        float playerY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - GameLevelScene.this.player.getHeight() / 2;
+                        float elementY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
+                        Debug.d(playerY + " : "  + elementY);
+
+                        if (playerY < elementY) {
+                            contact.setEnabled(false);
+                        }
                     }
                 }
             }
@@ -297,7 +312,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     GameLevelScene.this.levelElements.add(lvlElement.getBuildedShape());
                     lvlElement.getBuildedBody().setUserData(lvlElement);
                     lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-10, 0));
-                    GameLevelScene.this.engine.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback(){
+                    GameLevelScene.this.engine.registerUpdateHandler(new TimerHandler(6f, new ITimerCallback(){
                         @Override
                         public void onTimePassed(final TimerHandler pTimerHandler){
                             GameLevelScene.this.disposeLevelElement(lvlElement.getBuildedShape());
