@@ -124,6 +124,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                  || xB.getBody().getUserData().equals("player") && xA.getBody().getUserData().equals("ground")){
                     GameLevelScene.this.player.resetMovements();
                 }
+                /*
                 if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
                     xB.getBody().setActive(false);
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
@@ -136,12 +137,36 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
                     element.doPlayerAction(GameLevelScene.this.player);
                 }
+                */
             }
             @Override
             public void endContact(Contact contact){
             }
             @Override
             public void preSolve(Contact contact, Manifold oldManifold){
+                final Fixture xA = contact.getFixtureA();
+                final Fixture xB = contact.getFixtureB();
+                
+                if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
+                    LevelElement element = (LevelElement)xB.getBody().getUserData();
+                    float playerY = xA.getBody().getPosition().y - GameLevelScene.this.player.getHeight() / 2;
+                    float elementY = xB.getBody().getPosition().y - element.getBuildedShape().getHeight() / 2;
+                    
+                    float distance = playerY - elementY;
+                    if (distance < 0) {
+                        contact.setEnabled(false);
+                    }
+                }
+                if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
+                    LevelElement element = (LevelElement)xA.getBody().getUserData();
+                    float playerY = xB.getBody().getPosition().y - GameLevelScene.this.player.getHeight() / 2;
+                    float elementY = xA.getBody().getPosition().y - element.getBuildedShape().getHeight() / 2;
+                    
+                    float distance = playerY - elementY;
+                    if (distance > 0) {
+                        contact.setEnabled(false);
+                    }
+                }
             }
             @Override
             public void postSolve(Contact contact, ContactImpulse impulse){
