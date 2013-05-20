@@ -4,7 +4,6 @@
  */
 package org.game.runner.scene;
 
-import android.util.Log;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -12,7 +11,6 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -24,7 +22,6 @@ import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.modifier.MoveModifier;
@@ -138,7 +135,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         });
         this.registerUpdateHandler(this.physicWorld);
     }
-    
     private void createBackground(){
         this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5){
             @Override
@@ -387,22 +383,51 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         AudioManager.getInstance().stop();
         SceneManager.getInstance().unloadGameLevelScene();
     }
-
     @Override
     public void onPause() {
         this.audioManager.pause();
     }
-
     @Override
     public void onResume() {
         this.audioManager.resume();
     }
-
     @Override
     protected void onManagedUpdate(float pSecondsElapsed) {
         super.onManagedUpdate(pSecondsElapsed * this.player.getSpeed());
     }
     
+    @Override
+    public void disposeScene() {
+        this.destroyPhysicsWorld();
+        this.disposeLevelElements();
+        
+        this.camera.setHUD(null);
+        this.chrono3.detachSelf();
+        this.chrono3.dispose();
+        this.chrono2.detachSelf();
+        this.chrono2.dispose();
+        this.chrono1.detachSelf();
+        this.chrono1.dispose();
+        
+        this.chronoStart.detachSelf();
+        this.chronoStart.dispose();
+        this.ground.detachSelf();
+        this.ground.dispose();
+        this.playerTrail.detachSelf();
+        this.playerTrail.dispose();
+        this.player.detachSelf();
+        this.player.dispose();
+        for(Sprite layer : this.backgroundParallaxLayers){
+            layer.detachSelf();
+            layer.dispose();
+        }
+        this.removerLeft.detachSelf();
+        this.removerLeft.dispose();
+        this.removerRight.detachSelf();
+        this.removerRight.dispose();
+        this.detachSelf();
+        this.dispose();
+    }
     private void destroyPhysicsWorld(){
         this.engine.runOnUpdateThread(new Runnable(){
             public void run(){
@@ -440,39 +465,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         for(IEntity element : GameLevelScene.this.levelElements){
             this.disposeLevelElement(element);
         }
-    }
-
-    @Override
-    public void disposeScene() {
-        this.destroyPhysicsWorld();
-        this.disposeLevelElements();
-        
-        this.camera.setHUD(null);
-        this.chrono3.detachSelf();
-        this.chrono3.dispose();
-        this.chrono2.detachSelf();
-        this.chrono2.dispose();
-        this.chrono1.detachSelf();
-        this.chrono1.dispose();
-        
-        this.chronoStart.detachSelf();
-        this.chronoStart.dispose();
-        this.ground.detachSelf();
-        this.ground.dispose();
-        this.playerTrail.detachSelf();
-        this.playerTrail.dispose();
-        this.player.detachSelf();
-        this.player.dispose();
-        for(Sprite layer : this.backgroundParallaxLayers){
-            layer.detachSelf();
-            layer.dispose();
-        }
-        this.removerLeft.detachSelf();
-        this.removerLeft.dispose();
-        this.removerRight.detachSelf();
-        this.removerRight.dispose();
-        this.detachSelf();
-        this.dispose();
     }
 
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
