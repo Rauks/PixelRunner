@@ -202,6 +202,10 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     new ColorModifier(0.1f, GameLevelScene.this.player.getColor(), Color.WHITE),
                     new ColorModifier(0.1f, Color.WHITE, GameLevelScene.this.player.getColor()),
                     new ColorModifier(0.1f, GameLevelScene.this.player.getColor(), Color.WHITE),
+                    new ColorModifier(0.1f, Color.WHITE, GameLevelScene.this.player.getColor()),
+                    new ColorModifier(0.1f, GameLevelScene.this.player.getColor(), Color.WHITE),
+                    new ColorModifier(0.1f, Color.WHITE, GameLevelScene.this.player.getColor()),
+                    new ColorModifier(0.1f, GameLevelScene.this.player.getColor(), Color.WHITE),
                     new ColorModifier(0.1f, Color.WHITE, GameLevelScene.this.player.getColor()))
                  );
             }
