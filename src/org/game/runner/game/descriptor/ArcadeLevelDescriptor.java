@@ -56,7 +56,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
                 }
                 else{ // Platform @ 20%
                     this.prevState = PrevState.PLATFORM;
-                    this.platLayer = 1;
+                    this.platLayer = 2;
                     return new LevelElement[]{new Platform(this.platLayer)};
                 }
             case TRAP: //WAS TRAP
@@ -71,7 +71,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
                 }
                 else{ // Platform @ 20%
                     this.prevState = PrevState.PLATFORM;
-                    this.platLayer = 1;
+                    this.platLayer = 2;
                     return new LevelElement[]{new Platform(this.platLayer)};
                 }
             default: //WAS PLATFORM
