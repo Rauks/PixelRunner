@@ -79,35 +79,39 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     private PrevState prevState;
     private int platLayer;
     
+    private LevelElement[] buildArray(LevelElement... elements){
+        return elements;
+    }
+    
     @Override
-    public LevelElement getNext() {
+    public LevelElement[] getNext() {
         int rand;
         switch(this.prevState){
             case BONUS: //WAS BONUS
                 rand = ranGen.nextInt(100);
                 if(rand < 80){ // Rocket @ 80%
                     this.prevState = PrevState.TRAP;
-                    return this.getTrap();
+                    return new LevelElement[]{this.getTrap()};
                 }
                 else{ // Platform @ 20%
                     this.prevState = PrevState.PLATFORM;
                     this.platLayer = 1;
-                    return new Platform(this.platLayer);
+                    return new LevelElement[]{new Platform(this.platLayer)};
                 }
             case TRAP: //WAS TRAP
                 rand = ranGen.nextInt(100);
                 if(rand < 5){ // Bonus @ layer 3 @ 5%
                     this.prevState = PrevState.BONUS;
-                    return this.getBonus(3);
+                    return new LevelElement[]{this.getBonus(3)};
                 }
                 else if(rand >=5 && rand < 80){ // Rocket @ 75%
                     this.prevState = PrevState.TRAP;
-                    return this.getTrap();
+                    return new LevelElement[]{this.getTrap()};
                 }
                 else{ // Platform @ 20%
                     this.prevState = PrevState.PLATFORM;
                     this.platLayer = 1;
-                    return new Platform(this.platLayer);
+                    return new LevelElement[]{new Platform(this.platLayer)};
                 }
             default: //WAS PLATFORM
             case PLATFORM:
@@ -119,17 +123,17 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
                     if(rand < 90 && this.platLayer != LevelDescriptor.LAYERS_MAX){ // Plateform @ layer +1 @ 90%
                         this.platLayer++;
                     }
-                    return new Platform(this.platLayer);
+                    return new LevelElement[]{new Platform(this.platLayer)};
                 }
                 else{ // Bonus or trap @ 0% ~ 50%
                     rand = ranGen.nextInt(100);
                     if(rand < 70){ // Bonus @ layer +3 @ 70%
                         this.prevState = PrevState.BONUS;
-                        return this.getBonus(this.platLayer + 3);
+                        return new LevelElement[]{this.getBonus(this.platLayer + 3)};
                     }
                     else{ // Rocket @ layer 0 @ 30%
                         this.prevState = PrevState.TRAP;
-                        return this.getTrap();
+                        return new LevelElement[]{this.getTrap()};
                     }
                 }
         }

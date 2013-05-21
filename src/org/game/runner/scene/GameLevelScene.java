@@ -316,20 +316,21 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 else{
                     //Level elements spawn
                     final float baseY = GROUND_LEVEL + GROUND_THICKNESS/2;
-                    final LevelElement lvlElement = GameLevelScene.this.level.getNext();
+                    for(final LevelElement lvlElement : GameLevelScene.this.level.getNext()){
                     lvlElement.build(RIGHT_SPAWN, baseY, GameLevelScene.this.vbom, GameLevelScene.this.player, GameLevelScene.this.physicWorld);
-                    GameLevelScene.this.attachChild(lvlElement.getBuildedShape());
-                    lvlElement.getBuildedShape().setZIndex(GameLevelScene.this.player.getZIndex() - 2);
-                    GameLevelScene.this.sortChildren();
-                    GameLevelScene.this.levelElements.add(lvlElement.getBuildedShape());
-                    lvlElement.getBuildedBody().setUserData(lvlElement);
-                    lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-15, 0));
-                    GameLevelScene.this.engine.registerUpdateHandler(new TimerHandler(6f, new ITimerCallback(){
-                        @Override
-                        public void onTimePassed(final TimerHandler pTimerHandler){
-                            GameLevelScene.this.disposeLevelElement(lvlElement.getBuildedShape());
-                        }
-                    }));
+                        GameLevelScene.this.attachChild(lvlElement.getBuildedShape());
+                        lvlElement.getBuildedShape().setZIndex(GameLevelScene.this.player.getZIndex() - 2);
+                        GameLevelScene.this.sortChildren();
+                        GameLevelScene.this.levelElements.add(lvlElement.getBuildedShape());
+                        lvlElement.getBuildedBody().setUserData(lvlElement);
+                        lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-15, 0));
+                        GameLevelScene.this.engine.registerUpdateHandler(new TimerHandler(6f, new ITimerCallback(){
+                            @Override
+                            public void onTimePassed(final TimerHandler pTimerHandler){
+                                GameLevelScene.this.disposeLevelElement(lvlElement.getBuildedShape());
+                            }
+                        }));
+                    }
                 }
             }
         };
