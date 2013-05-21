@@ -5,6 +5,7 @@
 package org.game.runner.game.element.level;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.shape.Shape;
@@ -36,5 +37,6 @@ public class BonusJump extends LevelElement{
         player.resetBonus();
         player.setColor(this.getColor());
         player.setJumpMode(Player.JumpMode.INFINITE);
+        this.getBuildedShape().registerEntityModifier(new AlphaModifier(0.5f, 1f, 0f));
     }
 }

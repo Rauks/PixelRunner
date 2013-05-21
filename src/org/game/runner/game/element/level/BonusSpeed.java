@@ -5,6 +5,7 @@
 package org.game.runner.game.element.level;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.shape.Shape;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -35,5 +36,6 @@ public class BonusSpeed extends LevelElement{
         player.resetBonus();
         player.setColor(this.getColor());
         player.setSpeed(1.4f);
+        this.getBuildedShape().registerEntityModifier(new AlphaModifier(0.5f, 1f, 0f));
     }
 }

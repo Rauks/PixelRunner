@@ -5,6 +5,7 @@
 package org.game.runner.game.element.level;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.AnimatedSprite;
@@ -43,6 +44,9 @@ public class Wall extends LevelElement{
             else{
                 player.rollBackJump();
             }
+        }
+        else{
+            this.getBuildedShape().registerEntityModifier(new ColorModifier(.2f, this.getColor(), new Color(0.2f, 0.2f, 0.2f)));
         }
     }
 }

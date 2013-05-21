@@ -133,14 +133,9 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                         float elementY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
                         
                         if (playerY >= elementY && xA.getBody().getLinearVelocity().y < 0.5) {
-                            element.getBuildedShape().registerEntityModifier(new ColorModifier(.3f, element.getBuildedShape().getColor(), LevelElement.COLOR_DEFAULT));
+                            element.doPlayerAction(GameLevelScene.this.player);
                             GameLevelScene.this.player.resetMovements();
                         }
-                    }
-                    else{
-                        xB.getBody().setActive(false);
-                        GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
-                        element.doPlayerAction(GameLevelScene.this.player);
                     }
                 }
                 if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
@@ -150,14 +145,9 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                         float elementY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
                         
                         if (playerY >= elementY && xB.getBody().getLinearVelocity().y < 0.5) {
-                            element.getBuildedShape().registerEntityModifier(new ColorModifier(.3f, element.getBuildedShape().getColor(), LevelElement.COLOR_DEFAULT));
+                            element.doPlayerAction(GameLevelScene.this.player);
                             GameLevelScene.this.player.resetMovements();
                         }
-                    }
-                    else{
-                        xA.getBody().setActive(false);
-                        GameLevelScene.this.disposeLevelElement(element.getBuildedShape());
-                        element.doPlayerAction(GameLevelScene.this.player);
                     }
                 }
             }
@@ -179,6 +169,10 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                             contact.setEnabled(false);
                         }
                     }
+                    else{
+                        contact.setEnabled(false);
+                        element.doPlayerAction(GameLevelScene.this.player);
+                    }
                     
                 }
                 if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
@@ -190,6 +184,10 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                         if (playerY < elementY) {
                             contact.setEnabled(false);
                         }
+                    }
+                    else{
+                        contact.setEnabled(false);
+                        element.doPlayerAction(GameLevelScene.this.player);
                     }
                 }
             }
@@ -516,8 +514,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         final PhysicsConnector physicsConnector = this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(element);
         this.engine.runOnUpdateThread(new Runnable() {
             @Override
-            public void run() 
-            {
+            public void run() {
                 if (physicsConnector != null){
                      Body body = physicsConnector.getBody();
                      GameLevelScene.this.physicWorld.unregisterPhysicsConnector(physicsConnector);

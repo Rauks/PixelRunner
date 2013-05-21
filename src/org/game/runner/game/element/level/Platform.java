@@ -4,6 +4,7 @@
  */
 package org.game.runner.game.element.level;
 
+import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.shape.Shape;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -33,7 +34,7 @@ public class Platform extends LevelElement {
 
     @Override
     protected void playerAction(Player player) {
-        /* Nothing */
+        this.getBuildedShape().registerEntityModifier(new ColorModifier(.3f, this.getColor(), LevelElement.COLOR_DEFAULT));
     }
     
     @Override

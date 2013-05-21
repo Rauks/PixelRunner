@@ -123,7 +123,15 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
                     if(rand < 90 && this.platLayer != LevelDescriptor.LAYERS_MAX){ // Plateform @ layer +1 @ 90%
                         this.platLayer++;
                     }
-                    return new LevelElement[]{new Platform(this.platLayer)};
+                    if(this.platLayer > 5){
+                        return new LevelElement[]{new Platform(this.platLayer), this.getTrap()};
+                    }
+                    else if(this.platLayer > 3){
+                        return new LevelElement[]{new Platform(this.platLayer), this.getSmallTrap()};
+                    }
+                    else{
+                        return new LevelElement[]{new Platform(this.platLayer)};
+                    }
                 }
                 else{ // Bonus or trap @ 0% ~ 50%
                     rand = ranGen.nextInt(100);
@@ -159,6 +167,15 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
                 return new Wall(0);
             default:
             case 2:
+                return new Trap(0);
+        }
+    }
+    private LevelElement getSmallTrap(){
+        switch(this.ranGen.nextInt(2)){
+            case 0:
+                return new Rocket(0);
+            default:
+            case 1:
                 return new Trap(0);
         }
     }
