@@ -80,8 +80,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     protected LevelDescriptor level;
     private TimerHandler levelReaderHandler;
     private ITimerCallback levelReaderAction;
-    private TimerHandler bonusPickHandler;
-    private ITimerCallback bonusPickAction;
     //Background
     private AutoParallaxBackground autoParallaxBackground;
     private List<Sprite> backgroundParallaxLayers = new LinkedList<Sprite>();
@@ -223,18 +221,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     private void createPlayer(){
         this.player = new Player(PLAYER_X, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld) {
             @Override
-            public void onSpeedChange(float speed) {
-                GameLevelScene.this.activity.vibrate(30);
-            }
-            @Override
-            protected void onJumpModeChange() {
-                GameLevelScene.this.activity.vibrate(30);
-            }
-            @Override
-            protected void onGetLife() {
-                GameLevelScene.this.activity.vibrate(30);
-            }
-            @Override
             public void onJump() {
                 GameLevelScene.this.activity.vibrate(30);
             }
@@ -250,44 +236,11 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             }
             @Override
             protected void onBonus() {
-                this.registerUpdateHandler(GameLevelScene.this.bonusPickHandler = new TimerHandler(8, GameLevelScene.this.bonusPickAction));
-            }
-
-            @Override
-            protected void onBonusReset() {
-                this.clearUpdateHandlers();
-                this.clearEntityModifiers();
+                GameLevelScene.this.activity.vibrate(30);
             }
         };
         this.player.getBody().setUserData("player");
-        this.bonusPickAction = new ITimerCallback(){                      
-            @Override
-            public void onTimePassed(final TimerHandler pTimerHandler) {
-                GameLevelScene.this.player.registerEntityModifier(new SequenceEntityModifier(new IEntityModifierListener() {
-                        @Override
-                        public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {}
-                        @Override
-                        public void onModifierFinished(final IModifier<IEntity> pEntityModifier, final IEntity pEntity) {
-                            GameLevelScene.this.player.endBonus();
-                        }
-                    },
-                    new ColorModifier(0.4f, GameLevelScene.this.player.getColor(), Color.WHITE),
-                    new ColorModifier(0.4f, Color.WHITE, GameLevelScene.this.player.getColor()),
-                    new ColorModifier(0.3f, GameLevelScene.this.player.getColor(), Color.WHITE),
-                    new ColorModifier(0.3f, Color.WHITE, GameLevelScene.this.player.getColor()),
-                    new ColorModifier(0.2f, GameLevelScene.this.player.getColor(), Color.WHITE),
-                    new ColorModifier(0.2f, Color.WHITE, GameLevelScene.this.player.getColor()),
-                    new ColorModifier(0.1f, GameLevelScene.this.player.getColor(), Color.WHITE),
-                    new ColorModifier(0.1f, Color.WHITE, GameLevelScene.this.player.getColor()),
-                    new ColorModifier(0.1f, GameLevelScene.this.player.getColor(), Color.WHITE),
-                    new ColorModifier(0.1f, Color.WHITE, GameLevelScene.this.player.getColor()),
-                    new ColorModifier(0.1f, GameLevelScene.this.player.getColor(), Color.WHITE),
-                    new ColorModifier(0.1f, Color.WHITE, GameLevelScene.this.player.getColor()),
-                    new ColorModifier(0.1f, GameLevelScene.this.player.getColor(), Color.WHITE),
-                    new ColorModifier(0.1f, Color.WHITE, GameLevelScene.this.player.getColor()))
-                 );
-            }
-        };
+        
         this.attachChild(this.player);
         this.playerTrail = new Trail(32, 0, 0, 64, -320, -280, -2, 2, 15, 20, 40, Trail.ColorMode.NORMAL, this.player, this.resourcesManager.trail, this.vbom);
         this.playerTrail.hide();
@@ -357,9 +310,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.unregisterUpdateHandler(this.levelReaderHandler);
         AudioManager.getInstance().stop();
         this.player.resetBonus();
-        this.player.setAlpha(1f);
-        this.player.clearUpdateHandlers();
-        this.player.clearEntityModifiers();
         this.playerTrail.hide();
         this.parallaxFactor = -10f;
         this.disposeLevelElements();

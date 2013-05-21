@@ -7,7 +7,12 @@ package org.game.runner.game.player;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.ColorModifier;
+import org.andengine.entity.modifier.IEntityModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -15,7 +20,9 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
+import org.andengine.util.modifier.IModifier;
 import org.game.runner.game.descriptor.LevelDescriptor;
+import org.game.runner.scene.GameLevelScene;
 
 /**
  *
@@ -33,6 +40,35 @@ public abstract class Player extends AnimatedSprite{
     final int[] PLAYER_ANIMATE_JUMP_FRAMES = new int[]  { 12                                                  };
     final long[] PLAYER_ANIMATE_ROLL = new long[]       { 60,     60,     60,     60,     60,     60,     60  };
     final int[] PLAYER_ANIMATE_ROLL_FRAMES = new int[]  { 0,      1,      2,      3,      4,      5,      6   };
+    
+    private ITimerCallback bonusPickAction = new ITimerCallback(){                      
+        @Override
+        public void onTimePassed(final TimerHandler pTimerHandler) {
+            Player.this.registerEntityModifier(new SequenceEntityModifier(new IEntityModifier.IEntityModifierListener() {
+                    @Override
+                    public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {}
+                    @Override
+                    public void onModifierFinished(final IModifier<IEntity> pEntityModifier, final IEntity pEntity) {
+                        Player.this.endBonus();
+                    }
+                },
+                new ColorModifier(0.4f, Player.this.getColor(), Color.WHITE),
+                new ColorModifier(0.4f, Color.WHITE, Player.this.getColor()),
+                new ColorModifier(0.3f, Player.this.getColor(), Color.WHITE),
+                new ColorModifier(0.3f, Color.WHITE, Player.this.getColor()),
+                new ColorModifier(0.2f, Player.this.getColor(), Color.WHITE),
+                new ColorModifier(0.2f, Color.WHITE, Player.this.getColor()),
+                new ColorModifier(0.1f, Player.this.getColor(), Color.WHITE),
+                new ColorModifier(0.1f, Color.WHITE, Player.this.getColor()),
+                new ColorModifier(0.1f, Player.this.getColor(), Color.WHITE),
+                new ColorModifier(0.1f, Color.WHITE, Player.this.getColor()),
+                new ColorModifier(0.1f, Player.this.getColor(), Color.WHITE),
+                new ColorModifier(0.1f, Color.WHITE, Player.this.getColor()),
+                new ColorModifier(0.1f, Player.this.getColor(), Color.WHITE),
+                new ColorModifier(0.1f, Color.WHITE, Player.this.getColor()))
+             );
+        }
+    };
     
     private Body body;
     
@@ -71,11 +107,13 @@ public abstract class Player extends AnimatedSprite{
     }
     public void resetBonus(){
         this.endBonus();
-        this.onBonusReset();
+        this.clearUpdateHandlers();
+        this.clearEntityModifiers();
     }
-    public void endBonus() {
+    private void endBonus() {
         this.jumpMode = JumpMode.DOUBLE;
         this.speed = 1f;
+        this.setAlpha(1f);
         this.hasLife = false;
         this.setColor(Color.WHITE);
     }
@@ -107,17 +145,17 @@ public abstract class Player extends AnimatedSprite{
     }
     public void setSpeed(float speed){
         this.speed = speed;
-        this.onSpeedChange(speed);
+        this.fireBonusTimer();
         this.onBonus();
     }
     public void setJumpMode(JumpMode jumpMode){
         this.jumpMode = jumpMode;
-        this.onJumpModeChange();
+        this.fireBonusTimer();
         this.onBonus();
     }
     public void getLife(){
         this.hasLife = true;
-        this.onGetLife();
+        this.fireBonusTimer();
         this.onBonus();
     }
     public boolean hasLife(){
@@ -180,12 +218,12 @@ public abstract class Player extends AnimatedSprite{
         super.setColor(color);
     }
     
-    protected abstract void onSpeedChange(float speed);
+    private void fireBonusTimer(){
+        this.registerUpdateHandler(new TimerHandler(8, this.bonusPickAction));
+    }
+    
     protected abstract void onJump();
-    protected abstract void onGetLife();
-    protected abstract void onJumpModeChange();
     protected abstract void onRoll();
     protected abstract void onRollBackJump();
     protected abstract void onBonus();
-    protected abstract void onBonusReset();
 }
