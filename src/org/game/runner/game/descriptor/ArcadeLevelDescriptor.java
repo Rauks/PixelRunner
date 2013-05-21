@@ -26,12 +26,52 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
         PLATFORM
     }
     
+    private enum BackgroundPack{
+        MOUNTAIN(Layer.CLOUDS_2, Layer.CLOUDS_1, Layer.MOUNTAIN_2, Layer.MOUNTAIN_1), 
+        FOREST(Layer.CLOUDS_2, Layer.CLOUDS_1, Layer.FOREST_2, Layer.FOREST_1), 
+        CITY(Layer.CLOUDS_2, Layer.CLOUDS_1, Layer.CITY_2, Layer.CITY_1), 
+        DESERT(Layer.CLOUDS_2, Layer.CLOUDS_1, Layer.DESERT_2, Layer.DESERT_1);
+        
+        private enum Layer{
+            CLOUDS_1(0, 240, "clouds_1", 25),
+            CLOUDS_2(0, 260, "clouds_2", 20),
+            CITY_1(0, 0, "city_1", 35),
+            CITY_2(0, 0, "city_2", 30),
+            DESERT_1(0, 0, "desert_1", 35),
+            DESERT_2(0, 0, "desert_2", 30),
+            MOUNTAIN_1(0, 0, "mountain_1", 35),
+            MOUNTAIN_2(0, 0, "mountain_2", 30),
+            FOREST_1(0, 0, "forest_1", 35),
+            FOREST_2(0, 0, "forest_2", 30);
+            
+            public float x;
+            public float y;
+            public String resName;
+            public float speed;
+
+            private Layer(float x, float y, String resName, float speed) {
+                this.x = x;
+                this.y = y;
+                this.resName = resName;
+                this.speed = speed;
+            }
+        }
+        private Layer[] backgrounds;
+        
+        private BackgroundPack(Layer... backgrounds){
+            this.backgrounds = backgrounds;
+        }
+
+        public Layer[] getBackgrounds() {
+            return backgrounds;
+        }
+    }
+    
     public ArcadeLevelDescriptor(){
-        this.prevState = PrevState.TRAP;
-        this.addBackgroundElement(new BackgroundElement(0, 190, "clouds_2", 20));
-        this.addBackgroundElement(new BackgroundElement(0, 170, "clouds_1", 25));
-        this.addBackgroundElement(new BackgroundElement(0, 0, "mountain_2", 30));
-        this.addBackgroundElement(new BackgroundElement(0, 0, "mountain_1", 35));
+        BackgroundPack pack = BackgroundPack.values()[this.ranGen.nextInt(BackgroundPack.values().length)];
+        for(BackgroundPack.Layer layer : pack.getBackgrounds()){
+            this.addBackgroundElement(new BackgroundElement(layer.x, layer.y, layer.resName, layer.speed));
+        }
     }
     
     private Random ranGen = new Random();
@@ -71,8 +111,8 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
             default: //WAS PLATFORM
             case PLATFORM:
                 rand = ranGen.nextInt(100);
-                int deviation = (this.platLayer / LevelDescriptor.LAYERS_MAX) * 70; // 0% @ layer 0, 70% @ layer max
-                if(rand < (100 - deviation)){ // Platform @ 100% ~ 30%
+                int deviation = (int)(((float)this.platLayer / (float)LevelDescriptor.LAYERS_MAX) * 50f); // 0% @ layer 0, 70% @ layer max
+                if(rand < (100 - deviation)){ // Platform @ 100% ~ 50%
                     this.prevState = PrevState.PLATFORM;
                     rand = ranGen.nextInt(100);
                     if(rand < 90 && this.platLayer != LevelDescriptor.LAYERS_MAX){ // Plateform @ layer +1 @ 90%
@@ -80,7 +120,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
                     }
                     return new Platform(this.platLayer);
                 }
-                else{ // Bonus or trap @ 0% ~ 70%
+                else{ // Bonus or trap @ 0% ~ 50%
                     rand = ranGen.nextInt(100);
                     if(rand < 70){ // Bonus @ layer +3 @ 70%
                         this.prevState = PrevState.BONUS;
@@ -123,7 +163,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
 
     @Override
     public void init() {
-        
+        this.prevState = PrevState.TRAP;
     }
 
     @Override

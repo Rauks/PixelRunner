@@ -216,6 +216,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.setBackground(this.autoParallaxBackground);
         for(BackgroundElement layer : this.level.getBackgrounds()){
             Sprite layerSprite = new Sprite(layer.x, GROUND_LEVEL + layer.y, this.resourcesManager.gameParallaxLayers.get(layer.getResourceName()), this.vbom);
+            layerSprite.setColor(new Color(0.4f, 0.4f, 0.4f));
             this.backgroundParallaxLayers.add(layerSprite);
             layerSprite.setOffsetCenter(0, 0);
             this.autoParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(-layer.speed, layerSprite));
