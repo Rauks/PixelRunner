@@ -15,6 +15,7 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
+import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.game.player.Player;
 
 /**
@@ -28,7 +29,6 @@ public abstract class LevelElement{
     public static final int TRAP_WIDTH = 30;
     public static final int PLATFORM_THICKNESS = 10;
     public static final int PLATFORM_WIDTH = 200;
-    public static final int LEVEL_HIGH = 30;
     public static final Color COLOR_DEFAULT = Color.WHITE;
     
     private Body body;
@@ -39,8 +39,8 @@ public abstract class LevelElement{
     private float width;
     
     public LevelElement(int level, float width, float heigth){
-        if(level > 5){
-            this.level = 5;
+        if(level > LevelDescriptor.LAYERS_MAX){
+            this.level = LevelDescriptor.LAYERS_MAX;
         }
         else if(level < 0){
             this.level = 0;
@@ -61,7 +61,7 @@ public abstract class LevelElement{
     }
     
     public void build(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player, PhysicsWorld physicWorld){
-        this.shape = this.buildShape(pX, pY + this.heigth/2 + this.level*LEVEL_HIGH, pVertexBufferObjectManager, player);
+        this.shape = this.buildShape(pX, pY + this.heigth/2 + this.level*LevelDescriptor.LAYER_HIGH, pVertexBufferObjectManager, player);
         this.shape.setColor(this.getColor());
         this.body = PhysicsFactory.createBoxBody(physicWorld, this.shape, BodyDef.BodyType.KinematicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
         this.body.setFixedRotation(true);

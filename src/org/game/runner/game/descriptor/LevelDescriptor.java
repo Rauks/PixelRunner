@@ -16,6 +16,8 @@ import org.game.runner.game.element.level.LevelElement;
  */
 public abstract class LevelDescriptor {
     public static final int MAX_BACKGROUND_ELEMENTS = 5;
+    public static final int LAYER_HIGH = 30;
+    public static final int LAYERS_MAX = 10;
     
     private List<BackgroundElement> backgrounds = new LinkedList<BackgroundElement>();
     

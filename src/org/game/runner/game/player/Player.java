@@ -15,6 +15,7 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
+import org.game.runner.game.descriptor.LevelDescriptor;
 
 /**
  *
@@ -36,7 +37,7 @@ public abstract class Player extends AnimatedSprite{
     private Body body;
     
     private JumpMode jumpMode;
-    private final float JUMP_INFINITE_MAX_Y = 350;
+    private final float JUMP_INFINITE_MAX_Y = LevelDescriptor.LAYERS_MAX * LevelDescriptor.LAYER_HIGH + 50;
     private int jumpCount;
     private boolean jumping;
     

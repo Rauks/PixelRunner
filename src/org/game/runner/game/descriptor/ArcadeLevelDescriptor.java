@@ -19,7 +19,14 @@ import org.game.runner.game.element.level.Trap;
  * @author Karl
  */
 public class ArcadeLevelDescriptor extends LevelDescriptor{
+    private enum PrevState{
+        BONUS,
+        TRAP,
+        PLATFORM
+    }
+    
     public ArcadeLevelDescriptor(){
+        this.prevState = PrevState.TRAP;
         this.addBackgroundElement(new BackgroundElement(0, 190, "clouds_2", 20));
         this.addBackgroundElement(new BackgroundElement(0, 170, "clouds_1", 25));
         this.addBackgroundElement(new BackgroundElement(0, 0, "mountain_2", 30));
@@ -27,29 +34,79 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     }
     
     private Random ranGen = new Random();
+    private PrevState prevState;
+    private int platLayer;
     
     @Override
     public LevelElement getNext() {
-        switch(this.ranGen.nextInt(10)){
-            case 0:
-                return new BonusJump(0);
-            case 1:
-                return new BonusLife(0);
-            case 2:
-                return new BonusSlow(0);
-            case 3:
-                return new BonusSpeed(0);
-            case 4:
-            case 5:
-                return new Platform(1);
-            case 6:
-                return new Platform(2);
-            default:
-            case 7:
-            case 8:
-            case 9:
-                return new Trap(0);
+        int rand;
+        switch(this.prevState){
+            case BONUS: //WAS BONUS
+                rand = ranGen.nextInt(100);
+                if(rand < 80){ // Trap @ 80%
+                    this.prevState = PrevState.TRAP;
+                    return this.getTrap();
+                }
+                else{ // Platform @ 20%
+                    this.prevState = PrevState.PLATFORM;
+                    this.platLayer = 1;
+                    return new Platform(this.platLayer);
+                }
+            case TRAP: //WAS TRAP
+                rand = ranGen.nextInt(100);
+                if(rand < 5){ // Bonus @ layer 3 @ 5%
+                    this.prevState = PrevState.BONUS;
+                    return this.getBonus(3);
+                }
+                else if(rand >=5 && rand < 80){ // Trap @ 75%
+                    this.prevState = PrevState.TRAP;
+                    return this.getTrap();
+                }
+                else{ // Platform @ 20%
+                    this.prevState = PrevState.PLATFORM;
+                    this.platLayer = 1;
+                    return new Platform(this.platLayer);
+                }
+            default: //WAS PLATFORM
+            case PLATFORM:
+                rand = ranGen.nextInt(100);
+                int deviation = (this.platLayer / LevelDescriptor.LAYERS_MAX) * 70; // 0% @ layer 0, 70% @ layer max
+                if(rand < (100 - deviation)){ // Platform @ 100% ~ 30%
+                    this.prevState = PrevState.PLATFORM;
+                    rand = ranGen.nextInt(100);
+                    if(rand < 90 && this.platLayer != LevelDescriptor.LAYERS_MAX){ // Plateform @ layer +1 @ 90%
+                        this.platLayer++;
+                    }
+                    return new Platform(this.platLayer);
+                }
+                else{ // Bonus or trap @ 0% ~ 70%
+                    rand = ranGen.nextInt(100);
+                    if(rand < 70){ // Bonus @ layer +3 @ 70%
+                        this.prevState = PrevState.BONUS;
+                        return this.getBonus(this.platLayer + 3);
+                    }
+                    else{ // Trap @ layer 0 @ 30%
+                        this.prevState = PrevState.TRAP;
+                        return this.getTrap();
+                    }
+                }
         }
+    }
+    private LevelElement getBonus(int layer){
+        switch(this.ranGen.nextInt(4)){
+            case 0:
+                return new BonusJump(layer);
+            case 1:
+                return new BonusLife(layer);
+            case 2:
+                return new BonusSlow(layer);
+            default:
+            case 3:
+                return new BonusSpeed(layer);
+        }
+    }
+    private LevelElement getTrap(){
+        return new Trap(0);
     }
 
     @Override
