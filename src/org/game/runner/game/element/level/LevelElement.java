@@ -46,6 +46,8 @@ public abstract class LevelElement{
     private float heigth;
     private float width;
     
+    private boolean actionDone;
+    
     public LevelElement(int level, float width, float heigth){
         if(level > LevelDescriptor.LAYERS_MAX){
             this.level = LevelDescriptor.LAYERS_MAX;
@@ -58,6 +60,7 @@ public abstract class LevelElement{
         }
         this.heigth = heigth;
         this.width = width;
+        this.actionDone = false;
     }
 
     protected float getHeigth() {
@@ -88,7 +91,10 @@ public abstract class LevelElement{
     protected abstract Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player);
     protected abstract void playerAction(Player player);
     public void doPlayerAction(Player player){
-        this.playerAction(player);
+        if(!this.actionDone){
+            this.playerAction(player);
+            this.actionDone = true;
+        }
     }
     public boolean isPlatform(){
         return false;
