@@ -25,8 +25,6 @@ import org.game.runner.game.player.Player;
 public abstract class LevelElement{
     public static final int BONUS_HEIGHT = 30;
     public static final int BONUS_WIDTH = 30;
-    public static final int TRAP_HEIGHT = 30;
-    public static final int TRAP_WIDTH = 30;
     public static final int PLATFORM_THICKNESS = 10;
     public static final int PLATFORM_WIDTH = 200;
     public static final Color COLOR_DEFAULT = Color.WHITE;

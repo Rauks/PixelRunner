@@ -12,6 +12,7 @@ import org.game.runner.game.element.level.BonusSlow;
 import org.game.runner.game.element.level.BonusSpeed;
 import org.game.runner.game.element.level.LevelElement;
 import org.game.runner.game.element.level.Platform;
+import org.game.runner.game.element.level.Rocket;
 import org.game.runner.game.element.level.Trap;
 
 /**
@@ -43,7 +44,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
         switch(this.prevState){
             case BONUS: //WAS BONUS
                 rand = ranGen.nextInt(100);
-                if(rand < 80){ // Trap @ 80%
+                if(rand < 80){ // Rocket @ 80%
                     this.prevState = PrevState.TRAP;
                     return this.getTrap();
                 }
@@ -58,7 +59,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
                     this.prevState = PrevState.BONUS;
                     return this.getBonus(3);
                 }
-                else if(rand >=5 && rand < 80){ // Trap @ 75%
+                else if(rand >=5 && rand < 80){ // Rocket @ 75%
                     this.prevState = PrevState.TRAP;
                     return this.getTrap();
                 }
@@ -85,7 +86,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
                         this.prevState = PrevState.BONUS;
                         return this.getBonus(this.platLayer + 3);
                     }
-                    else{ // Trap @ layer 0 @ 30%
+                    else{ // Rocket @ layer 0 @ 30%
                         this.prevState = PrevState.TRAP;
                         return this.getTrap();
                     }
@@ -106,7 +107,13 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
         }
     }
     private LevelElement getTrap(){
-        return new Trap(0);
+        switch(this.ranGen.nextInt(2)){
+            case 0:
+                return new Rocket(0);
+            default:
+            case 1:
+                return new Trap(0);
+        }
     }
 
     @Override

@@ -22,7 +22,7 @@ public class BonusSpeed extends LevelElement{
     
     @Override
     public Color getColor() {
-        return Color.RED;
+        return Color.PINK;
     }
 
     @Override

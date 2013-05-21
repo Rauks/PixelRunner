@@ -34,11 +34,19 @@ public class Trail extends SpriteParticleSystem{
     private int dX;
     private int dY;
     private ColorMode colorMode;
+    private float pMinVelocityX;
+    private float pMaxVelocityX;
+    private float pMinVelocityY;
+    private float pMaxVelocityY;
     
-    public Trail(int pX, int pY, int dX, int dY, ColorMode colorMode, IEntity attachTo, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager){
-        super(new PointParticleEmitter(pX, pY), 15, 20, 40, pTextureRegion, pVertexBufferObjectManager);
+    public Trail(int pX, int pY, int dX, int dY, float pMinVelocityX, float pMaxVelocityX, float pMinVelocityY, float pMaxVelocityY, float pRateMinimum, float pRateMaximum, int pParticlesMaximum, ColorMode colorMode, IEntity attachTo, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager){
+        super(new PointParticleEmitter(pX, pY), pRateMinimum, pRateMaximum, pParticlesMaximum, pTextureRegion, pVertexBufferObjectManager);
         this.dX = dX;
         this.dY = dY;
+        this.pMinVelocityX = pMinVelocityX;
+        this.pMaxVelocityX = pMaxVelocityX;
+        this.pMinVelocityY = pMinVelocityY;
+        this.pMaxVelocityY = pMaxVelocityY;
         this.colorMode = colorMode;
         attachTo.attachChild(this);
         this.setZIndex(attachTo.getZIndex() - 1);
@@ -73,7 +81,7 @@ public class Trail extends SpriteParticleSystem{
     
     private void initInitializers(){
         this.addParticleInitializer(new BlendFunctionParticleInitializer<Sprite>(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE));
-        this.addParticleInitializer(new VelocityParticleInitializer<Sprite>(-320, -280, -2, 2));
+        this.addParticleInitializer(new VelocityParticleInitializer<Sprite>(this.pMinVelocityX, this.pMaxVelocityX, this.pMinVelocityY, this.pMaxVelocityY));
         this.addParticleInitializer(new ExpireParticleInitializer<Sprite>(1f));
         this.addParticleModifier( new AlphaParticleModifier<Sprite>(0.5f, 1f, 1f, 0f) );
         this.addParticleInitializer(new IParticleInitializer<Sprite>() {
@@ -83,7 +91,7 @@ public class Trail extends SpriteParticleSystem{
                 int tdX = 0;
                 int tdY = 0;
                 if(Trail.this.dX != 0){
-                    tdX = Trail.this.ranGen.nextInt(Trail.this.dY);
+                    tdX = Trail.this.ranGen.nextInt(Trail.this.dX);
                 }
                 if(Trail.this.dY != 0){
                     tdY = Trail.this.ranGen.nextInt(Trail.this.dY);

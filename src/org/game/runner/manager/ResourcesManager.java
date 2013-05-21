@@ -17,6 +17,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.game.runner.GameActivity;
 import org.game.runner.game.descriptor.LevelDescriptor;
@@ -46,6 +47,10 @@ public class ResourcesManager {
     public ITiledTextureRegion player;
     private BitmapTextureAtlas trailTextureAtlas;
     public ITextureRegion trail;
+    private BitmapTextureAtlas rocketTextureAtlas;
+    public ITiledTextureRegion rocket;
+    private BitmapTextureAtlas trapTextureAtlas;
+    public TiledTextureRegion trap;
     private BitmapTextureAtlas gameBackgroundTextureAtlas;
     public Map<String, ITextureRegion> gameParallaxLayers = new HashMap<String, ITextureRegion>();
     
@@ -126,6 +131,14 @@ public class ResourcesManager {
         this.trailTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 4, 4);
         this.trail = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.trailTextureAtlas, this.activity, "trail.png", 0, 0);
         this.trailTextureAtlas.load();
+        
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/elements/");
+        this.rocketTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 368, 36);
+        this.rocket = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.rocketTextureAtlas, this.activity, "rocket.png", 0, 0, 4, 1);
+        this.rocketTextureAtlas.load();
+        this.trapTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 96, 32);
+        this.trap = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.trapTextureAtlas, this.activity, "trap.png", 0, 0, 3, 1);
+        this.trapTextureAtlas.load();
         
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/backgrounds/");
         this.gameBackgroundTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), BackgroundElement.MAX_WIDTH, BackgroundElement.MAX_HEIGHT * LevelDescriptor.MAX_BACKGROUND_ELEMENTS);

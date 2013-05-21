@@ -19,30 +19,30 @@ import org.game.runner.manager.ResourcesManager;
  *
  * @author Karl
  */
-public class Trap extends LevelElement{
-    public Trap(int level){
-        super(level, ResourcesManager.getInstance().trap.getWidth(), ResourcesManager.getInstance().trap.getHeight());
+public class Rocket extends LevelElement{
+    public Rocket(int level){
+        super(level, ResourcesManager.getInstance().rocket.getWidth(), ResourcesManager.getInstance().rocket.getHeight() + 20);
     }
     
     private Trail trail;
 
     @Override
     protected Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
-        AnimatedSprite shape = new AnimatedSprite(pX, pY, ResourcesManager.getInstance().trap, pVertexBufferObjectManager){
+        AnimatedSprite shape = new AnimatedSprite(pX, pY, ResourcesManager.getInstance().rocket, pVertexBufferObjectManager){
             @Override
             public boolean detachSelf(){
-                Trap.this.trail.detachSelf();
+                Rocket.this.trail.detachSelf();
                 return super.detachSelf();
             }
             @Override
             public void dispose(){
-                Trap.this.trail.dispose();
+                Rocket.this.trail.dispose();
                 super.dispose();
             }
         };
-        this.trail = new Trail(16, 0, 0, 24, 150, 120, -2, 2, 15, 20, 15, Trail.ColorMode.NORMAL, shape, ResourcesManager.getInstance().trail, pVertexBufferObjectManager);
+        this.trail = new Trail(72, 8, 0, 20, 150, 120, -2, 2, 15, 20, 15, Trail.ColorMode.NORMAL, shape, ResourcesManager.getInstance().trail, pVertexBufferObjectManager);
         this.trail.setColor(Color.RED);
-        shape.animate(new long[]{200, 150, 200, 150}, new int[]{0, 1, 2, 1});
+        shape.animate(150);
         return shape;
     }
 
