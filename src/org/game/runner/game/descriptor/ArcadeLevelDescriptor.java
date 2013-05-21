@@ -14,6 +14,7 @@ import org.game.runner.game.element.level.LevelElement;
 import org.game.runner.game.element.level.Platform;
 import org.game.runner.game.element.level.Rocket;
 import org.game.runner.game.element.level.Trap;
+import org.game.runner.game.element.level.Wall;
 
 /**
  *
@@ -147,11 +148,13 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
         }
     }
     private LevelElement getTrap(){
-        switch(this.ranGen.nextInt(2)){
+        switch(this.ranGen.nextInt(3)){
             case 0:
                 return new Rocket(0);
-            default:
             case 1:
+                return new Wall(0);
+            default:
+            case 2:
                 return new Trap(0);
         }
     }

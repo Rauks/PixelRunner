@@ -60,7 +60,7 @@ import org.game.runner.utils.ease.EaseBroadcast;
  * @author Karl
  */
 public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
-    private final float RIGHT_SPAWN = 850;
+    private final float RIGHT_SPAWN = 900;
     private final float PLAYER_X = 250;
     private final float GROUND_LEVEL = 50;
     private final float GROUND_WIDTH = 1000;

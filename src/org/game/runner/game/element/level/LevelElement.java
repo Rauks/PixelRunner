@@ -27,7 +27,17 @@ public abstract class LevelElement{
     public static final int BONUS_WIDTH = 30;
     public static final int PLATFORM_THICKNESS = 10;
     public static final int PLATFORM_WIDTH = 200;
+    
+    public static final float TRAIL_MIN_SPEED_X = 150;
+    public static final float TRAIL_MAX_SPEED_X = 120;
+    public static final float TRAIL_MIN_SPEED_Y = -2;
+    public static final float TRAIL_MAX_SPEED_Y = 2;
+    public static final float TRAIL_MIN_RATE = 15;
+    public static final float TRAIL_MAX_RATE = 20;
+    public static final int TRAIL_MAX_PARTICULES = 15;
+    
     public static final Color COLOR_DEFAULT = Color.WHITE;
+    public static final Color COLOR_TRAIL_DEFAULT = Color.RED;
     
     private Body body;
     private Shape shape;

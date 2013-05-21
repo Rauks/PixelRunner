@@ -40,15 +40,14 @@ public class Rocket extends LevelElement{
                 super.dispose();
             }
         };
-        this.trail = new Trail(72, 8, 0, 20, 150, 120, -2, 2, 15, 20, 15, Trail.ColorMode.NORMAL, shape, ResourcesManager.getInstance().trail, pVertexBufferObjectManager);
-        this.trail.setColor(Color.RED);
+        this.trail = new Trail(72, 8, 0, 20, TRAIL_MIN_SPEED_X, TRAIL_MAX_SPEED_X, TRAIL_MIN_SPEED_Y, TRAIL_MAX_SPEED_Y, TRAIL_MIN_RATE, TRAIL_MAX_RATE, TRAIL_MAX_PARTICULES, Trail.ColorMode.NORMAL, shape, ResourcesManager.getInstance().trail, pVertexBufferObjectManager);
+        this.trail.setColor(COLOR_TRAIL_DEFAULT);
         shape.animate(150);
         return shape;
     }
 
     @Override
     protected void playerAction(Player player) {
-        player.setColor(this.getColor());
         if(player.hasLife()){
             player.resetBonus();
         }
