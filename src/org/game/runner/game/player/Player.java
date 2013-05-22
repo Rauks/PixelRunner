@@ -91,7 +91,7 @@ public abstract class Player extends AnimatedSprite{
     }
     
     private void createPhysics(PhysicsWorld physicWorld){        
-        this.body = PhysicsFactory.createBoxBody(physicWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+        this.body = PhysicsFactory.createBoxBody(physicWorld, this.getX(), this.getY(), this.getWidth() - 16, this.getHeight(), BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
         this.body.setFixedRotation(true);
         physicWorld.registerPhysicsConnector(new PhysicsConnector(this, this.body, true, false));
     }
