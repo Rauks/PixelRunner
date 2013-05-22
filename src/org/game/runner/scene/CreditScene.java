@@ -56,7 +56,7 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
         this.tests = new Text(centerX, 0, resourcesManager.fontPixel_34, "BETA TESTERS", vbom);
         this.testsNames = new Text(centerX, 0, resourcesManager.fontPixel_60, "AURELIE KERAVAL\nCHARLES HAZARD\nGEORGES OLIVARES\nLUCAS D'AGUI\nNICOLAS DEVENET\nSIMON CHEVALIER", new TextOptions(HorizontalAlign.CENTER), vbom);
         this.thanks = new Text(centerX, 0, resourcesManager.fontPixel_34, "SPECIAL THANKS", vbom);
-        this.thanksNames = new Text(centerX, 0, resourcesManager.fontPixel_60, "MICHEL HASSENFORDER\nSUZANNE NOLL\nTHIBAUT MEYER", new TextOptions(HorizontalAlign.CENTER), vbom);
+        this.thanksNames = new Text(centerX, 0, resourcesManager.fontPixel_60, "LEONARD DAVER\nMICHEL HASSENFORDER\nSUZANNE NOLL\nTHIBAUT MEYER", new TextOptions(HorizontalAlign.CENTER), vbom);
         
         this.setFlow(this.title, 30f, 5f, this.prod, this.prodNames, this.design, this.designNames, this.tests, this.testsNames, this.thanks, this.thanksNames);
         
