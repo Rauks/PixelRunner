@@ -123,7 +123,6 @@ public class ArcadeGameLevelScene extends GameLevelScene{
 
     @Override
     protected void onRestartEnd() {
-        this.countScore = true;
     }
 
     @Override
