@@ -15,8 +15,8 @@ public enum BackgroundPack{
     DESERT(Layer.CLOUDS_2.withSpeed(20), Layer.CLOUDS_1.withSpeed(25), Layer.DESERT_2.withSpeed(30), Layer.DESERT_1.withSpeed(35));
 
     public enum Layer{
-        CLOUDS_1(0, 240, "clouds_1"),
-        CLOUDS_2(0, 260, "clouds_2"),
+        CLOUDS_1(0, 220, "clouds_1"),
+        CLOUDS_2(0, 240, "clouds_2"),
         CITY_1(0, 0, "city_1"),
         CITY_2(0, 0, "city_2"),
         DESERT_1(0, 0, "desert_1"),

@@ -93,11 +93,11 @@ public class ResourcesManager {
     
     public void loadMenuResources(){
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/main/");
-        this.menuTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 960, 960);
+        this.menuTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 240, 240);
         this.mainMenuParallaxLayer1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_1.png", 0, 0);
-        this.mainMenuParallaxLayer2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_2.png", 480, 0);
-        this.mainMenuParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_3.png", 0, 480);
-        this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_4.png", 480, 480);
+        this.mainMenuParallaxLayer2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_2.png", 120, 0);
+        this.mainMenuParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_3.png", 0, 120);
+        this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_4.png", 120, 120);
         this.menuTextureAtlas.load();
         AudioManager.getInstance().prepare("mfx/", "menu.xm");
     }
@@ -112,7 +112,7 @@ public class ResourcesManager {
 
     public void loadSplashResources() {
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/splash/");
-        this.splashTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 960, 960);
+        this.splashTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 16, 16);
         this.splashHeadphones = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.splashTextureAtlas, this.activity, "headphones.png", 0, 0);
         this.splashTextureAtlas.load();
     }

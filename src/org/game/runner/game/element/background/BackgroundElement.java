@@ -9,8 +9,8 @@ package org.game.runner.game.element.background;
  * @author Karl
  */
 public class BackgroundElement {
-    public static final int MAX_WIDTH = 1000;
-    public static final int MAX_HEIGHT = 480;
+    public static final int MAX_WIDTH = 250;
+    public static final int MAX_HEIGHT = 120;
     
     public final float x;
     public final float y;
