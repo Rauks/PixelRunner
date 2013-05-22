@@ -46,21 +46,18 @@ public class GameActivity extends BaseGameActivity{
 
     @Override
     public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws IOException {
-        ResourcesManager.getInstance().loadSplashResources();
-        SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);
+        SceneManager.getInstance().createLoadingScene(pOnCreateSceneCallback);
     }
 
     @Override
     public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException {
         this.mEngine.enableVibrator(this);
         this.phoneAudioManager = (android.media.AudioManager)getSystemService(AUDIO_SERVICE);
-        this.mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback(){
+        this.mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
                 GameActivity.this.mEngine.unregisterUpdateHandler(pTimerHandler);
-                ResourcesManager.getInstance().loadMenuResources();
-                SceneManager.getInstance().createSplashEndScene();
-                SceneManager.getInstance().disposeSplashScene();
+                SceneManager.getInstance().createSplashScene();
             }
         }));
         pOnPopulateSceneCallback.onPopulateSceneFinished();

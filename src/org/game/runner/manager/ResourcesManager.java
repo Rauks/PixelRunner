@@ -72,7 +72,7 @@ public class ResourcesManager {
         getInstance().vbom = vbom;
     }
     
-    private void loadFonts(){
+    public void loadFonts(){
         FontFactory.setAssetBasePath("font/");
         final ITexture fontPixel34Texture = new BitmapTextureAtlas(this.activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         this.fontPixel_34 = FontFactory.createStrokeFromAsset(this.activity.getFontManager(), fontPixel34Texture, this.activity.getAssets(), "pixel.ttf", 34, false, Color.WHITE, 1, Color.BLACK);
@@ -111,7 +111,6 @@ public class ResourcesManager {
     }
 
     public void loadSplashResources() {
-        this.loadFonts();
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/splash/");
         this.splashTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 960, 960);
         this.splashHeadphones = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.splashTextureAtlas, this.activity, "headphones.png", 0, 0);

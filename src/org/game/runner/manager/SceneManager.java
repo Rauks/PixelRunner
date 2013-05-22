@@ -18,7 +18,6 @@ import org.game.runner.scene.GameLevelScene;
 import org.game.runner.scene.LoadingScene;
 import org.game.runner.scene.MainMenuScene;
 import org.game.runner.scene.SplashEndScene;
-import org.game.runner.scene.SplashScene;
 
 /**
  *
@@ -36,7 +35,6 @@ public class SceneManager {
     private static final SceneManager INSTANCE = new SceneManager();
     
     private BaseScene creditsScene;
-    private BaseScene splashScene;
     private BaseScene splashEndScene;
     private BaseScene mainMenuScene;
     private BaseScene gameLevelScene;
@@ -61,7 +59,7 @@ public class SceneManager {
     }
     
     public void loadGameLevelScene(final SceneType type, final LevelDescriptor level){
-        this.createLoadingScene();
+        this.setScene(this.loadingScene);
         ResourcesManager.getInstance().unloadMenuResources();
         this.disposeMainMenuScene();
         this.engine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
@@ -70,11 +68,13 @@ public class SceneManager {
                 SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadGameResources(level);
                 SceneManager.this.createGameLevelScene(type, level);
-                SceneManager.this.disposeLoadingScene();
                 SceneManager.this.engine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
                     @Override
                     public void onTimePassed(final TimerHandler pTimerHandler){
-                        ((GameLevelScene)SceneManager.getInstance().getCurrentScene()).start();
+                        SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
+                        if(SceneManager.getInstance().getCurrentScene() instanceof GameLevelScene){
+                            ((GameLevelScene)SceneManager.getInstance().getCurrentScene()).start();
+                        }
                     }
                 }));
             }
@@ -82,7 +82,7 @@ public class SceneManager {
     }
     
     public void unloadGameLevelScene(){
-        this.createLoadingScene();
+        this.setScene(this.loadingScene);
         ResourcesManager.getInstance().unloadGameResources();
         this.disposeGameLevelScene();
         this.engine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
@@ -92,24 +92,8 @@ public class SceneManager {
                 ResourcesManager.getInstance().loadMenuResources();
                 SceneManager.this.createMainMenuScene();
                 AudioManager.getInstance().play("mfx/", "menu.xm");
-                SceneManager.this.disposeLoadingScene();
             }
         }));
-    }
-    
-    private void createLoadingScene() {
-        this.loadingScene = new LoadingScene();
-        setScene(this.loadingScene);
-    }
-    
-    private void disposeLoadingScene(){
-        this.activity.runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                SceneManager.this.loadingScene.disposeScene();
-                SceneManager.this.loadingScene = null;
-            }
-        });
     }
     
     private void createGameLevelScene(SceneType type, LevelDescriptor level) {
@@ -164,12 +148,14 @@ public class SceneManager {
         });
     }
     
-    public void createSplashEndScene() {
+    public void createSplashScene() {
+        ResourcesManager.getInstance().loadSplashResources();
+        ResourcesManager.getInstance().loadMenuResources();
         this.splashEndScene = new SplashEndScene();
         this.setScene(this.splashEndScene);
     }
     
-    public void disposeSplashEndScene(){
+    public void disposeSplashScene(){
         this.activity.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {
@@ -179,20 +165,11 @@ public class SceneManager {
         });
     }
     
-    public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback) {
-        this.splashScene = new SplashScene();
-        this.currentScene = this.splashScene;
-        pOnCreateSceneCallback.onCreateSceneFinished(this.splashScene);
-    }
-    
-    public void disposeSplashScene(){
-        this.activity.runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                SceneManager.this.splashScene.disposeScene();
-                SceneManager.this.splashScene = null;
-            }
-        });
+    public void createLoadingScene(OnCreateSceneCallback pOnCreateSceneCallback) {
+        ResourcesManager.getInstance().loadFonts();
+        this.loadingScene = new LoadingScene();
+        this.setScene(this.loadingScene);
+        pOnCreateSceneCallback.onCreateSceneFinished(this.loadingScene);
     }
     
     public static SceneManager getInstance(){
