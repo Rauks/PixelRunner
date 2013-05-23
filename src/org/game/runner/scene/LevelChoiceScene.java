@@ -4,7 +4,7 @@
  */
 package org.game.runner.scene;
 
-import org.game.runner.base.BaseMenuScene;
+import org.game.runner.base.BaseScrollMenuScene;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 
@@ -12,7 +12,13 @@ import org.game.runner.manager.SceneManager.SceneType;
  *
  * @author Karl
  */
-public class LevelChoiceScene extends BaseMenuScene{
+public class LevelChoiceScene extends BaseScrollMenuScene{
+    @Override
+    public void createScene(){
+        super.createScene();
+
+        this.setOnSceneTouchListener(this);
+    }
 
     @Override
     public void onBackKeyPressed() {
@@ -25,4 +31,8 @@ public class LevelChoiceScene extends BaseMenuScene{
         return SceneType.SCENE_LEVEL_CHOICE;
     }
     
+    @Override
+    public void disposeScene() {
+        super.disposeScene();
+    }
 }
