@@ -74,9 +74,9 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
         final float startY = this.title.getY() + this.title.getHeight()/2 + centerY;
         final float endY = this.thanksNames.getY() - this.thanksNames.getHeight()/2 - centerY;
         this.e = new Entity();
-        this.e.setPosition(400, startY);
+        this.e.setPosition(centerX, startY);
         this.camera.setChaseEntity(this.e);
-        this.e.registerEntityModifier(new LoopEntityModifier(new MoveModifier(20f, this.e.getX(), startY, this.e.getX(), endY), LoopEntityModifier.LOOP_CONTINUOUS, new IEntityModifier.IEntityModifierListener() {
+        this.e.registerEntityModifier(new LoopEntityModifier(new MoveModifier(30f, this.e.getX(), startY, this.e.getX(), endY), LoopEntityModifier.LOOP_CONTINUOUS, new IEntityModifier.IEntityModifierListener() {
             @Override
             public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {}
             @Override
