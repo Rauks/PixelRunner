@@ -4,6 +4,8 @@
  */
 package org.game.runner.scene;
 
+import org.andengine.entity.primitive.Rectangle;
+import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScrollMenuScene;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
@@ -13,11 +15,13 @@ import org.game.runner.manager.SceneManager.SceneType;
  * @author Karl
  */
 public class LevelChoiceScene extends BaseScrollMenuScene{
-    @Override
-    public void createScene(){
-        super.createScene();
-
-        this.setOnSceneTouchListener(this);
+    public LevelChoiceScene(){
+        super(GameActivity.CAMERA_WIDTH, GameActivity.CAMERA_HEIGHT);
+        
+        this.addPage(new Rectangle(0, 0, 100, 100, this.vbom));
+        this.addPage(new Rectangle(0, 0, 100, 100, this.vbom));
+        this.addPage(new Rectangle(0, 0, 100, 100, this.vbom));
+        this.addPage(new Rectangle(0, 0, 100, 100, this.vbom));
     }
 
     @Override

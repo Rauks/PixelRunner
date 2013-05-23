@@ -7,6 +7,7 @@ package org.game.runner.scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
 import org.andengine.util.adt.color.Color;
+import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
 import org.game.runner.manager.SceneManager.SceneType;
 
@@ -20,7 +21,7 @@ public class LoadingScene extends BaseScene{
     @Override
     public void createScene() {
         this.setBackground(new Background(Color.BLACK));
-        this.title = new Text(this.camera.getWidth()/2, this.camera.getHeight()/2, resourcesManager.fontPixel_60, "LOADING...", vbom);
+        this.title = new Text(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2, resourcesManager.fontPixel_60, "LOADING...", vbom);
         attachChild(this.title);
     }
 

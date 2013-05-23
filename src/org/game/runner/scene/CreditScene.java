@@ -19,6 +19,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.modifier.IModifier;
+import org.game.runner.GameActivity;
 import org.game.runner.base.BaseMenuScene;
 import org.game.runner.game.player.Player;
 import org.game.runner.manager.SceneManager;
@@ -45,8 +46,8 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
     public void createScene() {
         super.createScene();
         
-        float centerX = this.camera.getWidth()/2;
-        float centerY = this.camera.getHeight()/2;
+        float centerX = GameActivity.CAMERA_WIDTH/2;
+        float centerY = GameActivity.CAMERA_HEIGHT/2;
         
         this.title = new Text(centerX, centerY + 150, resourcesManager.fontPixel_100, "CREDITS", vbom);
         this.prod = new Text(centerX, 0, resourcesManager.fontPixel_34, "PROGRAMMING", vbom);

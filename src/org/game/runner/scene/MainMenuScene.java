@@ -9,6 +9,7 @@ import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.text.Text;
+import org.game.runner.GameActivity;
 import org.game.runner.base.BaseMenuScene;
 import org.game.runner.game.descriptor.ArcadeLevelDescriptor;
 import org.game.runner.manager.AudioManager;
@@ -29,7 +30,7 @@ public class MainMenuScene extends BaseMenuScene implements MenuScene.IOnMenuIte
     public void createScene() {
         super.createScene();
         this.createMenuChildScene();
-        attachChild(new Text(this.camera.getWidth()/2, this.camera.getHeight()/2 + 150, resourcesManager.fontPixel_100, "PIXEL RUNNER", vbom));
+        attachChild(new Text(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2 + 150, resourcesManager.fontPixel_100, "PIXEL RUNNER", vbom));
     }
     
     private void createMenuChildScene(){
