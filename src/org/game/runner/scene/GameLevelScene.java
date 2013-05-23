@@ -488,11 +488,11 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
 
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
         if (pSceneTouchEvent.isActionDown()){
-            if(pSceneTouchEvent.getY() > 250){
+            if(pSceneTouchEvent.getY() >= 240){
                 //Jump
                 this.player.jump();
             }
-            else if(pSceneTouchEvent.getY() < 230){
+            else if(pSceneTouchEvent.getY() < 240){
                 //Roll
                 this.player.roll();
             }
