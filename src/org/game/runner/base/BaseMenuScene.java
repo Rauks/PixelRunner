@@ -18,14 +18,25 @@ public abstract class BaseMenuScene extends BaseScene{
     private Sprite parallaxLayer2;
     private Sprite parallaxLayer3;
     private Sprite parallaxLayer4;
+    private float parallaxFactor;
     
     @Override
     public void createScene() {
         this.createBackground();
     }
     
+    public void setParallaxFactor(float parallaxFactor){
+        this.parallaxFactor = parallaxFactor;
+    }
+    
     private void createBackground(){
-        this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5);
+        this.parallaxFactor = 1f;
+        this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5){
+            @Override
+            public void onUpdate(final float pSecondsElapsed) {
+		super.onUpdate(pSecondsElapsed * BaseMenuScene.this.parallaxFactor);
+            }
+        };
         this.setBackground(this.autoParallaxBackground);
         this.parallaxLayer1 = new Sprite(0, 0, this.resourcesManager.mainMenuParallaxLayer1, this.vbom);
         this.parallaxLayer2 = new Sprite(0, 0, this.resourcesManager.mainMenuParallaxLayer2, this.vbom);

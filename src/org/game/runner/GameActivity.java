@@ -18,6 +18,9 @@ import org.game.runner.manager.ResourcesManager;
 import org.game.runner.manager.SceneManager;
 
 public class GameActivity extends BaseGameActivity{
+    public static float CAMERA_WIDTH = 800;
+    public static float CAMERA_HEIGHT = 480;
+    
     private android.media.AudioManager phoneAudioManager;
     private Camera camera;
     private ResourcesManager resourcesManager;
@@ -25,7 +28,7 @@ public class GameActivity extends BaseGameActivity{
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        this.camera = new Camera(0, 0, 800, 480);
+        this.camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
         EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(800, 480), this.camera);
         engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
         engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);

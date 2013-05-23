@@ -15,6 +15,7 @@ import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.scene.ArcadeGameLevelScene;
 import org.game.runner.scene.CreditScene;
 import org.game.runner.scene.GameLevelScene;
+import org.game.runner.scene.LevelChoiceScene;
 import org.game.runner.scene.LoadingScene;
 import org.game.runner.scene.MainMenuScene;
 import org.game.runner.scene.SplashEndScene;
@@ -24,10 +25,12 @@ import org.game.runner.scene.SplashEndScene;
  * @author Karl
  */
 public class SceneManager {
+
     public enum SceneType{
         SCENE_SPLASH,
         SCENE_SPLASH_END,
         SCENE_MENU,
+        SCENE_LEVEL_CHOICE,
         SCENE_GAME_ARCADE,
         SCENE_LOADING,
         SCENE_CREDITS}
@@ -37,6 +40,7 @@ public class SceneManager {
     private BaseScene creditsScene;
     private BaseScene splashEndScene;
     private BaseScene mainMenuScene;
+    private BaseScene levelChoiceScene;
     private BaseScene gameLevelScene;
     private BaseScene loadingScene;
     
@@ -144,6 +148,20 @@ public class SceneManager {
             public void run() {
                 SceneManager.this.creditsScene.disposeScene();
                 SceneManager.this.creditsScene = null;
+            }
+        });
+    }
+    
+    public void createLevelChoiceScene() {
+        this.levelChoiceScene = new LevelChoiceScene();
+        this.setScene(this.levelChoiceScene);
+    }
+    public void disposeLevelChoiceScene() {
+        this.activity.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                SceneManager.this.levelChoiceScene.disposeScene();
+                SceneManager.this.levelChoiceScene = null;
             }
         });
     }
