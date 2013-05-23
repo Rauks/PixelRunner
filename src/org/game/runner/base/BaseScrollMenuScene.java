@@ -49,8 +49,8 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         IDLE, SLIDING;
     }
     public static interface IOnScrollScenePageListener {
-        public void onMoveToPageStarted(final int pPageNumber);
-        public void onMoveToPageFinished(final int pPageNumber);
+        public void onMoveToPageStarted(final int oldPageNumber, final int newPageNumber);
+        public void onMoveToPageFinished(final int oldPageNumber, final int newPageNumber);
     }
 
     public BaseScrollMenuScene() {
@@ -217,7 +217,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
             throw new IndexOutOfBoundsException("moveToPage: " + pageNumber + " - wrong page number, out of bounds.");
         }
         
-        int oldPage = this.mCurrentPage;
+        final int oldPage = this.mCurrentPage;
         this.mCurrentPage = pageNumber;
 
         final float toX = positionForPageWithNumber(pageNumber);
@@ -247,12 +247,12 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
                 this.mMoveXModifierListener = new IModifier.IModifierListener<IEntity>() {
                     @Override
                     public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-                        BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageStarted(BaseScrollMenuScene.this.mCurrentPage);
+                        BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageStarted(oldPage, BaseScrollMenuScene.this.mCurrentPage);
                     }
 
                     @Override
                     public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-                        BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageFinished(BaseScrollMenuScene.this.mCurrentPage);
+                        BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageFinished(oldPage, BaseScrollMenuScene.this.mCurrentPage);
                     }
                 };
                 this.mMoveXModifier.addModifierListener(this.mMoveXModifierListener);
