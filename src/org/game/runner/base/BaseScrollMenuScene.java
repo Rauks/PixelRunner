@@ -171,12 +171,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
                 return false;
         }
     }
-
-    /**
-     * Updates all pages positions & adds them as children if needed.<br>
-     * Can be used to update position of pages after screen reshape, or for rearranging pages after
-     * insertion or removal of pages.
-     */
+    
     public void updatePages() {
         int i = 0;
         for (Shape page : this.mPages) {
@@ -184,34 +179,21 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
             i++;
         }
     }
-
-    /**
-     * Adds new page to the right end of the scroll scene.
-     * 
-     * @param pPage
-     */
+    
     public void addPage(final Shape pPage) {
         this.mPages.add(pPage);
         this.attachChild(pPage);
 
         this.updatePages();
     }
-
-    /**
-     * Adds new page and reorders pages trying to set given number for newly added page. <br>
-     * If number > page count -> adds new page to the right end of the scroll scene.<br>
-     * If number <= 0 -> adds new page to the left end of the scroll scene.
-     */
+    
     public void addPage(final Shape pPage, final int pPageNumber) {
         this.mPages.add(pPageNumber, pPage);
         this.attachChild(pPage);
 
         this.updatePages();
     }
-
-    /**
-     * Removes page if it's one of scroll scene pages (not children) Does nothing if page not found.
-     */
+    
     public void removePage(final Shape pPage) {
         this.unregisterTouchArea(pPage);
         this.detachChild(pPage);
@@ -223,28 +205,19 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         this.moveToPage(this.mCurrentPage);
 
     }
-
-    /** Removes page with given number. Does nothing if there's no page for such number. */
+    
     void removePageWithNumber(final Shape pPage, final int pPageNumber) {
         if (pPageNumber < this.mPages.size()) {
             this.removePage(this.mPages.get(pPageNumber));
         }
     }
-
-    /**
-     * Moves the scene to the page with the given number and, if it has a OnScrollScenePageListener
-     * registered, calls {@link #onMoveToPageStarted()} when started and
-     * {@link #onMoveToPageFinished()} method when finished.
-     * 
-     * @param pageNumber
-     * @throws IndexOutOfBoundsException
-     *             if number >= totalPages or < 0.
-     */
+    
     private void moveToPage(final int pageNumber) {
         if (pageNumber >= this.mPages.size()) {
             throw new IndexOutOfBoundsException("moveToPage: " + pageNumber + " - wrong page number, out of bounds.");
         }
-
+        
+        int oldPage = this.mCurrentPage;
         this.mCurrentPage = pageNumber;
 
         final float toX = positionForPageWithNumber(pageNumber);
@@ -286,14 +259,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
             }
         }
     }
-
-    /**
-     * Immediately moves the scene to the given page number.
-     * 
-     * @param pageNumber
-     * @throws IndexOutOfBoundsException
-     *             if number >= totalPages or < 0.
-     */
+    
     public void selectPage(int pageNumber) {
         if (pageNumber >= this.mPages.size()) {
             throw new IndexOutOfBoundsException("selectPage: " + pageNumber + " - wrong page number, out of bounds.");
@@ -302,21 +268,11 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         this.setX(positionForPageWithNumber(pageNumber));
         this.mCurrentPage = pageNumber;
     }
-
-    /**
-     * @param pageNumber
-     * @return the position of the page with the given number
-     */
+    
     public float positionForPageWithNumber(int pageNumber) {
         return pageNumber * (this.mPageWidth - this.mOffset) * -1f;
     }
-
-    /**
-     * 
-     * @param pPosition
-     *            meaning the X value
-     * @return the number of the page at the given position
-     */
+    
     public int pageNumberForPosition(float pPosition) {
         float pageFloat = -pPosition / (this.mPageWidth - this.mOffset);
         int pageNumber = (int) Math.ceil(pageFloat);
@@ -330,10 +286,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
 
         return pageNumber;
     }
-
-    /**
-     * Moves to the next page. Does nothing if the current page is the last page
-     */
+    
     public void moveToNextPage() {
         final int pageNo = this.mPages.size();
 
@@ -341,19 +294,13 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
             this.moveToPage(this.mCurrentPage + 1);
         }
     }
-
-    /**
-     * Moves to the previous page. Does nothing if the current page is the first page
-     */
+    
     public void moveToPreviousPage() {
         if (this.mCurrentPage > 0) {
             this.moveToPage(this.mCurrentPage - 1);
         }
     }
-
-    /**
-     * Removes all Pages from the scene
-     */
+    
     public void clearPages() {
         for (int i = this.mPages.size() - 1; i >= 0; i--) {
             final Shape page = this.mPages.remove(i);
