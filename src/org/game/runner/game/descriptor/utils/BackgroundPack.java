@@ -52,7 +52,7 @@ public enum BackgroundPack{
         this.backgrounds = backgrounds;
     }
 
-    public Layer[] getBackgrounds() {
+    public Layer[] getLayers() {
         return backgrounds;
     }
 }

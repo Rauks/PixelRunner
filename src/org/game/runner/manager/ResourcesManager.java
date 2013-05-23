@@ -142,7 +142,7 @@ public class ResourcesManager {
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/backgrounds/");
         this.gameBackgroundTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), BackgroundElement.MAX_WIDTH, BackgroundElement.MAX_HEIGHT * LevelDescriptor.MAX_BACKGROUND_ELEMENTS);
         int index = 0;
-        for(BackgroundElement background : level.getBackgrounds()){
+        for(BackgroundElement background : level.getBackgroundsElements()){
             if(!this.gameParallaxLayers.containsKey(background.getResourceName())){
                 this.gameParallaxLayers.put(background.getResourceName(), BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.gameBackgroundTextureAtlas, this.activity, background.getResourceName() + ".png", 0, index * BackgroundElement.MAX_HEIGHT));
                 index++;

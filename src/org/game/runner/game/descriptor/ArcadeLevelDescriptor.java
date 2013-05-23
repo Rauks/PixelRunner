@@ -30,19 +30,12 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     }
     
     public ArcadeLevelDescriptor(){
-        BackgroundPack pack = BackgroundPack.values()[this.ranGen.nextInt(BackgroundPack.values().length)];
-        for(Layer layer : pack.getBackgrounds()){
-            this.addBackgroundElement(new BackgroundElement(layer.x, layer.y, layer.resName, layer.speed));
-        }
+        super(BackgroundPack.values()[new Random().nextInt(BackgroundPack.values().length)]);
     }
     
     private Random ranGen = new Random();
     private PrevState prevState;
     private int platLayer;
-    
-    private LevelElement[] buildArray(LevelElement... elements){
-        return elements;
-    }
     
     @Override
     public LevelElement[] getNext() {
