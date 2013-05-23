@@ -28,6 +28,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     private ScrollState mState;
     private IOnScrollScenePageListener mOnScrollScenePageListener;
 
+    private int mPrevPage;
     private int mCurrentPage;
     private float mStartSwipe;
 
@@ -69,6 +70,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         this.mMinimumTouchLengthToChagePage = pMinimumTouchLengthToChangePage;
         this.mEaseFunction = EaseLinear.getInstance();
 
+        this.mPrevPage = 0;
         this.mCurrentPage = 0;
     }
         
@@ -127,6 +129,12 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     }
     public int getCurrentPageNumber() {
         return this.mCurrentPage;
+    }
+    public Shape getPreviousPage() {
+        return this.mPages.get(this.mPrevPage);
+    }
+    public int getPreviousPageNumber() {
+        return this.mPrevPage;
     }
 
     @Override
@@ -201,6 +209,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
 
         this.updatePages();
 
+        this.mPrevPage = this.mCurrentPage;
         this.mCurrentPage = Math.min(this.mCurrentPage, mPages.size() - 1);
         this.moveToPage(this.mCurrentPage);
 
@@ -217,7 +226,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
             throw new IndexOutOfBoundsException("moveToPage: " + pageNumber + " - wrong page number, out of bounds.");
         }
         
-        final int oldPage = this.mCurrentPage;
+        this.mPrevPage = this.mCurrentPage;
         this.mCurrentPage = pageNumber;
 
         final float toX = positionForPageWithNumber(pageNumber);
@@ -247,12 +256,12 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
                 this.mMoveXModifierListener = new IModifier.IModifierListener<IEntity>() {
                     @Override
                     public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-                        BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageStarted(oldPage, BaseScrollMenuScene.this.mCurrentPage);
+                        BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageStarted(BaseScrollMenuScene.this.mPrevPage, BaseScrollMenuScene.this.mCurrentPage);
                     }
 
                     @Override
                     public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-                        BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageFinished(oldPage, BaseScrollMenuScene.this.mCurrentPage);
+                        BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageFinished(BaseScrollMenuScene.this.mPrevPage, BaseScrollMenuScene.this.mCurrentPage);
                     }
                 };
                 this.mMoveXModifier.addModifierListener(this.mMoveXModifierListener);
@@ -266,6 +275,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         }
 
         this.setX(positionForPageWithNumber(pageNumber));
+        this.mPrevPage = this.mCurrentPage;
         this.mCurrentPage = pageNumber;
     }
     
