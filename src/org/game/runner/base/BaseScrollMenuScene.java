@@ -14,9 +14,6 @@ import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
-import org.game.runner.manager.SceneManager;
-import org.game.runner.manager.SceneManager.SceneType;
-import org.game.runner.scene.LevelChoiceScene;
 
 /**
  *
@@ -182,8 +179,8 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
      */
     public void updatePages() {
         int i = 0;
-        for (Shape page : mPages) {
-            page.setPosition(i * (this.mPageWidth - this.mOffset), 0);
+        for (Shape page : this.mPages) {
+            page.setPosition(i * (this.mPageWidth - this.mOffset) + this.mPageWidth/2, this.mPageHeight/2);
             i++;
         }
     }
