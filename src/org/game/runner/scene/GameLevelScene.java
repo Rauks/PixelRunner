@@ -233,11 +233,21 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             protected void onBonus() {
                 GameLevelScene.this.activity.vibrate(30);
             }
+            
+            @Override
+            protected void onUpdateColor(){
+                super.onUpdateColor();
+                if(GameLevelScene.this.playerTrail != null){
+                    GameLevelScene.this.playerTrail.setColor(this.getColor());
+                }
+            }
         };
         this.player.getBody().setUserData("player");
         
         this.attachChild(this.player);
-        this.playerTrail = new Trail(32, 0, 0, 64, -320, -280, -2, 2, 15, 20, 40, Trail.ColorMode.NORMAL, this.player, this.resourcesManager.trail, this.vbom);
+        this.playerTrail = new Trail(32, 0, 0, 64, -340, -300, -2, 2, 25, 30, 50, Trail.ColorMode.NORMAL, this.resourcesManager.trail, this.vbom);
+        this.playerTrail.bind(this.player);
+        this.attachChild(this.playerTrail);
         this.playerTrail.hide();
         
 	Body retention = PhysicsFactory.createBoxBody(this.physicWorld, PLAYER_X - this.player.getWidth()/2, 250, 1, 400, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));

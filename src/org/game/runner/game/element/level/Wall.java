@@ -30,8 +30,11 @@ public class Wall extends LevelElement{
     @Override
     protected Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
         Rectangle shape = new Rectangle(pX, pY, this.getWidth(), this.getHeigth(), pVertexBufferObjectManager);
-        this.trail = new Trail(8, 0, 0, 120, TRAIL_MIN_SPEED_X, TRAIL_MAX_SPEED_X, TRAIL_MIN_SPEED_Y, TRAIL_MAX_SPEED_Y, TRAIL_MIN_RATE, TRAIL_MAX_RATE, TRAIL_MAX_PARTICULES, Trail.ColorMode.NORMAL, shape, ResourcesManager.getInstance().trail, pVertexBufferObjectManager);
+        this.trail = new Trail(8, 0, 0, 120, TRAIL_MIN_SPEED_X, TRAIL_MAX_SPEED_X, TRAIL_MIN_SPEED_Y, TRAIL_MAX_SPEED_Y, TRAIL_MIN_RATE, TRAIL_MAX_RATE, TRAIL_MAX_PARTICULES, Trail.ColorMode.NORMAL, ResourcesManager.getInstance().trail, pVertexBufferObjectManager);
         this.trail.setColor(COLOR_TRAIL_DEFAULT);
+        shape.attachChild(this.trail);
+        this.trail.setZIndex(shape.getZIndex() - 1);
+        shape.sortChildren();
         return shape;
     }
 

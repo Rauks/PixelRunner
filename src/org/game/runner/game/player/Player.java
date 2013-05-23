@@ -210,14 +210,6 @@ public abstract class Player extends AnimatedSprite{
         return this.rolling;
     }
     
-    @Override
-    public void setColor(Color color){
-        for(int i = 0; i < this.getChildCount(); i++) {
-            this.mChildren.get(i).setColor(color);
-        }
-        super.setColor(color);
-    }
-    
     private void fireBonusTimer(){
         this.registerUpdateHandler(new TimerHandler(8, this.bonusPickAction));
     }

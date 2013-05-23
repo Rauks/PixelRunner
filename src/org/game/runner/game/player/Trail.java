@@ -39,7 +39,9 @@ public class Trail extends SpriteParticleSystem{
     private float pMinVelocityY;
     private float pMaxVelocityY;
     
-    public Trail(int pX, int pY, int dX, int dY, float pMinVelocityX, float pMaxVelocityX, float pMinVelocityY, float pMaxVelocityY, float pRateMinimum, float pRateMaximum, int pParticlesMaximum, ColorMode colorMode, IEntity attachTo, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager){
+    private IEntity bind;
+    
+    public Trail(int pX, int pY, int dX, int dY, float pMinVelocityX, float pMaxVelocityX, float pMinVelocityY, float pMaxVelocityY, float pRateMinimum, float pRateMaximum, int pParticlesMaximum, ColorMode colorMode, ITextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager){
         super(new PointParticleEmitter(pX, pY), pRateMinimum, pRateMaximum, pParticlesMaximum, pTextureRegion, pVertexBufferObjectManager);
         this.dX = dX;
         this.dY = dY;
@@ -48,10 +50,15 @@ public class Trail extends SpriteParticleSystem{
         this.pMinVelocityY = pMinVelocityY;
         this.pMaxVelocityY = pMaxVelocityY;
         this.colorMode = colorMode;
-        attachTo.attachChild(this);
-        this.setZIndex(attachTo.getZIndex() - 1);
-        this.sortChildren();
+        
         this.initInitializers();
+    }
+    
+    public void bind(IEntity bind){
+        this.bind = bind;
+    }
+    public void unBind(){
+        this.bind = null;
     }
     
     private Color getRandomColor(){
@@ -83,7 +90,7 @@ public class Trail extends SpriteParticleSystem{
         this.addParticleInitializer(new BlendFunctionParticleInitializer<Sprite>(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE));
         this.addParticleInitializer(new VelocityParticleInitializer<Sprite>(this.pMinVelocityX, this.pMaxVelocityX, this.pMinVelocityY, this.pMaxVelocityY));
         this.addParticleInitializer(new ExpireParticleInitializer<Sprite>(1f));
-        this.addParticleModifier( new AlphaParticleModifier<Sprite>(0.5f, 1f, 1f, 0f) );
+        this.addParticleModifier(new AlphaParticleModifier<Sprite>(0.5f, 1f, 1f, 0f));
         this.addParticleInitializer(new IParticleInitializer<Sprite>() {
             @Override
             public void onInitializeParticle(Particle<Sprite> pParticle) {
@@ -96,7 +103,12 @@ public class Trail extends SpriteParticleSystem{
                 if(Trail.this.dY != 0){
                     tdY = Trail.this.ranGen.nextInt(Trail.this.dY);
                 }
-                pSprite.setPosition(pSprite.getX() + tdX, pSprite.getY() + tdY);
+                if(Trail.this.bind != null){
+                    pSprite.setPosition(pSprite.getX() + Trail.this.bind.getX() - Trail.this.bind.getWidth()/2 + tdX, pSprite.getY() + Trail.this.bind.getY() - Trail.this.bind.getHeight()/2 + tdY);
+                }
+                else{
+                    pSprite.setPosition(pSprite.getX() + tdX, pSprite.getY() + tdY);
+                }
                 pSprite.setColor(Trail.this.getRandomColor());
             }
         });
