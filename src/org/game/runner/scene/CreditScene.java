@@ -30,6 +30,9 @@ import org.game.runner.manager.SceneManager.SceneType;
  * @author Karl
  */
 public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
+    private float speed = 1f;
+    private LoopEntityModifier loopScroll;
+    
     private Text title;
     private Text prod;
     private Text prodNames;
@@ -83,7 +86,12 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
             public void onModifierFinished(final IModifier<IEntity> pEntityModifier, final IEntity pEntity) {
                 CreditScene.this.e.setPosition(CreditScene.this.e.getX(), startY);
             }
-        }));
+        }){
+            @Override
+            public float onUpdate(final float pSecondsElapsed, final IEntity pItem){
+                return super.onUpdate(CreditScene.this.speed * pSecondsElapsed, pItem);
+            }
+        });
         attachChild(this.e);
         
         this.setOnSceneTouchListener(this);
@@ -147,7 +155,10 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
     @Override
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
         if (pSceneTouchEvent.isActionUp()){
-            this.onBackKeyPressed();
+            this.speed = 1f;
+        }
+        else if(pSceneTouchEvent.isActionDown()){
+            this.speed = 4f;
         }
     return false;
     }
