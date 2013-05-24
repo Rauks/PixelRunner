@@ -402,11 +402,12 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     }
     @Override
     public void onPause() {
-        this.audioManager.pause();
+        this.onBackKeyPressed();
+        //this.audioManager.pause();
     }
     @Override
     public void onResume() {
-        this.audioManager.resume();
+        //this.audioManager.resume();
     }
     @Override
     protected void onManagedUpdate(float pSecondsElapsed) {
