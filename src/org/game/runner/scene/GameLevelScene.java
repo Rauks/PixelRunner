@@ -249,6 +249,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.playerTrail.bind(this.player);
         this.attachChild(this.playerTrail);
         this.playerTrail.hide();
+        this.playerTrail.setZIndex(this.player.getZIndex() - 1);
+        this.sortChildren();
         
 	Body retention = PhysicsFactory.createBoxBody(this.physicWorld, PLAYER_X - this.player.getWidth()/2, 250, 1, 400, BodyDef.BodyType.StaticBody, PhysicsFactory.createFixtureDef(0, 0, 0));
         retention.setUserData("retention");
