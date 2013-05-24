@@ -195,6 +195,12 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         this.updatePages();
     }
     
+    public void addPages(final ScrollMenuPage... pPages){
+        for(ScrollMenuPage pPage : pPages){
+            this.addPage(pPage);
+        }
+    }
+    
     public void addPage(final ScrollMenuPage pPage, final int pPageNumber) {
         this.mPages.add(pPageNumber, pPage);
         this.attachChild(pPage);

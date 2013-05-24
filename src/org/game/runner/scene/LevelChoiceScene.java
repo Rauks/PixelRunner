@@ -17,6 +17,13 @@ import org.game.runner.manager.SceneManager.SceneType;
 public class LevelChoiceScene extends BaseScrollMenuScene{
     private static float PADDING = 100;
     
+    private ScrollMenuPage tutorials;
+    private ScrollMenuPage mountains;
+    private ScrollMenuPage desert;
+    private ScrollMenuPage city;
+    private ScrollMenuPage forest;
+    private ScrollMenuPage hill;
+    
     public LevelChoiceScene(){
         super(GameActivity.CAMERA_WIDTH, GameActivity.CAMERA_HEIGHT);
         
@@ -36,10 +43,20 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
             }
         });
         
-        this.addPage(new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom));
-        this.addPage(new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom));
-        this.addPage(new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom));
-        this.addPage(new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom));
+        this.tutorials = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
+        this.tutorials.setTitle("TUTORIALS");
+        this.mountains = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
+        this.mountains.setTitle("MOUNTAINS");
+        this.desert = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
+        this.desert.setTitle("DESERT");
+        this.city = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
+        this.city.setTitle("CITY");
+        this.forest = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
+        this.forest.setTitle("FOREST");
+        this.hill = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
+        this.hill.setTitle("HILL");
+        
+        addPages(this.tutorials, this.mountains, this.desert, this.city, this.forest, this.hill);
     }
 
     @Override
