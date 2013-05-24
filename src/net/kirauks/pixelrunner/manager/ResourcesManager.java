@@ -76,6 +76,10 @@ public class ResourcesManager {
     private BitmapTextureAtlas splashTextureAtlas;
     public ITextureRegion splashHeadphones;
     
+    //Textures - Nyan
+    private BitmapTextureAtlas nyanTextureAtlas;
+    public ITiledTextureRegion nyan;
+    
     public static void prepareManager(Engine engine, GameActivity activity, Camera camera, VertexBufferObjectManager vbom){
         getInstance().engine = engine;
         getInstance().activity = activity;
@@ -207,6 +211,18 @@ public class ResourcesManager {
         this.wall = null;
         this.gameBackgroundTextureAtlas.unload();
         this.gameParallaxLayers.clear();
+    }
+    
+    public void loadNyanResources(){
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+        this.nyanTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 198, 84);
+        this.nyan = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.nyanTextureAtlas, this.activity, "nyan.png", 0, 0, 3, 2);
+        this.nyanTextureAtlas.load();
+    }
+    
+    public void unloadNyanResources(){
+        this.nyanTextureAtlas.unload();
+        this.nyan = null;
     }
     
     public static ResourcesManager getInstance(){
