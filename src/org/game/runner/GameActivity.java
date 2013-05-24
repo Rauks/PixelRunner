@@ -12,6 +12,7 @@ import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.WakeLockOptions;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.util.FPSLogger;
 import org.andengine.ui.activity.BaseGameActivity;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.ResourcesManager;
@@ -55,6 +56,7 @@ public class GameActivity extends BaseGameActivity{
     @Override
     public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException {
         this.mEngine.enableVibrator(this);
+        this.mEngine.registerUpdateHandler(new FPSLogger());
         this.phoneAudioManager = (android.media.AudioManager)getSystemService(AUDIO_SERVICE);
         this.mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
             @Override

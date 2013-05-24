@@ -66,6 +66,7 @@ public class SceneManager {
         this.setScene(this.loadingScene);
         ResourcesManager.getInstance().unloadMenuResources();
         this.disposeMainMenuScene();
+        System.gc();
         this.engine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
@@ -89,6 +90,7 @@ public class SceneManager {
         this.setScene(this.loadingScene);
         ResourcesManager.getInstance().unloadGameResources();
         this.disposeGameLevelScene();
+        System.gc();
         this.engine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){

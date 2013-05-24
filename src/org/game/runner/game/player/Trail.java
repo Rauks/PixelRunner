@@ -95,6 +95,7 @@ public class Trail extends SpriteParticleSystem{
             @Override
             public void onInitializeParticle(Particle<Sprite> pParticle) {
                 Sprite pSprite = pParticle.getEntity();
+                pSprite.setCullingEnabled(true);
                 int tdX = 0;
                 int tdY = 0;
                 if(Trail.this.dX != 0){
