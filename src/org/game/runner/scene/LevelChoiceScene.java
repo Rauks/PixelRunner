@@ -22,7 +22,7 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
     private ScrollMenuPage desert;
     private ScrollMenuPage city;
     private ScrollMenuPage forest;
-    private ScrollMenuPage hill;
+    private ScrollMenuPage hills;
     
     public LevelChoiceScene(){
         super(GameActivity.CAMERA_WIDTH, GameActivity.CAMERA_HEIGHT);
@@ -53,10 +53,10 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
         this.city.setTitle("CITY");
         this.forest = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
         this.forest.setTitle("FOREST");
-        this.hill = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
-        this.hill.setTitle("HILL");
+        this.hills = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
+        this.hills.setTitle("HILLS");
         
-        addPages(this.tutorials, this.mountains, this.desert, this.city, this.forest, this.hill);
+        addPages(this.tutorials, this.mountains, this.desert, this.city, this.forest, this.hills);
     }
 
     @Override
