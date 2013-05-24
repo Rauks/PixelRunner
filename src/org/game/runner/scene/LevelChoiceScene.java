@@ -4,10 +4,9 @@
  */
 package org.game.runner.scene;
 
-import org.andengine.util.debug.Debug;
-import org.andengine.entity.primitive.Rectangle;
 import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScrollMenuScene;
+import org.game.runner.base.element.ScrollMenuPage;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 
@@ -16,6 +15,8 @@ import org.game.runner.manager.SceneManager.SceneType;
  * @author Karl
  */
 public class LevelChoiceScene extends BaseScrollMenuScene{
+    private static float PADDING = 100;
+    
     public LevelChoiceScene(){
         super(GameActivity.CAMERA_WIDTH, GameActivity.CAMERA_HEIGHT);
         
@@ -35,10 +36,10 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
             }
         });
         
-        this.addPage(new Rectangle(0, 0, 100, 100, this.vbom));
-        this.addPage(new Rectangle(0, 0, 100, 100, this.vbom));
-        this.addPage(new Rectangle(0, 0, 100, 100, this.vbom));
-        this.addPage(new Rectangle(0, 0, 100, 100, this.vbom));
+        this.addPage(new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom));
+        this.addPage(new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom));
+        this.addPage(new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom));
+        this.addPage(new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom));
     }
 
     @Override
