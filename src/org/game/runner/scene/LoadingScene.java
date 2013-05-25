@@ -52,6 +52,7 @@ public class LoadingScene extends BaseScene{
     public void onPause() {
         if(this.listener != null){
             this.listener.onPause();
+            this.audioManager.pause();
         }
     }
 
@@ -59,6 +60,7 @@ public class LoadingScene extends BaseScene{
     public void onResume() {
         if(this.listener != null){
             this.listener.onResume();
+            this.audioManager.resume();
         }
     }
 
