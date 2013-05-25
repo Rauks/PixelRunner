@@ -73,7 +73,7 @@ public abstract class Player extends AnimatedSprite{
     private Body body;
     
     private JumpMode jumpMode;
-    private final float JUMP_INFINITE_MAX_Y = LevelDescriptor.LAYERS_MAX * LevelDescriptor.LAYER_HIGH + 50;
+    private final float JUMP_INFINITE_MAX_Y = LevelDescriptor.LAYERS_MAX * LevelDescriptor.LAYER_HIGH + 150;
     private int jumpCount;
     private boolean jumping;
     
