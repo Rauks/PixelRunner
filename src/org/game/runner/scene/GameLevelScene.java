@@ -39,6 +39,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.IModifier;
+import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScene;
 import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.game.element.background.BackgroundElement;
@@ -63,6 +64,9 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     private final float BROADCAST_LEFT = -100;
     private final float BROADCAST_RIGHT = 1000;
     
+    private boolean isPaused = false;
+    private boolean isStarted = false;
+    
     //HUD
     protected HUD hud;
     //HUD Broadcast
@@ -70,6 +74,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     private Text chrono2;
     private Text chrono1;
     private Text chronoStart;
+    //HUD - Pause
+    private Text pause;
     //Level
     protected LevelDescriptor level;
     private TimerHandler levelReaderHandler;
@@ -282,7 +288,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                         GameLevelScene.this.levelElements.add(lvlElement.getBuildedShape());
                         lvlElement.getBuildedBody().setUserData(lvlElement);
                         lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-15, 0));
-                        GameLevelScene.this.engine.registerUpdateHandler(new TimerHandler(6f, new ITimerCallback(){
+                        GameLevelScene.this.registerUpdateHandler(new TimerHandler(6f, new ITimerCallback(){
                             @Override
                             public void onTimePassed(final TimerHandler pTimerHandler){
                                 GameLevelScene.this.disposeLevelElement(lvlElement.getBuildedShape());
@@ -310,9 +316,15 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.hud.attachChild(this.chrono2);
         this.hud.attachChild(this.chrono1);
         this.hud.attachChild(this.chronoStart);
+        
+        //Pause message
+        this.pause = new Text(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2, resourcesManager.fontPixel_200, "PAUSE", vbom);
+        this.pause.setVisible(false);
+        this.hud.attachChild(this.pause);
     }
     
     private void restart(){
+        this.isStarted = false;
         this.onRestartBegin();
         this.unregisterUpdateHandler(this.levelReaderHandler);
         AudioManager.getInstance().stop();
@@ -320,12 +332,14 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.playerTrail.hide();
         this.parallaxFactor = -10f;
         this.disposeLevelElements();
-        this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
+        this.engine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
                 GameLevelScene.this.parallaxFactor = 1f;
                 GameLevelScene.this.onRestartEnd();
-                GameLevelScene.this.start();
+                if(!GameLevelScene.this.isPaused){
+                    GameLevelScene.this.start();
+                }
             }
         }));
     }
@@ -363,6 +377,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                                         GameLevelScene.this.playerTrail.show();
                                         GameLevelScene.this.registerUpdateHandler(GameLevelScene.this.levelReaderHandler = new TimerHandler(GameLevelScene.this.level.getSpawnTime(), true, GameLevelScene.this.levelReaderAction));
                                         GameLevelScene.this.onStartEnd();
+                                        GameLevelScene.this.isStarted = true;
                                     }
                                     
                                     @Override
@@ -402,8 +417,64 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     }
     @Override
     public void onPause() {
-        this.onBackKeyPressed();
+        this.pause();
+        //this.onBackKeyPressed();
         //this.audioManager.pause();
+    }
+    private void pause(){
+        this.isPaused = true;
+        this.chrono1.clearEntityModifiers();
+        this.chrono2.clearEntityModifiers();
+        this.chrono3.clearEntityModifiers();
+        this.chronoStart.clearEntityModifiers();
+        this.chrono1.setVisible(false);
+        this.chrono2.setVisible(false);
+        this.chrono3.setVisible(false);
+        this.chronoStart.setVisible(false);
+        this.setIgnoreUpdate(true);
+        this.pause.setVisible(true);
+        this.audioManager.pause();
+    }
+    private void unPause(){
+        this.isPaused = false;
+        if(this.isStarted){
+            this.broadcast(this.chrono3, new IEntityModifierListener() {
+                @Override
+                public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+                    GameLevelScene.this.pause.setVisible(false);
+                }
+
+                @Override
+                public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+                     GameLevelScene.this.broadcast(GameLevelScene.this.chrono2, new IEntityModifierListener() {
+                        @Override
+                        public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+                        }
+
+                        @Override
+                        public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+                            GameLevelScene.this.broadcast(GameLevelScene.this.chrono1, new IEntityModifierListener() {
+                                @Override
+                                public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+                                }
+
+                                @Override
+                                public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+                                    GameLevelScene.this.setIgnoreUpdate(false);
+                                    GameLevelScene.this.audioManager.resume();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        else{
+            this.pause.setVisible(false);
+            this.setIgnoreUpdate(false);
+            this.audioManager.resume();
+            this.start();
+        }
     }
     @Override
     public void onResume() {
@@ -491,13 +562,18 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
 
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
         if (pSceneTouchEvent.isActionDown()){
-            if(pSceneTouchEvent.getY() >= 240){
-                //Jump
-                this.player.jump();
+            if(this.isPaused){
+                this.unPause();
             }
-            else if(pSceneTouchEvent.getY() < 240){
-                //Roll
-                this.player.roll();
+            else{
+                if(pSceneTouchEvent.getY() >= 240){
+                    //Jump
+                    this.player.jump();
+                }
+                else if(pSceneTouchEvent.getY() < 240){
+                    //Roll
+                    this.player.roll();
+                }
             }
         }
         return false;
