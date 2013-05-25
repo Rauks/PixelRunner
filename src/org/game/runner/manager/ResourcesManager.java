@@ -51,6 +51,8 @@ public class ResourcesManager {
     public ITiledTextureRegion rocket;
     private BitmapTextureAtlas trapTextureAtlas;
     public TiledTextureRegion trap;
+    private BitmapTextureAtlas wallTextureAtlas;
+    public ITextureRegion wall;
     private BitmapTextureAtlas gameBackgroundTextureAtlas;
     public Map<String, ITextureRegion> gameParallaxLayers = new HashMap<String, ITextureRegion>();
     
@@ -60,6 +62,9 @@ public class ResourcesManager {
     public ITextureRegion mainMenuParallaxLayer2;
     public ITextureRegion mainMenuParallaxLayer3;
     public ITextureRegion mainMenuParallaxLayer4;
+    private BitmapTextureAtlas lvlTextureAtlas;
+    public ITextureRegion lvlBack;
+    public ITextureRegion lvlLock;
     
     //Textures - Splash
     private BitmapTextureAtlas splashTextureAtlas;
@@ -99,15 +104,22 @@ public class ResourcesManager {
         this.mainMenuParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_3.png", 0, 120);
         this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_4.png", 120, 120);
         this.menuTextureAtlas.load();
+        this.lvlTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 98, 64);
+        this.lvlBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "lvl_bg.png", 0, 0);
+        this.lvlLock = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "lvl_lock.png", 64, 0);
+        this.lvlTextureAtlas.load();
         AudioManager.getInstance().prepare("mfx/", "menu.xm");
     }
     
     public void unloadMenuResources(){
         this.menuTextureAtlas.unload();
-        mainMenuParallaxLayer1 = null;
-        mainMenuParallaxLayer2 = null;
-        mainMenuParallaxLayer3 = null;
-        mainMenuParallaxLayer4 = null;
+        this.mainMenuParallaxLayer1 = null;
+        this.mainMenuParallaxLayer2 = null;
+        this.mainMenuParallaxLayer3 = null;
+        this.mainMenuParallaxLayer4 = null;
+        this.lvlTextureAtlas.unload();
+        this.lvlBack = null;
+        this.lvlLock = null;
     }
 
     public void loadSplashResources() {
@@ -138,6 +150,9 @@ public class ResourcesManager {
         this.trapTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 96, 32);
         this.trap = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.trapTextureAtlas, this.activity, "trap.png", 0, 0, 3, 1);
         this.trapTextureAtlas.load();
+        this.wallTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 15, 120);
+        this.wall = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.trapTextureAtlas, this.activity, "wall.png", 0, 0);
+        this.wallTextureAtlas.load();
         
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/backgrounds/");
         this.gameBackgroundTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), BackgroundElement.MAX_WIDTH, BackgroundElement.MAX_HEIGHT * LevelDescriptor.MAX_BACKGROUND_ELEMENTS);
@@ -158,6 +173,12 @@ public class ResourcesManager {
         this.player = null;
         this.trailTextureAtlas.unload();
         this.trail = null;
+        this.rocketTextureAtlas.unload();
+        this.rocket = null;
+        this.trapTextureAtlas.unload();
+        this.trap = null;
+        this.wallTextureAtlas.unload();
+        this.wall = null;
         this.gameBackgroundTextureAtlas.unload();
         this.gameParallaxLayers.clear();
     }
