@@ -105,8 +105,8 @@ public class ResourcesManager {
         this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_4.png", 120, 120);
         this.menuTextureAtlas.load();
         this.lvlTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 98, 64);
-        this.lvlBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "lvl_bg.png", 0, 0);
-        this.lvlLock = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "lvl_lock.png", 64, 0);
+        this.lvlBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_bg.png", 0, 0);
+        this.lvlLock = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_lock.png", 64, 0);
         this.lvlTextureAtlas.load();
         AudioManager.getInstance().prepare("mfx/", "menu.xm");
     }
@@ -151,7 +151,7 @@ public class ResourcesManager {
         this.trap = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.trapTextureAtlas, this.activity, "trap.png", 0, 0, 3, 1);
         this.trapTextureAtlas.load();
         this.wallTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 15, 120);
-        this.wall = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.trapTextureAtlas, this.activity, "wall.png", 0, 0);
+        this.wall = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.wallTextureAtlas, this.activity, "wall.png", 0, 0);
         this.wallTextureAtlas.load();
         
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/backgrounds/");
