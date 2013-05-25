@@ -17,6 +17,7 @@ import org.game.runner.scene.CreditScene;
 import org.game.runner.scene.GameLevelScene;
 import org.game.runner.scene.LevelChoiceScene;
 import org.game.runner.scene.LoadingScene;
+import org.game.runner.scene.LoadingScene.LoadingListener;
 import org.game.runner.scene.MainMenuScene;
 import org.game.runner.scene.SplashEndScene;
 
@@ -42,7 +43,8 @@ public class SceneManager {
     private BaseScene mainMenuScene;
     private BaseScene levelChoiceScene;
     private BaseScene gameLevelScene;
-    private BaseScene loadingScene;
+    
+    private LoadingScene loadingScene;
     
     private Engine engine = ResourcesManager.getInstance().engine;
     private GameActivity activity = ResourcesManager.getInstance().activity;
@@ -73,6 +75,19 @@ public class SceneManager {
                 SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadGameResources(level);
                 SceneManager.this.createGameLevelScene(type, level);
+                SceneManager.this.loadingScene.setLoadingListener(new LoadingListener(){
+                    @Override
+                    public void onPause() {
+                        if(SceneManager.getInstance().getCurrentScene() instanceof GameLevelScene){
+                            ((GameLevelScene)SceneManager.getInstance().getCurrentScene()).pause();
+                        }
+                    }
+                    @Override
+                    public void onResume() {
+                        if(SceneManager.getInstance().getCurrentScene() instanceof GameLevelScene){
+                        }
+                    }
+                });
                 SceneManager.this.engine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback() {
                     @Override
                     public void onTimePassed(final TimerHandler pTimerHandler){
@@ -80,6 +95,7 @@ public class SceneManager {
                         if(SceneManager.getInstance().getCurrentScene() instanceof GameLevelScene){
                             ((GameLevelScene)SceneManager.getInstance().getCurrentScene()).start();
                         }
+                        SceneManager.this.loadingScene.removeLoadingListener();
                     }
                 }));
             }
