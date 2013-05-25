@@ -20,6 +20,15 @@ import org.game.runner.base.element.ScrollMenuPage;
  * @author Karl
  */
 public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSceneTouchListener{
+    public static interface IOnScrollScenePageListener {
+        public void onMoveToPageStarted(final int oldPageNumber, final int newPageNumber);
+        public void onMoveToPageFinished(final int oldPageNumber, final int newPageNumber);
+    }
+    
+    private enum ScrollState {
+        IDLE, SLIDING;
+    }
+    
     private static final float SLIDE_DURATION_DEFAULT = 0.3f;
     private static final float MINIMUM_TOUCH_LENGTH_TO_SLIDE_DEFAULT = 30f;
     private static final float MINIMUM_TOUCH_LENGTH_TO_CHANGE_PAGE_DEFAULT = 100f;
@@ -45,14 +54,6 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     private MoveXModifier mMoveXModifier;
     private IModifier.IModifierListener<IEntity> mMoveXModifierListener;
     private boolean mEaseFunctionDirty = false;
-    
-    private enum ScrollState {
-        IDLE, SLIDING;
-    }
-    public static interface IOnScrollScenePageListener {
-        public void onMoveToPageStarted(final int oldPageNumber, final int newPageNumber);
-        public void onMoveToPageFinished(final int oldPageNumber, final int newPageNumber);
-    }
 
     public BaseScrollMenuScene() {
         this(0, 0, MINIMUM_TOUCH_LENGTH_TO_SLIDE_DEFAULT, MINIMUM_TOUCH_LENGTH_TO_CHANGE_PAGE_DEFAULT);
