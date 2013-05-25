@@ -77,6 +77,7 @@ public class ArcadeGameLevelScene extends GameLevelScene{
         this.isHigtscoring = false;
         this.score = 0;
         this.scoreText.setText("0");
+        this.highScoreText.setPosition(this.scoreText.getWidth(), 0);
         this.highScoreText.setText("/" + String.valueOf(this.highScore/5));
     }
     
