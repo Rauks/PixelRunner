@@ -28,11 +28,12 @@ public class ScrollMenuPage extends Rectangle{
     private int progress;
     private SmartList<ScrollMenuPageElement> elements;
     
-    public ScrollMenuPage(final float pWidth, final float pHeight, final VertexBufferObjectManager pVertexBufferObjectManager){
+    public ScrollMenuPage(final float pWidth, final float pHeight, final int nbElements,final VertexBufferObjectManager pVertexBufferObjectManager){
         super(0, 0, pWidth, pHeight, pVertexBufferObjectManager);
         this.setColor(Color.TRANSPARENT);
-        this.elements = new SmartList<ScrollMenuPageElement>();
+        this.elements = new SmartList<ScrollMenuPageElement>(nbElements);
         this.progress = 0;
+        this.addElements(nbElements);
     }
     
     public void setTitle(String title){
@@ -44,19 +45,20 @@ public class ScrollMenuPage extends Rectangle{
             this.title.setText(title);
         }
     }
-    public void addElement() throws IndexOutOfBoundsException{
+    private void addElement() throws IndexOutOfBoundsException{
         int index = this.elements.size();
         if(index >= MAX_ELEMENTS){
             Debug.e("Elements limit reached in level choice page.");
         }
         else{
-            float x = (index%NB_COLS)*(this.getWidth() - 2*PADDING_X)/3 + PADDING_X;
-            float y = (NB_ROWS - 1 - index/NB_COLS)*(this.getHeight() - 2*PADDING_Y)/2 + PADDING_Y - 50;
+            
+            float x = (index%NB_COLS)*(this.getWidth() - 2*PADDING_X)/(NB_COLS - 1) + PADDING_X;
+            float y = (NB_ROWS - 1 - index/NB_COLS)*(this.getHeight() - 2*PADDING_Y)/(NB_ROWS - 1) + PADDING_Y - 50;
             this.elements.add(index, new ScrollMenuPageElement(x, y, index + 1, true, this.getVertexBufferObjectManager()));
             this.attachChild(this.elements.get(index));
         }
     }
-    public void addElements(int nbElements){
+    private void addElements(int nbElements){
         for (int i = 0; i < nbElements; i++) {
             this.addElement();
         }
