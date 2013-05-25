@@ -497,6 +497,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.chrono2.dispose();
         this.chrono1.detachSelf();
         this.chrono1.dispose();
+        this.pause.detachSelf();
+        this.pause.dispose();
         
         this.chronoStart.detachSelf();
         this.chronoStart.dispose();
