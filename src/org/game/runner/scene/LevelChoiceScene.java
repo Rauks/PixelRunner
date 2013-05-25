@@ -45,16 +45,36 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
         
         this.tutorials = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
         this.tutorials.setTitle("TUTORIALS");
+        this.tutorials.addElements(12);
+        this.tutorials.setProgress(11);
+        this.tutorials.refreshLocks();
+        
         this.mountains = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
         this.mountains.setTitle("MOUNTAINS");
+        this.mountains.addElements(12);
+        this.mountains.setProgress(5);
+        this.mountains.refreshLocks();
+        
         this.desert = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
         this.desert.setTitle("DESERT");
+        this.desert.addElements(12);
+        this.desert.setProgress(7);
+        this.desert.refreshLocks();
+        
         this.city = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
         this.city.setTitle("CITY");
+        this.city.addElements(12);
+        this.city.refreshLocks();
+        
         this.forest = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
         this.forest.setTitle("FOREST");
+        this.forest.addElements(12);
+        this.forest.refreshLocks();
+        
         this.hills = new ScrollMenuPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, this.vbom);
         this.hills.setTitle("HILLS");
+        this.hills.addElements(12);
+        this.hills.refreshLocks();
         
         addPages(this.tutorials, this.mountains, this.desert, this.city, this.forest, this.hills);
     }

@@ -26,7 +26,7 @@ public abstract class LevelDescriptor {
     public LevelDescriptor(BackgroundPack backgroundPack){
         for(BackgroundPack.Layer layer : backgroundPack.getLayers()){
             if(this.backgroundElements.size() >= MAX_BACKGROUND_ELEMENTS){
-                Debug.e("PixelRunner", "Background limit reached in level descriptor.");
+                Debug.e("Background limit reached in level descriptor.");
             }
             else{
                 this.backgroundElements.add(new BackgroundElement(layer.x, layer.y, layer.resName, layer.speed));
