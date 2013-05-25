@@ -49,7 +49,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
                 }
                 else{ // Platform @ 20%
                     this.prevState = PrevState.PLATFORM;
-                    this.platLayer = 2;
+                    this.platLayer = PLATFORM_LOW_LAYER;
                     return new LevelElement[]{new Platform(this.platLayer)};
                 }
             case TRAP: //WAS TRAP
@@ -64,23 +64,23 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
                 }
                 else{ // Platform @ 20%
                     this.prevState = PrevState.PLATFORM;
-                    this.platLayer = 2;
+                    this.platLayer = PLATFORM_LOW_LAYER;
                     return new LevelElement[]{new Platform(this.platLayer)};
                 }
             default: //WAS PLATFORM
             case PLATFORM:
                 rand = ranGen.nextInt(100);
-                int deviation = (int)(((float)this.platLayer / (float)LevelDescriptor.LAYERS_MAX) * 50f); // 0% @ layer 0, 70% @ layer max
+                int deviation = (int)(((float)this.platLayer / (float)LAYERS_MAX) * 50f); // 0% @ layer 0, 70% @ layer max
                 if(rand < (100 - deviation)){ // Platform @ 100% ~ 50%
                     this.prevState = PrevState.PLATFORM;
                     rand = ranGen.nextInt(100);
-                    if(rand < 90 && this.platLayer != LevelDescriptor.LAYERS_MAX){ // Plateform @ layer +1 @ 90%
+                    if(rand < 90 && this.platLayer != LAYERS_MAX){ // Plateform @ layer +1 @ 90%
                         this.platLayer++;
                     }
-                    if(this.platLayer > 5){
+                    if(this.platLayer > 4){
                         return new LevelElement[]{new Platform(this.platLayer), this.getTrap()};
                     }
-                    else if(this.platLayer > 3){
+                    else if(this.platLayer > 2){
                         return new LevelElement[]{new Platform(this.platLayer), this.getSmallTrap()};
                     }
                     else{

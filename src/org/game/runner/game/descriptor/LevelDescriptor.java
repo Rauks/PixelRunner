@@ -19,6 +19,7 @@ public abstract class LevelDescriptor {
     public static final int MAX_BACKGROUND_ELEMENTS = 5;
     public static final int LAYER_HIGH = 30;
     public static final int LAYERS_MAX = 10;
+    public static final int PLATFORM_LOW_LAYER = 3;
     
     private LinkedList<BackgroundElement> backgroundElements = new LinkedList<BackgroundElement>();
     
