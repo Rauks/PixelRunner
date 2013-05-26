@@ -109,8 +109,8 @@ public class ResourcesManager {
         this.lvlTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 98, 64);
         this.lvlBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_bg.png", 0, 0);
         this.lvlLock = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_lock.png", 64, 0);
-        this.lvlLock = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_left.png", 64, 46);
-        this.lvlLock = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_right.png", 69, 46);
+        this.lvlLeft = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_left.png", 64, 46);
+        this.lvlRight = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_right.png", 69, 46);
         this.lvlTextureAtlas.load();
         AudioManager.getInstance().prepare("mfx/", "menu.xm");
     }
