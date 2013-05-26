@@ -184,6 +184,18 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     public void updatePages() {
         int i = 0;
         for (ScrollMenuPage page : this.mPages) {
+            if(this.isFirstPage(page)){
+                page.setLeftVisible(false);
+            }
+            else{
+                page.setLeftVisible(true);
+            }
+            if(this.isLastPage(page)){
+                page.setRightVisible(false);
+            }
+            else{
+                page.setRightVisible(true);
+            }
             page.setPosition(i * (this.mPageWidth - this.mOffset) + this.mPageWidth/2, this.mPageHeight/2);
             i++;
         }
