@@ -99,6 +99,11 @@ public class ResourcesManager {
     }
     
     public void loadMenuResources(){
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+        this.playerTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 224, 256);
+        this.player = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.playerTextureAtlas, this.activity, "player.png", 0, 0, 4, 4);
+        this.playerTextureAtlas.load();
+        
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/main/");
         this.menuTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 240, 240);
         this.mainMenuParallaxLayer1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_1.png", 0, 0);
@@ -116,6 +121,8 @@ public class ResourcesManager {
     }
     
     public void unloadMenuResources(){
+        this.playerTextureAtlas.unload();
+        this.player = null;
         this.menuTextureAtlas.unload();
         this.mainMenuParallaxLayer1 = null;
         this.mainMenuParallaxLayer2 = null;
