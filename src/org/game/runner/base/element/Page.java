@@ -25,7 +25,8 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     private static final int MAX_ELEMENTS = 12;
     private static final float PADDING_X = 100;
     private static final float PADDING_Y = 80;
-    private static final float MARGIN_TOP = 50;
+    private static final float MARGIN_TOP = 40;
+    private static final float TITLE_MARGIN_TOP = 20;
     
     private Text title;
     private Sprite left;
@@ -41,6 +42,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     public Page(final float pWidth, final float pHeight, int worldId, final int nbElements,final VertexBufferObjectManager pVertexBufferObjectManager){
         super(0, 0, pWidth, pHeight, pVertexBufferObjectManager);
         this.setColor(Color.TRANSPARENT);
+        this.setCullingEnabled(true);
         this.elements = new SmartList<PageElement>(nbElements);
         this.worldId = worldId;
         this.progress = 0;
@@ -103,7 +105,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     
     public void setTitle(String title){
         if(this.title == null){
-            this.title = new Text(this.getWidth()/2, this.getHeight() - 30, ResourcesManager.getInstance().fontPixel_60, title, this.getVertexBufferObjectManager());
+            this.title = new Text(this.getWidth()/2, this.getHeight() - TITLE_MARGIN_TOP, ResourcesManager.getInstance().fontPixel_60, title, this.getVertexBufferObjectManager());
             attachChild(this.title);
         }
         else{

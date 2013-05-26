@@ -34,7 +34,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     }
     
     private static final float SLIDE_DURATION_DEFAULT = 0.3f;
-    private static final float MINIMUM_TOUCH_LENGTH_TO_SLIDE_DEFAULT = 30f;
+    private static final float MINIMUM_TOUCH_LENGTH_TO_SLIDE_DEFAULT = 50f;
     private static final float MINIMUM_TOUCH_LENGTH_TO_CHANGE_PAGE_DEFAULT = 100f;
     
     private SmartList<Page> mPages = new SmartList<Page>();

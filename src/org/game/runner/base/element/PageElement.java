@@ -23,6 +23,7 @@ public class PageElement extends Sprite{
     
     public PageElement(float pX, float pY, int id, boolean locked, VertexBufferObjectManager pVertexBufferObjectManager){
         super(pX, pY, ResourcesManager.getInstance().lvlBack, pVertexBufferObjectManager);
+        this.setCullingEnabled(true);
         this.id = id;
         this.locked = locked;
         this.lock = new Sprite(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().lvlLock, this.getVertexBufferObjectManager());
