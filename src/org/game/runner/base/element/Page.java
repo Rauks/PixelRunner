@@ -117,6 +117,10 @@ public class Page extends Rectangle{
             this.addElement();
         }
     }
+    //Shallow copy
+    public SmartList<PageElement> getElements(){
+        return (SmartList<PageElement>)this.elements.clone();
+    }
     
     public void setProgress(int progress){
         this.progress = progress;

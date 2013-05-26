@@ -14,6 +14,7 @@ import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
 import org.game.runner.base.element.Page;
+import org.game.runner.base.element.PageElement;
 
 /**
  *
@@ -202,18 +203,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     }
     
     public void addPage(final Page pPage) {
-        pPage.registerPageNavigationTouchListener(new Page.IPageNavigationTouchListener() {
-            @Override
-            public void onLeft() {
-                BaseScrollMenuScene.this.moveToPage(BaseScrollMenuScene.this.mCurrentPage - 1);
-            }
-            @Override
-            public void onRight() {
-                BaseScrollMenuScene.this.moveToPage(BaseScrollMenuScene.this.mCurrentPage + 1);
-            }
-        });
-        this.registerTouchArea(pPage.getNavigationLeft());
-        this.registerTouchArea(pPage.getNavigationRight());
+        this.registerPageTouchAreas(pPage);
         this.mPages.add(pPage);
         this.attachChild(pPage);
 
@@ -227,18 +217,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     }
     
     public void addPage(final Page pPage, final int pPageNumber) {
-        pPage.registerPageNavigationTouchListener(new Page.IPageNavigationTouchListener() {
-            @Override
-            public void onLeft() {
-                BaseScrollMenuScene.this.moveToPage(BaseScrollMenuScene.this.mCurrentPage - 1);
-            }
-            @Override
-            public void onRight() {
-                BaseScrollMenuScene.this.moveToPage(BaseScrollMenuScene.this.mCurrentPage + 1);
-            }
-        });
-        this.registerTouchArea(pPage.getNavigationLeft());
-        this.registerTouchArea(pPage.getNavigationRight());
+        this.registerPageTouchAreas(pPage);
         this.mPages.add(pPageNumber, pPage);
         this.attachChild(pPage);
 
@@ -246,7 +225,8 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     }
     
     public void removePage(final Page pPage) {
-        this.unregisterTouchArea(pPage);
+        //this.unregisterTouchArea(pPage);
+        this.unregisterPageTouchAreas(pPage);
         this.detachChild(pPage);
         this.mPages.remove(pPage);
 
@@ -261,6 +241,33 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     void removePageWithNumber(final Page pPage, final int pPageNumber) {
         if (pPageNumber < this.mPages.size()) {
             this.removePage(this.mPages.get(pPageNumber));
+        }
+    }
+    
+    private void registerPageTouchAreas(final Page pPage){
+        pPage.registerPageNavigationTouchListener(new Page.IPageNavigationTouchListener() {
+            @Override
+            public void onLeft() {
+                BaseScrollMenuScene.this.moveToPage(BaseScrollMenuScene.this.mCurrentPage - 1);
+            }
+            @Override
+            public void onRight() {
+                BaseScrollMenuScene.this.moveToPage(BaseScrollMenuScene.this.mCurrentPage + 1);
+            }
+        });
+        this.registerTouchArea(pPage.getNavigationLeft());
+        this.registerTouchArea(pPage.getNavigationRight());
+        for(PageElement element : pPage.getElements()){
+            this.registerTouchArea(element);
+        }
+    }
+    
+    private void unregisterPageTouchAreas(final Page pPage){
+        pPage.registerPageNavigationTouchListener(null);
+        this.unregisterTouchArea(pPage.getNavigationLeft());
+        this.unregisterTouchArea(pPage.getNavigationRight());
+        for(PageElement element : pPage.getElements()){
+            this.unregisterTouchArea(element);
         }
     }
     
@@ -358,7 +365,8 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         for (int i = this.mPages.size() - 1; i >= 0; i--) {
             final Page page = this.mPages.remove(i);
             this.detachChild(page);
-            this.unregisterTouchArea(page);
+            //this.unregisterTouchArea(page);
+            this.unregisterPageTouchAreas(page);
         }
     }
     
