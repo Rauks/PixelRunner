@@ -3,9 +3,10 @@
  * and open the template in the editor.
  */
 package org.game.runner.base.element;
-
+import org.andengine.util.debug.Debug;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.game.runner.manager.ResourcesManager;
@@ -14,14 +15,20 @@ import org.game.runner.manager.ResourcesManager;
  *
  * @author Karl
  */
-public class ScrollMenuPageElement extends Sprite{
+public class PageElement extends Sprite{
+    public static interface IPageElementTouchListener{
+        public void onActionUp();
+    }
+    
     private int id;
     private boolean locked;
+    
+    private IPageElementTouchListener listener;
     
     private Text textId;
     private Sprite lock;
     
-    public ScrollMenuPageElement(float pX, float pY, int id, boolean locked, VertexBufferObjectManager pVertexBufferObjectManager){
+    public PageElement(float pX, float pY, int id, boolean locked, VertexBufferObjectManager pVertexBufferObjectManager){
         super(pX, pY, ResourcesManager.getInstance().lvlBack, pVertexBufferObjectManager);
         this.id = id;
         this.locked = locked;
@@ -30,6 +37,21 @@ public class ScrollMenuPageElement extends Sprite{
         this.textId = new Text(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().fontPixel_60, String.valueOf(id), this.getVertexBufferObjectManager());
         this.attachChild(this.textId);
         this.refreshEntity();
+    }
+    
+    @Override
+    public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
+        if (pSceneTouchEvent.isActionUp()){
+            if(PageElement.this.listener != null){
+                PageElement.this.listener.onActionUp();
+            }
+            Debug.d("Touched element : " + this.id + "(" + (this.locked?"locked":"unlocked") + ")");
+        }
+        return false;
+    };
+    
+    public void registerPageElementTouchListener(IPageElementTouchListener listener){
+        this.listener = listener;
     }
     
     public void setLocked(boolean locked){

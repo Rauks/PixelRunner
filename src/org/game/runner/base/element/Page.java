@@ -18,8 +18,8 @@ import org.game.runner.manager.ResourcesManager;
  *
  * @author Karl
  */
-public class ScrollMenuPage extends Rectangle{
-    public static interface IScrollNavigationListener{
+public class Page extends Rectangle{
+    public static interface IPageNavigationTouchListener{
         public void onLeft();
         public void onRight();
     }
@@ -35,22 +35,22 @@ public class ScrollMenuPage extends Rectangle{
     private Sprite left;
     private Sprite right;
     
-    private IScrollNavigationListener listener;
+    private IPageNavigationTouchListener listener;
     
     private int progress;
-    private SmartList<ScrollMenuPageElement> elements;
+    private SmartList<PageElement> elements;
     
-    public ScrollMenuPage(final float pWidth, final float pHeight, final int nbElements,final VertexBufferObjectManager pVertexBufferObjectManager){
+    public Page(final float pWidth, final float pHeight, final int nbElements,final VertexBufferObjectManager pVertexBufferObjectManager){
         super(0, 0, pWidth, pHeight, pVertexBufferObjectManager);
         this.setColor(Color.TRANSPARENT);
-        this.elements = new SmartList<ScrollMenuPageElement>(nbElements);
+        this.elements = new SmartList<PageElement>(nbElements);
         this.progress = 0;
         this.left = new Sprite(0, this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlLeft, this.getVertexBufferObjectManager()){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 if (pSceneTouchEvent.isActionUp()){
-                    if(ScrollMenuPage.this.listener != null){
-                        ScrollMenuPage.this.listener.onLeft();
+                    if(Page.this.listener != null){
+                        Page.this.listener.onLeft();
                     }
                 }
                 return false;
@@ -62,8 +62,8 @@ public class ScrollMenuPage extends Rectangle{
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 if (pSceneTouchEvent.isActionUp()){
-                    if(ScrollMenuPage.this.listener != null){
-                        ScrollMenuPage.this.listener.onRight();
+                    if(Page.this.listener != null){
+                        Page.this.listener.onRight();
                     }
                 }
                 return false;
@@ -74,7 +74,7 @@ public class ScrollMenuPage extends Rectangle{
         this.addElements(nbElements);
     }
     
-    public void registerScrollNavigationListener(IScrollNavigationListener listener){
+    public void registerPageNavigationTouchListener(IPageNavigationTouchListener listener){
         this.listener = listener;
     }
     public Sprite getNavigationLeft(){
@@ -108,7 +108,7 @@ public class ScrollMenuPage extends Rectangle{
             
             float x = (index%NB_COLS)*(this.getWidth() - 2*PADDING_X)/(NB_COLS - 1) + PADDING_X;
             float y = (NB_ROWS - 1 - index/NB_COLS)*(this.getHeight() - 2*PADDING_Y)/(NB_ROWS - 1) + PADDING_Y - MARGIN_TOP;
-            this.elements.add(index, new ScrollMenuPageElement(x, y, index + 1, true, this.getVertexBufferObjectManager()));
+            this.elements.add(index, new PageElement(x, y, index + 1, true, this.getVertexBufferObjectManager()));
             this.attachChild(this.elements.get(index));
         }
     }
@@ -145,7 +145,7 @@ public class ScrollMenuPage extends Rectangle{
         this.left.dispose();
         this.right.detachSelf();
         this.right.dispose();
-        for(ScrollMenuPageElement element : this.elements){
+        for(PageElement element : this.elements){
             element.detachSelf();
             element.dispose();
         }
