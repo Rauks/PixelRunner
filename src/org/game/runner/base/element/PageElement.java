@@ -3,11 +3,9 @@
  * and open the template in the editor.
  */
 package org.game.runner.base.element;
-import org.andengine.util.debug.Debug;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.game.runner.manager.ResourcesManager;
 
@@ -16,13 +14,8 @@ import org.game.runner.manager.ResourcesManager;
  * @author Karl
  */
 public class PageElement extends Sprite{
-    public static interface IPageElementTouchListener{
-        public void onActionUp();
-    }
-    
     private int id;
     private boolean locked;
-    
     private IPageElementTouchListener listener;
     
     private Text textId;
@@ -39,19 +32,25 @@ public class PageElement extends Sprite{
         this.refreshEntity();
     }
     
+    public int getId(){
+        return id;
+    }
+    
     @Override
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
         if (pSceneTouchEvent.isActionUp()){
             if(PageElement.this.listener != null){
-                PageElement.this.listener.onActionUp();
+                PageElement.this.listener.onElementActionUp(this);
             }
-            Debug.d("Touched element : " + this.id + "(" + (this.locked?"locked":"unlocked") + ")");
         }
         return false;
     };
     
     public void registerPageElementTouchListener(IPageElementTouchListener listener){
         this.listener = listener;
+    }
+    public void unregisterPageElementTouchListener(){
+        this.listener = null;
     }
     
     public void setLocked(boolean locked){

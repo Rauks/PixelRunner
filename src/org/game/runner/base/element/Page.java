@@ -5,6 +5,7 @@
 package org.game.runner.base.element;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
@@ -18,12 +19,7 @@ import org.game.runner.manager.ResourcesManager;
  *
  * @author Karl
  */
-public class Page extends Rectangle{
-    public static interface IPageNavigationTouchListener{
-        public void onLeft();
-        public void onRight();
-    }
-    
+public class Page extends Rectangle implements IPageElementTouchListener{
     private static final int NB_COLS = 4;
     private static final int NB_ROWS = 3;
     private static final int MAX_ELEMENTS = 12;
@@ -35,22 +31,25 @@ public class Page extends Rectangle{
     private Sprite left;
     private Sprite right;
     
-    private IPageNavigationTouchListener listener;
+    private IPageNavigationTouchListener navigationListener;
+    private IPageElementTouchListener elementListener;
     
+    private int worldId;
     private int progress;
     private SmartList<PageElement> elements;
     
-    public Page(final float pWidth, final float pHeight, final int nbElements,final VertexBufferObjectManager pVertexBufferObjectManager){
+    public Page(final float pWidth, final float pHeight, int worldId, final int nbElements,final VertexBufferObjectManager pVertexBufferObjectManager){
         super(0, 0, pWidth, pHeight, pVertexBufferObjectManager);
         this.setColor(Color.TRANSPARENT);
         this.elements = new SmartList<PageElement>(nbElements);
+        this.worldId = worldId;
         this.progress = 0;
         this.left = new Sprite(0, this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlLeft, this.getVertexBufferObjectManager()){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 if (pSceneTouchEvent.isActionUp()){
-                    if(Page.this.listener != null){
-                        Page.this.listener.onLeft();
+                    if(Page.this.navigationListener != null){
+                        Page.this.navigationListener.onLeft();
                     }
                 }
                 return false;
@@ -62,8 +61,8 @@ public class Page extends Rectangle{
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 if (pSceneTouchEvent.isActionUp()){
-                    if(Page.this.listener != null){
-                        Page.this.listener.onRight();
+                    if(Page.this.navigationListener != null){
+                        Page.this.navigationListener.onRight();
                     }
                 }
                 return false;
@@ -74,13 +73,31 @@ public class Page extends Rectangle{
         this.addElements(nbElements);
     }
     
-    public void registerPageNavigationTouchListener(IPageNavigationTouchListener listener){
-        this.listener = listener;
+    public int getWorldId(){
+        return this.worldId;
     }
-    public Sprite getNavigationLeft(){
+    
+    public void registerPageNavigationTouchListener(IPageNavigationTouchListener navigationListener){
+        this.navigationListener = navigationListener;
+    }
+    public void unregisterPageNavigationTouchListener(){
+        this.navigationListener = null;
+    }
+    public void registerPageElementTouchListener(IPageElementTouchListener elementListener){
+        this.elementListener = elementListener;
+    }
+    public void unregisterPageElementTouchListener(){
+        this.elementListener = null;
+    }
+    public void onElementActionUp(PageElement element) {
+        if(this.elementListener != null){
+            this.elementListener.onElementActionUp(element);
+        }
+    }
+    public ITouchArea getNavigationLeftTouchArea(){
         return this.left;
     }
-    public Sprite getNavigationRight(){
+    public ITouchArea getNavigationRightTouchArea(){
         return this.right;
     }
     
@@ -99,16 +116,17 @@ public class Page extends Rectangle{
     public void setRightVisible(boolean visible){
         this.right.setVisible(visible);
     }
-    private void addElement() throws IndexOutOfBoundsException{
+    private void addElement(){
         int index = this.elements.size();
         if(index >= MAX_ELEMENTS){
             Debug.e("Elements limit reached in level choice page.");
         }
         else{
-            
             float x = (index%NB_COLS)*(this.getWidth() - 2*PADDING_X)/(NB_COLS - 1) + PADDING_X;
             float y = (NB_ROWS - 1 - index/NB_COLS)*(this.getHeight() - 2*PADDING_Y)/(NB_ROWS - 1) + PADDING_Y - MARGIN_TOP;
-            this.elements.add(index, new PageElement(x, y, index + 1, true, this.getVertexBufferObjectManager()));
+            PageElement element = new PageElement(x, y, index + 1, true, this.getVertexBufferObjectManager());
+            element.registerPageElementTouchListener(this);
+            this.elements.add(index, element);
             this.attachChild(this.elements.get(index));
         }
     }
@@ -117,9 +135,13 @@ public class Page extends Rectangle{
             this.addElement();
         }
     }
-    //Shallow copy
-    public SmartList<PageElement> getElements(){
-        return (SmartList<PageElement>)this.elements.clone();
+    
+    public SmartList<ITouchArea> getElementsTouchAreas(){
+        SmartList<ITouchArea> areas = new SmartList<ITouchArea>();
+        for(PageElement element : this.elements){
+            areas.add(element);
+        }
+        return areas;
     }
     
     public void setProgress(int progress){

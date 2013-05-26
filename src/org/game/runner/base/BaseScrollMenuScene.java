@@ -7,21 +7,24 @@ package org.game.runner.base;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.modifier.IModifier;
+import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
+import org.game.runner.base.element.IPageElementTouchListener;
+import org.game.runner.base.element.IPageNavigationTouchListener;
 import org.game.runner.base.element.Page;
-import org.game.runner.base.element.PageElement;
 
 /**
  *
  * @author Karl
  */
-public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSceneTouchListener{
-    public static interface IOnScrollScenePageListener {
+public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSceneTouchListener, IPageNavigationTouchListener, IPageElementTouchListener{
+    public interface IOnScrollScenePageListener {
         public void onMoveToPageStarted(final int oldPageNumber, final int newPageNumber);
         public void onMoveToPageFinished(final int oldPageNumber, final int newPageNumber);
     }
@@ -53,7 +56,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
 
     private IEaseFunction mEaseFunction;
     private MoveXModifier mMoveXModifier;
-    private IModifier.IModifierListener<IEntity> mMoveXModifierListener;
+    private IModifierListener<IEntity> mMoveXModifierListener;
     private boolean mEaseFunctionDirty = false;
 
     public BaseScrollMenuScene() {
@@ -245,28 +248,20 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     }
     
     private void registerPageTouchAreas(final Page pPage){
-        pPage.registerPageNavigationTouchListener(new Page.IPageNavigationTouchListener() {
-            @Override
-            public void onLeft() {
-                BaseScrollMenuScene.this.moveToPage(BaseScrollMenuScene.this.mCurrentPage - 1);
-            }
-            @Override
-            public void onRight() {
-                BaseScrollMenuScene.this.moveToPage(BaseScrollMenuScene.this.mCurrentPage + 1);
-            }
-        });
-        this.registerTouchArea(pPage.getNavigationLeft());
-        this.registerTouchArea(pPage.getNavigationRight());
-        for(PageElement element : pPage.getElements()){
+        pPage.registerPageNavigationTouchListener(this);
+        this.registerTouchArea(pPage.getNavigationLeftTouchArea());
+        this.registerTouchArea(pPage.getNavigationRightTouchArea());
+        pPage.registerPageElementTouchListener(this);
+        for(ITouchArea element : pPage.getElementsTouchAreas()){
             this.registerTouchArea(element);
         }
     }
     
     private void unregisterPageTouchAreas(final Page pPage){
         pPage.registerPageNavigationTouchListener(null);
-        this.unregisterTouchArea(pPage.getNavigationLeft());
-        this.unregisterTouchArea(pPage.getNavigationRight());
-        for(PageElement element : pPage.getElements()){
+        this.unregisterTouchArea(pPage.getNavigationLeftTouchArea());
+        this.unregisterTouchArea(pPage.getNavigationRightTouchArea());
+        for(ITouchArea element : pPage.getElementsTouchAreas()){
             this.unregisterTouchArea(element);
         }
     }
@@ -300,7 +295,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
 
             if (mOnScrollScenePageListener != null) {
                 if (this.mMoveXModifierListener == null) {
-                    this.mMoveXModifierListener = new IModifier.IModifierListener<IEntity>() {
+                    this.mMoveXModifierListener = new IModifierListener<IEntity>() {
                         @Override
                         public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                             BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageStarted(BaseScrollMenuScene.this.mPrevPage, BaseScrollMenuScene.this.mCurrentPage);
@@ -375,5 +370,15 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
             page.detachSelf();
             page.dispose();
         }
+    }
+    
+    //IPageNavigationTouchListener
+    @Override
+    public void onLeft(){
+        this.moveToPage(BaseScrollMenuScene.this.mCurrentPage - 1);
+    }
+    @Override
+    public void onRight(){
+        this.moveToPage(BaseScrollMenuScene.this.mCurrentPage + 1);
     }
 }

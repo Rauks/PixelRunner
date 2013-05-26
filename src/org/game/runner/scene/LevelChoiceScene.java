@@ -7,8 +7,10 @@ package org.game.runner.scene;
 import org.game.runner.GameActivity;
 import org.game.runner.base.BaseScrollMenuScene;
 import org.game.runner.base.element.Page;
+import org.game.runner.base.element.PageElement;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
+import org.andengine.util.debug.Debug;
 
 /**
  *
@@ -43,30 +45,30 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
             }
         });
         
-        this.tutorials = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 6, this.vbom);
+        this.tutorials = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 0, 6, this.vbom);
         this.tutorials.setTitle("TUTORIALS");
         this.tutorials.setProgress(11);
         this.tutorials.refreshLocks();
         
-        this.mountains = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 12, this.vbom);
+        this.mountains = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 1, 12, this.vbom);
         this.mountains.setTitle("MOUNTAINS");
         this.mountains.setProgress(5);
         this.mountains.refreshLocks();
         
-        this.desert = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 12, this.vbom);
+        this.desert = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 2, 12, this.vbom);
         this.desert.setTitle("DESERT");
         this.desert.setProgress(7);
         this.desert.refreshLocks();
         
-        this.city = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 12, this.vbom);
+        this.city = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 3, 12, this.vbom);
         this.city.setTitle("CITY");
         this.city.refreshLocks();
         
-        this.forest = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 12, this.vbom);
+        this.forest = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 4, 12, this.vbom);
         this.forest.setTitle("FOREST");
         this.forest.refreshLocks();
         
-        this.hills = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 12, this.vbom);
+        this.hills = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 5, 12, this.vbom);
         this.hills.setTitle("HILLS");
         this.hills.refreshLocks();
         
@@ -87,5 +89,10 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
     @Override
     public void disposeScene() {
         super.disposeScene();
+    }
+
+    public void onElementActionUp(PageElement element) {
+        this.activity.vibrate(30);
+        Debug.d("Element selected : " + element.getId() + " @ page " + this.getCurrentPage().getWorldId());
     }
 }
