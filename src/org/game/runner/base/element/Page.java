@@ -57,7 +57,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
                 return false;
             };
         };
-        this.left.setScale(4f);
+        this.left.setScale(6f);
         this.attachChild(this.left);
         this.right = new Sprite(this.getWidth(), this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlRight, this.getVertexBufferObjectManager()){
             @Override
@@ -70,7 +70,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
                 return false;
             };
         };
-        this.right.setScale(4f);
+        this.right.setScale(6f);
         this.attachChild(this.right);
         this.addElements(nbElements);
     }
