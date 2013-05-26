@@ -272,49 +272,47 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     }
     
     private void moveToPage(final int pageNumber) {
-        if (pageNumber >= this.mPages.size()) {
-            throw new IndexOutOfBoundsException("moveToPage: " + pageNumber + " - wrong page number, out of bounds.");
-        }
-        
-        this.mPrevPage = this.mCurrentPage;
-        this.mCurrentPage = pageNumber;
+        if (pageNumber >= 0 && pageNumber < this.mPages.size()) {
+            this.mPrevPage = this.mCurrentPage;
+            this.mCurrentPage = pageNumber;
 
-        final float toX = positionForPageWithNumber(pageNumber);
+            final float toX = positionForPageWithNumber(pageNumber);
 
-        if (this.mEaseFunctionDirty) {
-            if (this.mMoveXModifier != null) {
-                if (this.mMoveXModifierListener != null) {
-                    this.mMoveXModifier.removeModifierListener(this.mMoveXModifierListener);
+            if (this.mEaseFunctionDirty) {
+                if (this.mMoveXModifier != null) {
+                    if (this.mMoveXModifierListener != null) {
+                        this.mMoveXModifier.removeModifierListener(this.mMoveXModifierListener);
+                    }
+                    this.unregisterEntityModifier(mMoveXModifier);
+                    this.mMoveXModifierListener = null;
+                    this.mMoveXModifier = null;
                 }
-                this.unregisterEntityModifier(mMoveXModifier);
-                this.mMoveXModifierListener = null;
-                this.mMoveXModifier = null;
+                this.mEaseFunctionDirty = false;
             }
-            this.mEaseFunctionDirty = false;
-        }
 
-        if (this.mMoveXModifier == null) {
-            this.mMoveXModifier = new MoveXModifier(SLIDE_DURATION_DEFAULT, this.getX(), toX, this.mEaseFunction);
-            this.mMoveXModifier.setAutoUnregisterWhenFinished(false);
-            this.registerEntityModifier(this.mMoveXModifier);
-        } else {
-            this.mMoveXModifier.reset(SLIDE_DURATION_DEFAULT, this.getX(), toX);
-        }
+            if (this.mMoveXModifier == null) {
+                this.mMoveXModifier = new MoveXModifier(SLIDE_DURATION_DEFAULT, this.getX(), toX, this.mEaseFunction);
+                this.mMoveXModifier.setAutoUnregisterWhenFinished(false);
+                this.registerEntityModifier(this.mMoveXModifier);
+            } else {
+                this.mMoveXModifier.reset(SLIDE_DURATION_DEFAULT, this.getX(), toX);
+            }
 
-        if (mOnScrollScenePageListener != null) {
-            if (this.mMoveXModifierListener == null) {
-                this.mMoveXModifierListener = new IModifier.IModifierListener<IEntity>() {
-                    @Override
-                    public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-                        BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageStarted(BaseScrollMenuScene.this.mPrevPage, BaseScrollMenuScene.this.mCurrentPage);
-                    }
+            if (mOnScrollScenePageListener != null) {
+                if (this.mMoveXModifierListener == null) {
+                    this.mMoveXModifierListener = new IModifier.IModifierListener<IEntity>() {
+                        @Override
+                        public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+                            BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageStarted(BaseScrollMenuScene.this.mPrevPage, BaseScrollMenuScene.this.mCurrentPage);
+                        }
 
-                    @Override
-                    public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-                        BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageFinished(BaseScrollMenuScene.this.mPrevPage, BaseScrollMenuScene.this.mCurrentPage);
-                    }
-                };
-                this.mMoveXModifier.addModifierListener(this.mMoveXModifierListener);
+                        @Override
+                        public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+                            BaseScrollMenuScene.this.mOnScrollScenePageListener.onMoveToPageFinished(BaseScrollMenuScene.this.mPrevPage, BaseScrollMenuScene.this.mCurrentPage);
+                        }
+                    };
+                    this.mMoveXModifier.addModifierListener(this.mMoveXModifierListener);
+                }
             }
         }
     }
