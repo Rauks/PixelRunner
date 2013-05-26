@@ -106,11 +106,11 @@ public class ResourcesManager {
         this.mainMenuParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_3.png", 0, 120);
         this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_4.png", 120, 120);
         this.menuTextureAtlas.load();
-        this.lvlTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 98, 64);
+        this.lvlTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 103, 64);
         this.lvlBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_bg.png", 0, 0);
-        this.lvlLock = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_lock.png", 64, 0);
-        this.lvlLeft = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_left.png", 64, 46);
-        this.lvlRight = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_right.png", 69, 46);
+        this.lvlLock = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_lock.png", 69, 0);
+        this.lvlLeft = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_left.png", 69, 51);
+        this.lvlRight = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_right.png", 79, 51);
         this.lvlTextureAtlas.load();
         AudioManager.getInstance().prepare("mfx/", "menu.xm");
     }
