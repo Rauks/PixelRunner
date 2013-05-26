@@ -92,7 +92,7 @@ public class GameActivity extends BaseGameActivity{
             SceneManager.getInstance().getCurrentScene().onResume();
         }
     }
-    
+    /*
     @Override
     protected void onPause() {
         super.onPause();
@@ -108,7 +108,7 @@ public class GameActivity extends BaseGameActivity{
             SceneManager.getInstance().getCurrentScene().onResume();
         }
     }
-    
+    */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {  
         if (keyCode == KeyEvent.KEYCODE_BACK){
