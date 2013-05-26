@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import org.andengine.util.debug.Debug;
 import org.game.runner.game.descriptor.utils.BackgroundPack;
+import org.game.runner.game.descriptor.utils.Layer;
 import org.game.runner.game.element.background.BackgroundElement;
 import org.game.runner.game.element.level.LevelElement;
 
@@ -24,7 +25,7 @@ public abstract class LevelDescriptor {
     private LinkedList<BackgroundElement> backgroundElements = new LinkedList<BackgroundElement>();
     
     public LevelDescriptor(BackgroundPack backgroundPack){
-        for(BackgroundPack.Layer layer : backgroundPack.getLayers()){
+        for(Layer layer : backgroundPack.getLayers()){
             if(this.backgroundElements.size() >= MAX_BACKGROUND_ELEMENTS){
                 Debug.e("Background limit reached in level descriptor.");
             }

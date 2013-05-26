@@ -6,7 +6,6 @@ package org.game.runner.game.descriptor;
 
 import java.util.Random;
 import org.game.runner.game.descriptor.utils.BackgroundPack;
-import org.game.runner.game.descriptor.utils.BackgroundPack.Layer;
 import org.game.runner.game.element.background.BackgroundElement;
 import org.game.runner.game.element.level.BonusJump;
 import org.game.runner.game.element.level.BonusLife;
