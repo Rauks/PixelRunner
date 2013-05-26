@@ -53,14 +53,23 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
         float centerY = GameActivity.CAMERA_HEIGHT/2;
         
         this.title = new Text(centerX, centerY + 150, resourcesManager.fontPixel_100, "CREDITS", vbom);
+        this.title.setCullingEnabled(true);
         this.prod = new Text(centerX, 0, resourcesManager.fontPixel_34, "PROGRAMMING", vbom);
+        this.prod.setCullingEnabled(true);
         this.prodNames = new Text(centerX, 0, resourcesManager.fontPixel_60, "KARL WODITSCH", new TextOptions(HorizontalAlign.CENTER), vbom);
+        this.prodNames.setCullingEnabled(true);
         this.design = new Text(centerX, 0, resourcesManager.fontPixel_34, "DESIGN", vbom);
+        this.design.setCullingEnabled(true);
         this.designNames = new Text(centerX, 0, resourcesManager.fontPixel_60, "FLORENT LACROIX", new TextOptions(HorizontalAlign.CENTER), vbom);
+        this.designNames.setCullingEnabled(true);
         this.tests = new Text(centerX, 0, resourcesManager.fontPixel_34, "BETA TESTERS", vbom);
+        this.tests.setCullingEnabled(true);
         this.testsNames = new Text(centerX, 0, resourcesManager.fontPixel_60, "AURELIE KERAVAL\nCHARLES HAZARD\nGEORGES OLIVARES\nLUCAS D'AGUI\nNICOLAS DEVENET\nSIMON CHEVALIER", new TextOptions(HorizontalAlign.CENTER), vbom);
+        this.testsNames.setCullingEnabled(true);
         this.thanks = new Text(centerX, 0, resourcesManager.fontPixel_34, "SPECIAL THANKS", vbom);
+        this.thanks.setCullingEnabled(true);
         this.thanksNames = new Text(centerX, 0, resourcesManager.fontPixel_60, "ENSISA\nLEONARD DAVER\nMICHEL HASSENFORDER\nNICOLAS FRUTEAU\nSUZANNE NOLL\nTHIBAUT MEYER\nVALERIANE JEAN", new TextOptions(HorizontalAlign.CENTER), vbom);
+        this.thanksNames.setCullingEnabled(true);
         
         this.setFlow(this.title, 30f, 5f, this.prod, this.prodNames, this.design, this.designNames, this.tests, this.testsNames, this.thanks, this.thanksNames);
         
