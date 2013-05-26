@@ -202,6 +202,18 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     }
     
     public void addPage(final ScrollMenuPage pPage) {
+        pPage.registerScrollNavigationListener(new ScrollMenuPage.IScrollNavigationListener() {
+            @Override
+            public void onLeft() {
+                BaseScrollMenuScene.this.moveToPage(BaseScrollMenuScene.this.mCurrentPage - 1);
+            }
+            @Override
+            public void onRight() {
+                BaseScrollMenuScene.this.moveToPage(BaseScrollMenuScene.this.mCurrentPage + 1);
+            }
+        });
+        this.registerTouchArea(pPage.getNavigationLeft());
+        this.registerTouchArea(pPage.getNavigationRight());
         this.mPages.add(pPage);
         this.attachChild(pPage);
 
@@ -215,6 +227,18 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     }
     
     public void addPage(final ScrollMenuPage pPage, final int pPageNumber) {
+        pPage.registerScrollNavigationListener(new ScrollMenuPage.IScrollNavigationListener() {
+            @Override
+            public void onLeft() {
+                BaseScrollMenuScene.this.moveToPage(BaseScrollMenuScene.this.mCurrentPage - 1);
+            }
+            @Override
+            public void onRight() {
+                BaseScrollMenuScene.this.moveToPage(BaseScrollMenuScene.this.mCurrentPage + 1);
+            }
+        });
+        this.registerTouchArea(pPage.getNavigationLeft());
+        this.registerTouchArea(pPage.getNavigationRight());
         this.mPages.add(pPageNumber, pPage);
         this.attachChild(pPage);
 

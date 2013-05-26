@@ -7,6 +7,7 @@ package org.game.runner.base.element;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.list.SmartList;
@@ -18,6 +19,11 @@ import org.game.runner.manager.ResourcesManager;
  * @author Karl
  */
 public class ScrollMenuPage extends Rectangle{
+    public static interface IScrollNavigationListener{
+        public void onLeft();
+        public void onRight();
+    }
+    
     private static final int NB_COLS = 4;
     private static final int NB_ROWS = 3;
     private static final int MAX_ELEMENTS = 12;
@@ -29,6 +35,8 @@ public class ScrollMenuPage extends Rectangle{
     private Sprite left;
     private Sprite right;
     
+    private IScrollNavigationListener listener;
+    
     private int progress;
     private SmartList<ScrollMenuPageElement> elements;
     
@@ -37,13 +45,43 @@ public class ScrollMenuPage extends Rectangle{
         this.setColor(Color.TRANSPARENT);
         this.elements = new SmartList<ScrollMenuPageElement>(nbElements);
         this.progress = 0;
-        this.left = new Sprite(0, this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlLeft, this.getVertexBufferObjectManager());
+        this.left = new Sprite(0, this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlLeft, this.getVertexBufferObjectManager()){
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
+                if (pSceneTouchEvent.isActionUp()){
+                    if(ScrollMenuPage.this.listener != null){
+                        ScrollMenuPage.this.listener.onLeft();
+                    }
+                }
+                return false;
+            };
+        };
         this.left.setScale(4f);
         this.attachChild(this.left);
-        this.right = new Sprite(this.getWidth(), this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlRight, this.getVertexBufferObjectManager());
+        this.right = new Sprite(this.getWidth(), this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlRight, this.getVertexBufferObjectManager()){
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
+                if (pSceneTouchEvent.isActionUp()){
+                    if(ScrollMenuPage.this.listener != null){
+                        ScrollMenuPage.this.listener.onRight();
+                    }
+                }
+                return false;
+            };
+        };
         this.right.setScale(4f);
         this.attachChild(this.right);
         this.addElements(nbElements);
+    }
+    
+    public void registerScrollNavigationListener(IScrollNavigationListener listener){
+        this.listener = listener;
+    }
+    public Sprite getNavigationLeft(){
+        return this.left;
+    }
+    public Sprite getNavigationRight(){
+        return this.right;
     }
     
     public void setTitle(String title){
