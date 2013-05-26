@@ -34,14 +34,14 @@ public abstract class Player extends AnimatedSprite{
         DOUBLE, INFINITE
     }
     
-    public final long[] PLAYER_ANIMATE_RUN = new long[]        { 80,     80,     80,     80                          };
-    public final int[] PLAYER_ANIMATE_RUN_FRAMES = new int[]   { 8,      9,      10,     9                           };
-    public final long[] PLAYER_ANIMATE_JUMP = new long[]       { 1000                                                };
-    public final int[] PLAYER_ANIMATE_JUMP_FRAMES = new int[]  { 12                                                  };
-    public final long[] PLAYER_ANIMATE_ROLL = new long[]       { 60,     60,     60,     60,     60,     60,     60  };
-    public final int[] PLAYER_ANIMATE_ROLL_FRAMES = new int[]  { 0,      1,      2,      3,      4,      5,      6   };
-    public final long[] PLAYER_ANIMATE_DANCE = new long[]      { 60,     60,     60,     60                          };
-    public final int[] PLAYER_ANIMATE_DANCE_FRAMES = new int[] { 13,     14,     15,     14                          };
+    public static final long[] PLAYER_ANIMATE_RUN = new long[]        { 80,     80,     80,     80                          };
+    public static final int[] PLAYER_ANIMATE_RUN_FRAMES = new int[]   { 8,      9,      10,     9                           };
+    public static final long[] PLAYER_ANIMATE_JUMP = new long[]       { 1000                                                };
+    public static final int[] PLAYER_ANIMATE_JUMP_FRAMES = new int[]  { 12                                                  };
+    public static final long[] PLAYER_ANIMATE_ROLL = new long[]       { 60,     60,     60,     60,     60,     60,     60  };
+    public static final int[] PLAYER_ANIMATE_ROLL_FRAMES = new int[]  { 0,      1,      2,      3,      4,      5,      6   };
+    public static final long[] PLAYER_ANIMATE_DANCE = new long[]      { 150,    100,    150,    100                         };
+    public static final int[] PLAYER_ANIMATE_DANCE_FRAMES = new int[] { 13,     14,     15,     14                          };
     
     private ITimerCallback bonusPickAction = new ITimerCallback(){                      
         @Override
