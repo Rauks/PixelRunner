@@ -273,9 +273,9 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.levelReaderAction = new ITimerCallback(){                      
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
+                GameLevelScene.this.unregisterUpdateHandler(GameLevelScene.this.levelReaderHandler);
                 if(!GameLevelScene.this.level.hasNext()){
                     //End of level
-                    GameLevelScene.this.unregisterUpdateHandler(GameLevelScene.this.levelReaderHandler);
                 }
                 else{
                     //Level elements spawn
@@ -291,6 +291,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                         GameLevelScene.this.registerUpdateHandler(new TimerHandler(6f, new ITimerCallback(){
                             @Override
                             public void onTimePassed(final TimerHandler pTimerHandler){
+                                GameLevelScene.this.unregisterUpdateHandler(pTimerHandler);
                                 GameLevelScene.this.disposeLevelElement(lvlElement.getBuildedShape());
                             }
                         }));
@@ -335,6 +336,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.engine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
+                GameLevelScene.this.engine.unregisterUpdateHandler(pTimerHandler);
                 GameLevelScene.this.parallaxFactor = 1f;
                 GameLevelScene.this.onRestartEnd();
                 GameLevelScene.this.start();
@@ -553,6 +555,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                      GameLevelScene.this.physicWorld.destroyBody(body);
                 }
                 element.detachSelf();
+                element.dispose();
             }
         });
     }

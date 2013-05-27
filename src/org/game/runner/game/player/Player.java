@@ -45,6 +45,7 @@ public abstract class Player extends AnimatedSprite{
     private ITimerCallback bonusPickAction = new ITimerCallback(){                      
         @Override
         public void onTimePassed(final TimerHandler pTimerHandler) {
+            Player.this.unregisterUpdateHandler(pTimerHandler);
             Player.this.registerEntityModifier(new SequenceEntityModifier(new IEntityModifier.IEntityModifierListener() {
                     @Override
                     public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {}
