@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.game.runner.base.element;
+package org.game.runner.scene.base.element;
 
 /**
  *

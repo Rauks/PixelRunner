@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.game.runner.base;
+package org.game.runner.scene.base;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.MoveXModifier;
@@ -15,9 +15,10 @@ import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
-import org.game.runner.base.element.IPageElementTouchListener;
-import org.game.runner.base.element.IPageNavigationTouchListener;
-import org.game.runner.base.element.Page;
+import org.game.runner.scene.base.element.IPageElementTouchListener;
+import org.game.runner.scene.base.element.IPageNavigationTouchListener;
+import org.game.runner.scene.base.element.Page;
+import org.game.runner.scene.base.element.PageElement;
 
 /**
  *
@@ -98,6 +99,9 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     public void registerScrollScenePageListener(IOnScrollScenePageListener pOnScrollScenePageListener) {
         this.mOnScrollScenePageListener = pOnScrollScenePageListener;
     }
+    public void unregisterScrollScenePageListener(){
+        this.mOnScrollScenePageListener = null;
+    }
     public void setEaseFunction(IEaseFunction pEaseFunction) {
         this.mEaseFunction = pEaseFunction;
         this.mEaseFunctionDirty = true;
@@ -142,49 +146,6 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         return this.mPrevPage;
     }
 
-    @Override
-    public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
-        final float touchX = pSceneTouchEvent.getX();
-        switch(pSceneTouchEvent.getAction()) {
-            case TouchEvent.ACTION_DOWN:
-                this.mStartSwipe = touchX;
-                this.lastX = this.getX();
-                this.mState = ScrollState.IDLE;
-                return true;
-            case TouchEvent.ACTION_MOVE:
-                if (this.mState != ScrollState.SLIDING && Math.abs(touchX - mStartSwipe) >= this.mMinimumTouchLengthToSlide) {
-                    this.mState = ScrollState.SLIDING;
-                    // Avoid jerk after state change.
-                    this.mStartSwipe = touchX;
-                    return true;
-                } else if (this.mState == ScrollState.SLIDING) {
-                    float offsetX = touchX - mStartSwipe;
-                    this.setX(lastX + offsetX);
-                    return true;
-                } else {
-                    return false;
-                }
-            case TouchEvent.ACTION_UP:
-            case TouchEvent.ACTION_CANCEL:
-                if (this.mState == ScrollState.SLIDING) {
-                    int selectedPage = this.mCurrentPage;
-                    float delta = touchX - mStartSwipe;
-                    if (Math.abs(delta) >= this.mMinimumTouchLengthToChagePage) {
-                        if (delta < 0.f && selectedPage < this.mPages.size() - 1) {
-                            selectedPage++;
-                        }
-                        else if (delta > 0.f && selectedPage > 0) {
-                            selectedPage--;
-                        }
-                    }
-                    this.moveToPage(selectedPage);
-                }
-                return true;
-            default:
-                return false;
-        }
-    }
-    
     public void updatePages() {
         int i = 0;
         for (Page page : this.mPages) {
@@ -372,6 +333,50 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         }
     }
     
+    //IOnSceneTouchListener
+    @Override
+    public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
+        final float touchX = pSceneTouchEvent.getX();
+        switch(pSceneTouchEvent.getAction()) {
+            case TouchEvent.ACTION_DOWN:
+                this.mStartSwipe = touchX;
+                this.lastX = this.getX();
+                this.mState = ScrollState.IDLE;
+                return true;
+            case TouchEvent.ACTION_MOVE:
+                if (this.mState != ScrollState.SLIDING && Math.abs(touchX - mStartSwipe) >= this.mMinimumTouchLengthToSlide) {
+                    this.mState = ScrollState.SLIDING;
+                    // Avoid jerk after state change.
+                    this.mStartSwipe = touchX;
+                    return true;
+                } else if (this.mState == ScrollState.SLIDING) {
+                    float offsetX = touchX - mStartSwipe;
+                    this.setX(lastX + offsetX);
+                    return true;
+                } else {
+                    return false;
+                }
+            case TouchEvent.ACTION_UP:
+            case TouchEvent.ACTION_CANCEL:
+                if (this.mState == ScrollState.SLIDING) {
+                    int selectedPage = this.mCurrentPage;
+                    float delta = touchX - mStartSwipe;
+                    if (Math.abs(delta) >= this.mMinimumTouchLengthToChagePage) {
+                        if (delta < 0.f && selectedPage < this.mPages.size() - 1) {
+                            selectedPage++;
+                        }
+                        else if (delta > 0.f && selectedPage > 0) {
+                            selectedPage--;
+                        }
+                    }
+                    this.moveToPage(selectedPage);
+                }
+                return true;
+            default:
+                return false;
+        }
+    }
+    
     //IPageNavigationTouchListener
     @Override
     public void onLeft(){
@@ -381,4 +386,13 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     public void onRight(){
         this.moveToPage(BaseScrollMenuScene.this.mCurrentPage + 1);
     }
+    
+    //IPageElementTouchListener
+    @Override
+    public void onElementActionUp(PageElement element) {
+        if(this.mState != ScrollState.SLIDING){
+            this.onElementAction(element);
+        }
+    }
+    public abstract void onElementAction(PageElement element);
 }

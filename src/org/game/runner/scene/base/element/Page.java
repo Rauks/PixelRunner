@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.game.runner.base.element;
+package org.game.runner.scene.base.element;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.ITouchArea;
@@ -91,6 +91,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     public void unregisterPageElementTouchListener(){
         this.elementListener = null;
     }
+    @Override
     public void onElementActionUp(PageElement element) {
         if(this.elementListener != null){
             this.elementListener.onElementActionUp(element);

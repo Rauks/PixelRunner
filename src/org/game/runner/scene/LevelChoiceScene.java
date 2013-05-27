@@ -5,12 +5,13 @@
 package org.game.runner.scene;
 
 import org.game.runner.GameActivity;
-import org.game.runner.base.BaseScrollMenuScene;
-import org.game.runner.base.element.Page;
-import org.game.runner.base.element.PageElement;
+import org.game.runner.scene.base.BaseScrollMenuScene;
+import org.game.runner.scene.base.element.Page;
+import org.game.runner.scene.base.element.PageElement;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 import org.andengine.util.debug.Debug;
+import org.game.runner.scene.base.element.IPageElementTouchListener;
 
 /**
  *
@@ -91,7 +92,8 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
         super.disposeScene();
     }
 
-    public void onElementActionUp(PageElement element) {
+    @Override
+    public void onElementAction(PageElement element) {
         this.activity.vibrate(30);
         Debug.d("Element selected : " + element.getId() + " @ page " + this.getCurrentPage().getWorldId());
     }

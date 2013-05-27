@@ -40,7 +40,7 @@ import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.IModifier;
 import org.game.runner.GameActivity;
-import org.game.runner.base.BaseScene;
+import org.game.runner.scene.base.BaseScene;
 import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.game.element.background.BackgroundElement;
 import org.game.runner.game.element.level.LevelElement;

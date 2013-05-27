@@ -21,7 +21,7 @@ import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.modifier.IModifier;
 import org.game.runner.GameActivity;
-import org.game.runner.base.BaseMenuScene;
+import org.game.runner.scene.base.BaseMenuScene;
 import org.game.runner.game.player.Player;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;

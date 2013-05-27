@@ -8,7 +8,7 @@ import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
 import org.andengine.util.adt.color.Color;
 import org.game.runner.GameActivity;
-import org.game.runner.base.BaseScene;
+import org.game.runner.scene.base.BaseScene;
 import org.game.runner.manager.SceneManager.SceneType;
 
 /**

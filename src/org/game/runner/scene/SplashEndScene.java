@@ -9,7 +9,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.game.runner.GameActivity;
-import org.game.runner.base.BaseSplashScene;
+import org.game.runner.scene.base.BaseSplashScene;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.ResourcesManager;
 import org.game.runner.manager.SceneManager;

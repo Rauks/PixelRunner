@@ -10,7 +10,7 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 import org.andengine.util.debug.Debug;
 import org.game.runner.GameActivity;
-import org.game.runner.base.BaseScene;
+import org.game.runner.scene.base.BaseScene;
 import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.scene.ArcadeGameLevelScene;
 import org.game.runner.scene.CreditScene;
