@@ -22,7 +22,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.modifier.IModifier;
 import org.game.runner.game.descriptor.LevelDescriptor;
-import org.game.runner.scene.GameLevelScene;
 
 /**
  *

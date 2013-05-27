@@ -6,9 +6,6 @@ package org.game.runner.game.element.level;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import org.andengine.engine.handler.IUpdateHandler;
-import org.andengine.entity.IEntity;
 import org.andengine.entity.shape.Shape;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;

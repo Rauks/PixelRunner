@@ -11,7 +11,6 @@ import org.game.runner.scene.base.element.PageElement;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 import org.andengine.util.debug.Debug;
-import org.game.runner.scene.base.element.IPageElementTouchListener;
 
 /**
  *

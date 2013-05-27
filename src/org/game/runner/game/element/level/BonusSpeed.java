@@ -4,7 +4,6 @@
  */
 package org.game.runner.game.element.level;
 
-import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.shape.Shape;

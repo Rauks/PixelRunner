@@ -4,16 +4,12 @@
  */
 package org.game.runner.game.element.level;
 
-import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.ColorModifier;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.shape.Shape;
-import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.game.runner.game.player.Player;
-import org.andengine.util.debug.Debug;
 import org.game.runner.game.player.Trail;
 import org.game.runner.manager.ResourcesManager;
 
