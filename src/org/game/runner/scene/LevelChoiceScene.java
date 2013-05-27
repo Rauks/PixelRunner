@@ -29,7 +29,7 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
     public LevelChoiceScene(){
         super(GameActivity.CAMERA_WIDTH, GameActivity.CAMERA_HEIGHT);
         
-        this.registerScrollScenePageListener(new IOnScrollScenePageListener() {
+        this.registerScrollScenePageListener(new IOnScrollListener() {
             @Override
             public void onMoveToPageStarted(int oldPageNumber, int newPageNumber) {
                 if(oldPageNumber < newPageNumber){

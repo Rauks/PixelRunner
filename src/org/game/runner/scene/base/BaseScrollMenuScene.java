@@ -25,7 +25,7 @@ import org.game.runner.scene.base.element.PageElement;
  * @author Karl
  */
 public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSceneTouchListener, IPageNavigationTouchListener, IPageElementTouchListener{
-    public interface IOnScrollScenePageListener {
+    public interface IOnScrollListener {
         public void onMoveToPageStarted(final int oldPageNumber, final int newPageNumber);
         public void onMoveToPageFinished(final int oldPageNumber, final int newPageNumber);
     }
@@ -40,7 +40,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     
     private SmartList<Page> mPages = new SmartList<Page>();
     private ScrollState mState;
-    private IOnScrollScenePageListener mOnScrollScenePageListener;
+    private IOnScrollListener mOnScrollScenePageListener;
 
     private int mPrevPage;
     private int mCurrentPage;
@@ -96,7 +96,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     public float getPageHeight() {
         return this.mPageHeight;
     }
-    public void registerScrollScenePageListener(IOnScrollScenePageListener pOnScrollScenePageListener) {
+    public void registerScrollScenePageListener(IOnScrollListener pOnScrollScenePageListener) {
         this.mOnScrollScenePageListener = pOnScrollScenePageListener;
     }
     public void unregisterScrollScenePageListener(){
