@@ -9,6 +9,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.game.runner.GameActivity;
+import org.game.runner.R;
 import org.game.runner.scene.base.BaseSplashScene;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.ResourcesManager;
@@ -25,7 +26,7 @@ public class SplashEndScene extends BaseSplashScene implements IOnSceneTouchList
     @Override
     public void createScene() {
         super.createScene();
-        this.title = new Text(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2, resourcesManager.fontPixel_60, "PRESS TO START !", vbom);
+        this.title = new Text(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2, resourcesManager.fontPixel_60, this.activity.getString(R.string.splash_touch), vbom);
         attachChild(this.title);
         this.setOnSceneTouchListener(this);
     }

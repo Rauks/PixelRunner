@@ -10,6 +10,7 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
+import org.game.runner.R;
 
 /**
  *
@@ -24,7 +25,7 @@ public abstract class BaseSplashScene extends BaseScene{
         this.setBackground(new Background(Color.BLACK));
         this.headphones = new Sprite(260, 65, this.resourcesManager.splashHeadphones, this.vbom);
         this.headphones.setScale(4);
-        this.advice = new Text(434, 65, resourcesManager.fontPixel_34, "AWESOME WITH\nHEADPHONES !", new TextOptions(HorizontalAlign.CENTER), vbom);
+        this.advice = new Text(434, 65, resourcesManager.fontPixel_34, this.activity.getString(R.string.splash_headphones), new TextOptions(HorizontalAlign.CENTER), vbom);
         attachChild(this.headphones);
         attachChild(this.advice);
     }

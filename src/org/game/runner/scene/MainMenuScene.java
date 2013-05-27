@@ -10,6 +10,7 @@ import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.text.Text;
 import org.game.runner.GameActivity;
+import org.game.runner.R;
 import org.game.runner.scene.base.BaseMenuScene;
 import org.game.runner.game.descriptor.ArcadeLevelDescriptor;
 import org.game.runner.manager.AudioManager;
@@ -37,9 +38,9 @@ public class MainMenuScene extends BaseMenuScene implements MenuScene.IOnMenuIte
         this.menuChildScene = new MenuScene(this.camera);
         this.menuChildScene.setPosition(0, 0);
         
-        final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_PLAY, this.resourcesManager.fontPixel_60, "PLAY", vbom), 1.4f, 1);
-        final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_ARCADE, this.resourcesManager.fontPixel_60, "ARCADE", vbom), 1.4f, 1);
-        final IMenuItem creditsMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_CREDITS, this.resourcesManager.fontPixel_60, "CREDITS", vbom), 1.4f, 1);
+        final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_PLAY, this.resourcesManager.fontPixel_60, this.activity.getString(R.string.menu_play), vbom), 1.4f, 1);
+        final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_ARCADE, this.resourcesManager.fontPixel_60, this.activity.getString(R.string.menu_arcade), vbom), 1.4f, 1);
+        final IMenuItem creditsMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_CREDITS, this.resourcesManager.fontPixel_60, this.activity.getString(R.string.menu_credits), vbom), 1.4f, 1);
 
         this.menuChildScene.addMenuItem(playMenuItem);
         this.menuChildScene.addMenuItem(optionsMenuItem);
