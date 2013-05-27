@@ -12,6 +12,7 @@ import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 import org.andengine.util.debug.Debug;
 import org.game.runner.R;
+import org.game.runner.scene.base.element.PageTutorial;
 
 /**
  *
@@ -46,36 +47,29 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
             }
         });
         
-        this.tutorials = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 0, 6, this.vbom);
+        this.tutorials = new PageTutorial(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 0, this.vbom);
         this.tutorials.setTitle(this.activity.getString(R.string.lvl_tutorials));
         this.tutorials.setProgress(11);
-        this.tutorials.refreshLocks();
         
         this.mountains = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 1, 12, this.vbom);
         this.mountains.setTitle(this.activity.getString(R.string.lvl_mountains));
         this.mountains.setProgress(5);
-        this.mountains.refreshLocks();
         
         this.desert = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 2, 12, this.vbom);
         this.desert.setTitle(this.activity.getString(R.string.lvl_desert));
         this.desert.setProgress(7);
-        this.desert.refreshLocks();
         
         this.city = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 3, 12, this.vbom);
         this.city.setTitle(this.activity.getString(R.string.lvl_city));
-        this.city.refreshLocks();
         
         this.forest = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 4, 12, this.vbom);
         this.forest.setTitle(this.activity.getString(R.string.lvl_forest));
-        this.forest.refreshLocks();
         
         this.hills = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 5, 12, this.vbom);
         this.hills.setTitle(this.activity.getString(R.string.lvl_hills));
-        this.hills.refreshLocks();
         
         this.hills = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 6, 12, this.vbom);
         this.hills.setTitle(this.activity.getString(R.string.lvl_sweets));
-        this.hills.refreshLocks();
         
         addPages(this.tutorials, this.mountains, this.desert, this.city, this.forest, this.hills);
     }

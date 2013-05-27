@@ -67,6 +67,10 @@ public class ResourcesManager {
     public ITextureRegion lvlLock;
     public ITextureRegion lvlLeft;
     public ITextureRegion lvlRight;
+    public ITextureRegion lvlJump;
+    public ITextureRegion lvlDoubleJump;
+    public ITextureRegion lvlRoll;
+    public ITextureRegion lvlPlatform;
     
     //Textures - Splash
     private BitmapTextureAtlas splashTextureAtlas;
@@ -111,11 +115,15 @@ public class ResourcesManager {
         this.mainMenuParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_3.png", 0, 120);
         this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_4.png", 120, 120);
         this.menuTextureAtlas.load();
-        this.lvlTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 103, 64);
+        this.lvlTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 130, 109);
         this.lvlBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_bg.png", 0, 0);
         this.lvlLock = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_lock.png", 69, 0);
         this.lvlLeft = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_left.png", 69, 51);
         this.lvlRight = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_right.png", 79, 51);
+        this.lvlJump = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_jump.png", 53, 73);
+        this.lvlDoubleJump = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_double_jump.png", 0, 69);
+        this.lvlRoll = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_roll.png", 94, 73);
+        this.lvlPlatform = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_platform.png", 80, 64);
         this.lvlTextureAtlas.load();
         AudioManager.getInstance().prepare("mfx/", "menu.xm");
     }
@@ -133,6 +141,10 @@ public class ResourcesManager {
         this.lvlLock = null;
         this.lvlLeft = null;
         this.lvlRight = null;
+        this.lvlJump = null;
+        this.lvlDoubleJump = null;
+        this.lvlRoll = null;
+        this.lvlPlatform = null;
     }
 
     public void loadSplashResources() {

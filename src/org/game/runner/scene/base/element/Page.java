@@ -73,6 +73,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
         this.right.setScale(6f);
         this.attachChild(this.right);
         this.addElements(nbElements);
+        this.refreshLocks();
     }
     
     public int getWorldId(){
@@ -119,6 +120,20 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     public void setRightVisible(boolean visible){
         this.right.setVisible(visible);
     }
+    protected void addElement(PageElement element){
+        int index = this.elements.size();
+        if(index >= MAX_ELEMENTS){
+            Debug.e("Elements limit reached in level choice page.");
+        }
+        else{
+            float x = (index%NB_COLS)*(this.getWidth() - 2*PADDING_X)/(NB_COLS - 1) + PADDING_X;
+            float y = (NB_ROWS - 1 - index/NB_COLS)*(this.getHeight() - 2*PADDING_Y)/(NB_ROWS - 1) + PADDING_Y - MARGIN_TOP;
+            element.setPosition(x, y);
+            element.registerPageElementTouchListener(this);
+            this.elements.add(index, element);
+            this.attachChild(this.elements.get(index));
+        }
+    }
     private void addElement(){
         int index = this.elements.size();
         if(index >= MAX_ELEMENTS){
@@ -137,6 +152,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
         for (int i = 0; i < nbElements; i++) {
             this.addElement();
         }
+        this.refreshLocks();
     }
     
     public SmartList<ITouchArea> getElementsTouchAreas(){
@@ -149,12 +165,13 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     
     public void setProgress(int progress){
         this.progress = progress;
+        this.refreshLocks();
     }
     public int getProgress(){
         return this.progress;
     }
     
-    public void refreshLocks(){
+    private void refreshLocks(){
         for(int i = 0; i < this.elements.size(); i++){
             if(i <= this.progress){
                 this.elements.get(i).setLocked(false);

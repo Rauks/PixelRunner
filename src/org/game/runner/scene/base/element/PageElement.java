@@ -3,10 +3,13 @@
  * and open the template in the editor.
  */
 package org.game.runner.scene.base.element;
+import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.color.Color;
 import org.game.runner.manager.ResourcesManager;
 
 /**
@@ -18,18 +21,31 @@ public class PageElement extends Sprite{
     private boolean locked;
     private IPageElementTouchListener listener;
     
-    private Text textId;
+    private Shape picto;
     private Sprite lock;
     
+    public PageElement(float pX, float pY, int id, boolean locked, ITextureRegion texture, VertexBufferObjectManager pVertexBufferObjectManager){
+        super(pX, pY, ResourcesManager.getInstance().lvlBack, pVertexBufferObjectManager);
+        this.setCullingEnabled(true);
+        this.id = id;
+        this.locked = locked;
+        this.lock = new Sprite(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().lvlLock, this.getVertexBufferObjectManager());
+        this.lock.setColor(new Color(0.8f, 0.8f, 0.8f));
+        this.attachChild(this.lock);
+        this.picto = new Sprite(this.getHeight()/2, this.getWidth()/2, texture, this.getVertexBufferObjectManager());
+        this.attachChild(this.picto);
+        this.refreshEntity();
+    }
     public PageElement(float pX, float pY, int id, boolean locked, VertexBufferObjectManager pVertexBufferObjectManager){
         super(pX, pY, ResourcesManager.getInstance().lvlBack, pVertexBufferObjectManager);
         this.setCullingEnabled(true);
         this.id = id;
         this.locked = locked;
         this.lock = new Sprite(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().lvlLock, this.getVertexBufferObjectManager());
+        this.lock.setColor(new Color(0.4f, 0.4f, 0.4f));
         this.attachChild(this.lock);
-        this.textId = new Text(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().fontPixel_60, String.valueOf(id), this.getVertexBufferObjectManager());
-        this.attachChild(this.textId);
+        this.picto = new Text(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().fontPixel_60, String.valueOf(id), this.getVertexBufferObjectManager());
+        this.attachChild(this.picto);
         this.refreshEntity();
     }
     
@@ -62,24 +78,24 @@ public class PageElement extends Sprite{
     private void refreshEntity(){
         if(this.locked){
             this.lock.setVisible(true);
-            this.textId.setVisible(false);
+            this.picto.setVisible(false);
         }
         else{
             this.lock.setVisible(false);
-            this.textId.setVisible(true);
+            this.picto.setVisible(true);
         }
     }
     
     @Override
     public boolean detachSelf(){
-        this.textId.detachSelf();
+        this.picto.detachSelf();
         this.lock.detachSelf();
         return super.detachSelf();
     }
     
     @Override
     public void dispose(){
-        this.textId.dispose();
+        this.picto.dispose();
         this.lock.dispose();
         super.dispose();
     }
