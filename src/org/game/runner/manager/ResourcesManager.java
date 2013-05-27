@@ -190,7 +190,7 @@ public class ResourcesManager {
         }
         this.gameBackgroundTextureAtlas.load();
         
-        AudioManager.getInstance().prepare("mfx/lvl/", level.getMusic());
+        AudioManager.getInstance().prepare("mfx/game/", level.getMusic());
     }
 
     public void unloadGameResources() {
