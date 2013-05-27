@@ -51,7 +51,7 @@ public class SplashEndScene extends BaseSplashScene implements IOnSceneTouchList
             SceneManager.getInstance().createMainMenuScene();
             ResourcesManager.getInstance().unloadSplashResources();
             SceneManager.getInstance().disposeSplashScene();
-            AudioManager.getInstance().play("mfx/", "menu.xm");
+            AudioManager.getInstance().play("mfx/main/", "menu.xm");
         }
     return false;
     }

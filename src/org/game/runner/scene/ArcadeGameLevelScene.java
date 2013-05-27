@@ -35,7 +35,7 @@ public class ArcadeGameLevelScene extends GameLevelScene{
     public ArcadeGameLevelScene(LevelDescriptor level){
         super(level);
         
-        AudioManager.getInstance().prepare("mfx/", "arcade_win.xm");
+        AudioManager.getInstance().prepare("mfx/game/", "arcade_win.xm");
         
         this.scoreDb = this.activity.getSharedPreferences(HIGHSCORE_DB_NAME, Context.MODE_PRIVATE);
         this.scoreDbEditor = this.scoreDb.edit();
@@ -65,7 +65,7 @@ public class ArcadeGameLevelScene extends GameLevelScene{
                 if(!this.isHigtscoring){
                     this.isHigtscoring = true;
                     AudioManager.getInstance().stop();
-                    AudioManager.getInstance().play("mfx/", "arcade_win.xm");
+                    AudioManager.getInstance().play("mfx/game/", "arcade_win.xm");
                     this.playerTrail.setColorMode(Trail.ColorMode.MULTICOLOR);
                 }
                 this.highScore = this.score;

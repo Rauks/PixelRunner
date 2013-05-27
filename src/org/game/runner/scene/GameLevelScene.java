@@ -372,7 +372,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                                     GameLevelScene.this.broadcast(GameLevelScene.this.chronoStart, new IEntityModifierListener() {
                                         @Override
                                         public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-                                            AudioManager.getInstance().play("mfx/", GameLevelScene.this.level.getMusic());
+                                            AudioManager.getInstance().play("mfx/game/", GameLevelScene.this.level.getMusic());
                                             GameLevelScene.this.playerTrail.show();
                                             GameLevelScene.this.registerUpdateHandler(GameLevelScene.this.levelReaderHandler = new TimerHandler(GameLevelScene.this.level.getSpawnTime(), true, GameLevelScene.this.levelReaderAction));
                                             GameLevelScene.this.onStartEnd();
