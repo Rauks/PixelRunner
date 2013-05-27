@@ -556,7 +556,6 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                      GameLevelScene.this.physicWorld.destroyBody(body);
                 }
                 element.detachSelf();
-                element.dispose();
             }
         });
     }
