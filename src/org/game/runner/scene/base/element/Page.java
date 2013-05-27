@@ -23,7 +23,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     protected static final int NB_COLS = 4;
     protected static final int NB_ROWS = 3;
     protected static final int MAX_ELEMENTS = 12;
-    protected static final float PADDING_X = 100;
+    protected static final float PADDING_X = 130;
     protected static final float PADDING_Y = 80;
     protected static final float MARGIN_TOP = 40;
     protected static final float TITLE_MARGIN_TOP = 20;
@@ -39,11 +39,11 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     private int progress;
     private SmartList<PageElement> elements;
     
-    public Page(final float pWidth, final float pHeight, int worldId, final int nbElements,final VertexBufferObjectManager pVertexBufferObjectManager){
+    public Page(final float pWidth, final float pHeight, int worldId, final int nbElements, final VertexBufferObjectManager pVertexBufferObjectManager){
         super(0, 0, pWidth, pHeight, pVertexBufferObjectManager);
         this.setColor(Color.TRANSPARENT);
         this.setCullingEnabled(true);
-        this.elements = new SmartList<PageElement>(nbElements);
+        this.elements = new SmartList<PageElement>(MAX_ELEMENTS);
         this.worldId = worldId;
         this.progress = 0;
         this.left = new Sprite(0, this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlLeft, this.getVertexBufferObjectManager()){
@@ -138,21 +138,9 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     protected float getElementY(int index){
         return (NB_ROWS - 1 - index/NB_COLS)*(this.getHeight() - 2*PADDING_Y)/(NB_ROWS - 1) + PADDING_Y - MARGIN_TOP;
     }
-    private void addElement(){
-        int index = this.elements.size();
-        if(index >= MAX_ELEMENTS){
-            Debug.e("Elements limit reached in level choice page.");
-        }
-        else{
-            PageElement element = new PageElement(this.getElementX(index), this.getElementY(index), index + 1, true, this.getVertexBufferObjectManager());
-            element.registerPageElementTouchListener(this);
-            this.elements.add(index, element);
-            this.attachChild(this.elements.get(index));
-        }
-    }
     private void addElements(int nbElements){
         for (int i = 0; i < nbElements; i++) {
-            this.addElement();
+            this.addElement(new PageElement(0, 0, i + 1, true, this.getVertexBufferObjectManager()));
         }
         this.refreshLocks();
     }

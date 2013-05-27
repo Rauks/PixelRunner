@@ -29,9 +29,7 @@ public class PageElement extends Sprite{
         this.setCullingEnabled(true);
         this.id = id;
         this.locked = locked;
-        this.lock = new Sprite(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().lvlLock, this.getVertexBufferObjectManager());
-        this.lock.setColor(new Color(0.8f, 0.8f, 0.8f));
-        this.attachChild(this.lock);
+        this.initLock();
         this.picto = new Sprite(this.getHeight()/2, this.getWidth()/2, texture, this.getVertexBufferObjectManager());
         this.attachChild(this.picto);
         this.refreshEntity();
@@ -41,12 +39,15 @@ public class PageElement extends Sprite{
         this.setCullingEnabled(true);
         this.id = id;
         this.locked = locked;
-        this.lock = new Sprite(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().lvlLock, this.getVertexBufferObjectManager());
-        this.lock.setColor(new Color(0.4f, 0.4f, 0.4f));
-        this.attachChild(this.lock);
+        this.initLock();
         this.picto = new Text(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().fontPixel_60, String.valueOf(id), this.getVertexBufferObjectManager());
         this.attachChild(this.picto);
         this.refreshEntity();
+    }
+    private void initLock(){
+        this.lock = new Sprite(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().lvlLock, this.getVertexBufferObjectManager());
+        this.lock.setColor(new Color(0.4f, 0.4f, 0.4f));
+        this.attachChild(this.lock);
     }
     
     public int getId(){
