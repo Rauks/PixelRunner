@@ -273,8 +273,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.levelReaderAction = new ITimerCallback(){                      
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
-                GameLevelScene.this.unregisterUpdateHandler(GameLevelScene.this.levelReaderHandler);
                 if(!GameLevelScene.this.level.hasNext()){
+                    GameLevelScene.this.unregisterUpdateHandler(GameLevelScene.this.levelReaderHandler);
                     //End of level
                 }
                 else{
@@ -489,6 +489,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     
     @Override
     public void disposeScene() {
+        this.clearUpdateHandlers();
         this.destroyPhysicsWorld();
         this.disposeLevelElements();
         
