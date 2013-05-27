@@ -20,4 +20,13 @@ public class PageTutorial extends Page{
         this.addElement(new PageElement(0, 0, 4, false, ResourcesManager.getInstance().lvlPlatform, pVertexBufferObjectManager));
         this.setProgress(4);
     }
+    
+    @Override
+    protected float getElementX(int index){
+        return super.getElementX(index + 4);
+    }
+    @Override
+    protected float getElementY(int index){
+        return super.getElementY(index + 4);
+    }
 }

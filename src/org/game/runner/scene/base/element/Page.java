@@ -20,13 +20,13 @@ import org.game.runner.manager.ResourcesManager;
  * @author Karl
  */
 public class Page extends Rectangle implements IPageElementTouchListener{
-    private static final int NB_COLS = 4;
-    private static final int NB_ROWS = 3;
-    private static final int MAX_ELEMENTS = 12;
-    private static final float PADDING_X = 100;
-    private static final float PADDING_Y = 80;
-    private static final float MARGIN_TOP = 40;
-    private static final float TITLE_MARGIN_TOP = 20;
+    protected static final int NB_COLS = 4;
+    protected static final int NB_ROWS = 3;
+    protected static final int MAX_ELEMENTS = 12;
+    protected static final float PADDING_X = 100;
+    protected static final float PADDING_Y = 80;
+    protected static final float MARGIN_TOP = 40;
+    protected static final float TITLE_MARGIN_TOP = 20;
     
     private Text title;
     private Sprite left;
@@ -126,13 +126,17 @@ public class Page extends Rectangle implements IPageElementTouchListener{
             Debug.e("Elements limit reached in level choice page.");
         }
         else{
-            float x = (index%NB_COLS)*(this.getWidth() - 2*PADDING_X)/(NB_COLS - 1) + PADDING_X;
-            float y = (NB_ROWS - 1 - index/NB_COLS)*(this.getHeight() - 2*PADDING_Y)/(NB_ROWS - 1) + PADDING_Y - MARGIN_TOP;
-            element.setPosition(x, y);
+            element.setPosition(this.getElementX(index), this.getElementY(index));
             element.registerPageElementTouchListener(this);
             this.elements.add(index, element);
             this.attachChild(this.elements.get(index));
         }
+    }
+    protected float getElementX(int index){
+        return (index%NB_COLS)*(this.getWidth() - 2*PADDING_X)/(NB_COLS - 1) + PADDING_X;
+    }
+    protected float getElementY(int index){
+        return (NB_ROWS - 1 - index/NB_COLS)*(this.getHeight() - 2*PADDING_Y)/(NB_ROWS - 1) + PADDING_Y - MARGIN_TOP;
     }
     private void addElement(){
         int index = this.elements.size();
@@ -140,9 +144,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
             Debug.e("Elements limit reached in level choice page.");
         }
         else{
-            float x = (index%NB_COLS)*(this.getWidth() - 2*PADDING_X)/(NB_COLS - 1) + PADDING_X;
-            float y = (NB_ROWS - 1 - index/NB_COLS)*(this.getHeight() - 2*PADDING_Y)/(NB_ROWS - 1) + PADDING_Y - MARGIN_TOP;
-            PageElement element = new PageElement(x, y, index + 1, true, this.getVertexBufferObjectManager());
+            PageElement element = new PageElement(this.getElementX(index), this.getElementY(index), index + 1, true, this.getVertexBufferObjectManager());
             element.registerPageElementTouchListener(this);
             this.elements.add(index, element);
             this.attachChild(this.elements.get(index));
