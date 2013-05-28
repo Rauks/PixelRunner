@@ -87,17 +87,12 @@ public class PageElement extends Sprite{
         }
     }
     
-    @Override
-    public boolean detachSelf(){
+    public void disposeElement(){
         this.picto.detachSelf();
-        this.lock.detachSelf();
-        return super.detachSelf();
-    }
-    
-    @Override
-    public void dispose(){
         this.picto.dispose();
+        this.lock.detachSelf();
         this.lock.dispose();
-        super.dispose();
+        this.detachSelf();
+        this.dispose();
     }
 }

@@ -182,8 +182,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
         this.right.detachSelf();
         this.right.dispose();
         for(PageElement element : this.elements){
-            element.detachSelf();
-            element.dispose();
+            element.disposeElement();
         }
         this.elements.clear();
         this.detachSelf();
