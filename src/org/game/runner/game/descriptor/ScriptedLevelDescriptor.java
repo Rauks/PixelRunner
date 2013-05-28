@@ -60,9 +60,6 @@ public class ScriptedLevelDescriptor extends LevelDescriptor{
         }
         this.spawnTime = levelHandler.getSpawnTime();
         this.script = levelHandler.getScript();
-        this.script.add(new SmartList<Element>());
-        this.script.add(new SmartList<Element>());
-        this.script.add(new SmartList<Element>());
         
         Debug.d(this.script.toString());
     }

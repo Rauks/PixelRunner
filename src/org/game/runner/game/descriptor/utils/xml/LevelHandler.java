@@ -55,25 +55,33 @@ public class LevelHandler extends TagHandler{
     @Override
     public void handleStartTag() throws SAXException {
         super.handleStartTag();
-        this.scriptLine = new SmartList<Element>();
+        //this.spawnTime = Float.parseFloat()this.getStringAttribute(TAG_ROOT_SPAWNTIME);
     }
 
     @Override
     public void handleEndTag() throws SAXException {
         super.handleEndTag();
-        this.script.add(this.scriptLine);
-        this.scriptLine = null;
     }
 
     private TagHandler getScriptLineHandler() {
         TagHandler elementHandler = new TagHandler(TAG_SCRIPTLINE) {
             @Override
             public void handleStartTag() throws SAXException {
+                super.handleStartTag();
+                LevelHandler.this.scriptLine = new SmartList<Element>();
+                
                 this.addChildTagHandler(LevelHandler.this.getElementHandler());
             }
-        };
-        return elementHandler;
-    }
+
+            @Override
+            public void handleEndTag() throws SAXException {
+                super.handleEndTag();
+                LevelHandler.this.script.add(LevelHandler.this.scriptLine);
+                LevelHandler.this.scriptLine = null;
+            }
+                };
+                return elementHandler;
+            }
     
     private TagHandler getElementHandler() {
         TagHandler elementHandler = new TagHandler(TAG_ELEMENT) {
