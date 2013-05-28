@@ -56,8 +56,10 @@ public enum BackgroundPack{
                 return BackgroundPack.CITY;
             case 4:
                 return BackgroundPack.FOREST;
-            default:
             case 5:
+                return BackgroundPack.HILL;
+            default:
+            case 6:
                 return BackgroundPack.SWEETS;
         }
     }
