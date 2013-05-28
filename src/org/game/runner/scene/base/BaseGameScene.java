@@ -69,6 +69,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     
     private boolean isPaused = false;
     private boolean isStarted = false;
+    private boolean isWin = false;
     
     //HUD
     protected HUD hud;
@@ -285,6 +286,8 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                         public void onTimePassed(TimerHandler pTimerHandler) {
                             BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
                             
+                            BaseGameScene.this.isWin = true;
+                            
                             Sprite player = BaseGameScene.this.player;
                             final PhysicsConnector physicsConnector = BaseGameScene.this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(player);
                             physicsConnector.getBody().applyForce(135, 0, 0, 0);
@@ -453,9 +456,12 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     }
     @Override
     public void onPause() {
-        this.pause();
-        //this.onBackKeyPressed();
-        //this.audioManager.pause();
+        if(!this.isWin){
+            this.pause();
+        }
+        else{
+            this.audioManager.pause();
+        }
     }
     public void pause(){
         this.isPaused = true;
@@ -514,7 +520,9 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     }
     @Override
     public void onResume() {
-        //this.audioManager.resume();
+        if(this.isWin){
+            this.audioManager.resume();
+        }
     }
     @Override
     protected void onManagedUpdate(float pSecondsElapsed) {
@@ -605,6 +613,9 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         if (pSceneTouchEvent.isActionDown()){
             if(this.isPaused){
                 this.resume();
+            }
+            else if(this.isWin){
+                this.onBackKeyPressed();
             }
             else{
                 if(pSceneTouchEvent.getY() >= 240){
