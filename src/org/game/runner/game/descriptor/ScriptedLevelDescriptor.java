@@ -5,20 +5,11 @@
 package org.game.runner.game.descriptor;
 
 import android.content.Context;
-import org.andengine.util.debug.Debug;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.parsers.FactoryConfigurationError;
-import javax.xml.parsers.ParserConfigurationException;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.FileUtils;
 import org.andengine.util.adt.list.SmartList;
-import org.andengine.util.level.simple.SimpleLevelLoader;
-import org.game.runner.game.descriptor.utils.BackgroundPack;
 import org.game.runner.game.descriptor.utils.World;
 import org.game.runner.game.descriptor.utils.xml.LevelHandler;
 import org.game.runner.game.descriptor.utils.xml.LevelHandler.Element;
@@ -32,7 +23,6 @@ import org.game.runner.game.element.level.Platform;
 import org.game.runner.game.element.level.Rocket;
 import org.game.runner.game.element.level.Trap;
 import org.game.runner.game.element.level.Wall;
-import org.xml.sax.SAXException;
 
 /**
  *

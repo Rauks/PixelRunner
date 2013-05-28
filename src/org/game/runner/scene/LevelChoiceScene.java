@@ -4,17 +4,13 @@
  */
 package org.game.runner.scene;
 
-import android.content.SharedPreferences;
 import org.game.runner.GameActivity;
 import org.game.runner.scene.base.BaseScrollMenuScene;
 import org.game.runner.scene.base.element.Page;
 import org.game.runner.scene.base.element.PageElement;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
-import org.andengine.util.debug.Debug;
 import org.game.runner.R;
-import org.game.runner.game.descriptor.ArcadeLevelDescriptor;
-import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.game.descriptor.ScriptedLevelDescriptor;
 import org.game.runner.game.descriptor.utils.World;
 import org.game.runner.manager.AudioManager;

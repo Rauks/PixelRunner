@@ -4,11 +4,8 @@
  */
 package org.game.runner.scene;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.manager.SceneManager.SceneType;
-import org.game.runner.manager.db.ArcadeScoreDatabase;
 import org.game.runner.manager.db.ProgressDatabase;
 import org.game.runner.scene.base.BaseGameScene;
 
