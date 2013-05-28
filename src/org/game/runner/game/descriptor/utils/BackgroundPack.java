@@ -28,4 +28,33 @@ public enum BackgroundPack{
     public Layer[] getLayers() {
         return backgrounds;
     }
+    
+    public static BackgroundPack getBackgroundPack(int worldId, int levelId){
+        switch(worldId){
+            case 0:
+                switch(levelId){
+                    case 0:
+                        return BackgroundPack.TRAINING_JUMP;
+                    case 1:
+                        return BackgroundPack.TRAINING_ROLL;
+                    case 2:
+                        return BackgroundPack.TRAINING_DOUBLEJUMP;
+                    default:
+                    case 3:
+                        return BackgroundPack.TRAINING_PLATFORMS;
+                }
+            case 1:
+                return BackgroundPack.MOUNTAIN;
+            case 2:
+                return BackgroundPack.DESERT;
+            case 3:
+                return BackgroundPack.CITY;
+            case 4:
+                return BackgroundPack.FOREST;
+            default:
+            case 5:
+                //return BackgroundPack.SWEETS;
+                return null;
+        }
+    }
 }

@@ -12,6 +12,10 @@ import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 import org.andengine.util.debug.Debug;
 import org.game.runner.R;
+import org.game.runner.game.descriptor.ArcadeLevelDescriptor;
+import org.game.runner.game.descriptor.LevelDescriptor;
+import org.game.runner.game.descriptor.ScriptedLevelDescriptor;
+import org.game.runner.manager.AudioManager;
 import org.game.runner.scene.base.element.PageTutorial;
 
 /**
@@ -93,6 +97,9 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
     @Override
     public void onElementAction(PageElement element) {
         this.activity.vibrate(30);
+        AudioManager.getInstance().stop();
         Debug.d("Element selected : " + element.getId() + " @ page " + this.getCurrentPage().getWorldId());
+        SceneManager.getInstance().loadGameLevelScene(SceneType.SCENE_GAME_LEVEL, new ScriptedLevelDescriptor(this.getCurrentPage().getWorldId(), element.getId(), this.activity));
+        
     }
 }

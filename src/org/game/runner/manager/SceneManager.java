@@ -12,10 +12,11 @@ import org.andengine.util.debug.Debug;
 import org.game.runner.GameActivity;
 import org.game.runner.scene.base.BaseScene;
 import org.game.runner.game.descriptor.LevelDescriptor;
-import org.game.runner.scene.ArcadeGameLevelScene;
+import org.game.runner.scene.ArcadeGameScene;
 import org.game.runner.scene.CreditScene;
-import org.game.runner.scene.GameLevelScene;
+import org.game.runner.scene.base.BaseGameScene;
 import org.game.runner.scene.LevelChoiceScene;
+import org.game.runner.scene.LevelGameScene;
 import org.game.runner.scene.LoadingScene;
 import org.game.runner.scene.LoadingScene.LoadingListener;
 import org.game.runner.scene.MainMenuScene;
@@ -33,6 +34,7 @@ public class SceneManager {
         SCENE_MENU,
         SCENE_LEVEL_CHOICE,
         SCENE_GAME_ARCADE,
+        SCENE_GAME_LEVEL,
         SCENE_LOADING,
         SCENE_CREDITS}
     
@@ -67,24 +69,24 @@ public class SceneManager {
     public void loadGameLevelScene(final SceneType type, final LevelDescriptor level){
         this.setScene(this.loadingScene);
         ResourcesManager.getInstance().unloadMenuResources();
-        this.disposeMainMenuScene();
+        this.disposeMenuBeforeGameScene(type);
         System.gc();
         this.engine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
                 SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadGameResources(level);
-                SceneManager.this.createGameLevelScene(type, level);
+                SceneManager.this.createGameScene(type, level);
                 SceneManager.this.loadingScene.setLoadingListener(new LoadingListener(){
                     @Override
                     public void onPause() {
-                        if(SceneManager.getInstance().getCurrentScene() instanceof GameLevelScene){
-                            ((GameLevelScene)SceneManager.getInstance().getCurrentScene()).pause();
+                        if(SceneManager.getInstance().getCurrentScene() instanceof BaseGameScene){
+                            ((BaseGameScene)SceneManager.getInstance().getCurrentScene()).pause();
                         }
                     }
                     @Override
                     public void onResume() {
-                        if(SceneManager.getInstance().getCurrentScene() instanceof GameLevelScene){
+                        if(SceneManager.getInstance().getCurrentScene() instanceof BaseGameScene){
                         }
                     }
                 });
@@ -92,8 +94,8 @@ public class SceneManager {
                     @Override
                     public void onTimePassed(final TimerHandler pTimerHandler){
                         SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
-                        if(SceneManager.getInstance().getCurrentScene() instanceof GameLevelScene){
-                            ((GameLevelScene)SceneManager.getInstance().getCurrentScene()).start();
+                        if(SceneManager.getInstance().getCurrentScene() instanceof BaseGameScene){
+                            ((BaseGameScene)SceneManager.getInstance().getCurrentScene()).start();
                         }
                         SceneManager.this.loadingScene.removeLoadingListener();
                     }
@@ -105,7 +107,7 @@ public class SceneManager {
     public void unloadGameLevelScene(){
         this.setScene(this.loadingScene);
         ResourcesManager.getInstance().unloadGameResources();
-        this.disposeGameLevelScene();
+        this.disposeGameScene();
         System.gc();
         this.engine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
             @Override
@@ -118,10 +120,25 @@ public class SceneManager {
         }));
     }
     
-    private void createGameLevelScene(SceneType type, LevelDescriptor level) {
+    private void disposeMenuBeforeGameScene(final SceneType type){
         switch(type){
             case SCENE_GAME_ARCADE:
-                this.gameLevelScene = new ArcadeGameLevelScene(level);
+                this.disposeMainMenuScene();
+                break;
+            case SCENE_GAME_LEVEL:
+                this.disposeLevelChoiceScene();
+                break;
+            default:
+                Debug.e("PixelRunner", "Not a gaming scene flag in scene manager loading.");
+        }        
+    }
+    private void createGameScene(final SceneType type, final LevelDescriptor level) {
+        switch(type){
+            case SCENE_GAME_ARCADE:
+                this.gameLevelScene = new ArcadeGameScene(level);
+                break;
+            case SCENE_GAME_LEVEL:
+                this.gameLevelScene = new LevelGameScene(level);
                 break;
             default:
                 Debug.e("PixelRunner", "Not a gaming scene flag in scene manager loading.");
@@ -130,7 +147,7 @@ public class SceneManager {
         setScene(this.gameLevelScene);
     }
     
-    private void disposeGameLevelScene(){
+    private void disposeGameScene(){
         this.activity.runOnUpdateThread(new Runnable() {
             @Override
             public void run() {

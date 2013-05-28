@@ -4,8 +4,24 @@
  */
 package org.game.runner.game.descriptor;
 
+import android.content.Context;
+import org.andengine.util.debug.Debug;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.FactoryConfigurationError;
+import javax.xml.parsers.ParserConfigurationException;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.FileUtils;
 import org.andengine.util.adt.list.SmartList;
+import org.andengine.util.level.simple.SimpleLevelLoader;
+import org.game.runner.game.descriptor.utils.BackgroundPack;
+import org.game.runner.game.descriptor.utils.xml.LevelHandler;
+import org.game.runner.game.descriptor.utils.xml.LevelHandler.Element;
+import org.game.runner.game.descriptor.utils.xml.MinimizeXMLParser;
 import org.game.runner.game.element.level.BonusJump;
 import org.game.runner.game.element.level.BonusLife;
 import org.game.runner.game.element.level.BonusSlow;
@@ -15,29 +31,40 @@ import org.game.runner.game.element.level.Platform;
 import org.game.runner.game.element.level.Rocket;
 import org.game.runner.game.element.level.Trap;
 import org.game.runner.game.element.level.Wall;
+import org.xml.sax.SAXException;
 
 /**
  *
  * @author Karl
  */
 public class ScriptedLevelDescriptor extends LevelDescriptor{
-    private class Element{
-        public int id;
-        public int layer;
-
-        public Element(int id, int layer) {
-            this.id = id;
-            this.layer = layer;
-        }
-    }
+    private final int worldId;
+    private final int levelId;
+    private final float spawnTime;
     
     private SmartList<SmartList<Element>> script;
     private Iterator<SmartList<Element>> scriptIterator;
     
-    public ScriptedLevelDescriptor(int worldId, int levelId){
-        super(null);
-        this.script = new SmartList<SmartList<Element>>();
-        //Script building
+    public ScriptedLevelDescriptor(int worldId, int levelId, final Context pContext){
+        super(BackgroundPack.getBackgroundPack(worldId, levelId));
+        this.worldId = worldId;
+        this.levelId = levelId;
+        
+        LevelHandler levelHandler = new LevelHandler();
+        try {
+            MinimizeXMLParser parser = new MinimizeXMLParser();
+            parser.setElementHandler(levelHandler);
+            parser.parse(new InputStreamReader(pContext.getAssets().open("xml/game/" + this.worldId + "-" + this.levelId + ".xml")));
+        } catch (Exception ex) {
+            Logger.getLogger(ScriptedLevelDescriptor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.spawnTime = levelHandler.getSpawnTime();
+        this.script = levelHandler.getScript();
+        this.script.add(new SmartList<Element>());
+        this.script.add(new SmartList<Element>());
+        this.script.add(new SmartList<Element>());
+        
+        Debug.d(this.script.toString());
     }
     
     private LevelElement build(int id, int layer){
@@ -71,11 +98,14 @@ public class ScriptedLevelDescriptor extends LevelDescriptor{
     
     @Override
     public void init() {
+        Debug.d("Init");
+        Debug.d(this.script.toString());
         this.scriptIterator = this.script.iterator();
     }
 
     @Override
     public LevelElement[] getNext() {
+        Debug.d("Get next");
         return this.buildArray(this.scriptIterator.next());
     }
 
@@ -86,17 +116,18 @@ public class ScriptedLevelDescriptor extends LevelDescriptor{
 
     @Override
     public String getMusic() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.worldId + "-" + this.levelId + ".xm";
     }
 
     @Override
     public float getSpawnTime() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Debug.d("Spawntime : " + this.spawnTime);
+        return this.spawnTime;
     }
 
     @Override
     public float getSpawnSpeed() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return 500;
     }
     
 }

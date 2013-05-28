@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.game.runner.scene;
+package org.game.runner.scene.base;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -54,7 +54,7 @@ import org.game.runner.utils.ease.EaseBroadcast;
  *
  * @author Karl
  */
-public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchListener{
+public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchListener{
     private final float RIGHT_SPAWN = 900;
     private final float PLAYER_X = 250;
     private final float GROUND_LEVEL = 50;
@@ -76,6 +76,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     private Text chronoStart;
     //HUD - Pause
     private Text pause;
+    //HUD - Win
+    private Text win;
     //Level
     protected LevelDescriptor level;
     private TimerHandler levelReaderHandler;
@@ -94,7 +96,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     //Elements memory
     private ConcurrentLinkedQueue<Shape> levelElements = new ConcurrentLinkedQueue<Shape>();
     
-    public GameLevelScene(LevelDescriptor level){
+    public BaseGameScene(LevelDescriptor level){
         this.level = level;
         
         this.createBackground();
@@ -122,29 +124,29 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 //Player contacts
                 if (xA.getBody().getUserData().equals("player") && xB.getBody().getUserData().equals("ground")
                  || xB.getBody().getUserData().equals("player") && xA.getBody().getUserData().equals("ground")){
-                    GameLevelScene.this.player.resetMovements();
+                    BaseGameScene.this.player.resetMovements();
                 }
                 if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
                     if(element.isPlatform()){
-                        float playerY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - GameLevelScene.this.player.getHeight() / 2;
+                        float playerY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - BaseGameScene.this.player.getHeight() / 2;
                         float elementY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
                         
                         if (playerY >= elementY && xA.getBody().getLinearVelocity().y < 0.5) {
-                            element.doPlayerAction(GameLevelScene.this.player);
-                            GameLevelScene.this.player.resetMovements();
+                            element.doPlayerAction(BaseGameScene.this.player);
+                            BaseGameScene.this.player.resetMovements();
                         }
                     }
                 }
                 if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
                     if(element.isPlatform()){
-                        float playerY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - GameLevelScene.this.player.getHeight() / 2;
+                        float playerY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - BaseGameScene.this.player.getHeight() / 2;
                         float elementY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
                         
                         if (playerY >= elementY && xB.getBody().getLinearVelocity().y < 0.5) {
-                            element.doPlayerAction(GameLevelScene.this.player);
-                            GameLevelScene.this.player.resetMovements();
+                            element.doPlayerAction(BaseGameScene.this.player);
+                            BaseGameScene.this.player.resetMovements();
                         }
                     }
                 }
@@ -160,7 +162,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                 if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
                     if(element.isPlatform()){
-                        float playerY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - GameLevelScene.this.player.getHeight() / 2;
+                        float playerY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - BaseGameScene.this.player.getHeight() / 2;
                         float elementY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
                         
                         if (playerY < elementY) {
@@ -169,14 +171,14 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     }
                     else{
                         contact.setEnabled(false);
-                        element.doPlayerAction(GameLevelScene.this.player);
+                        element.doPlayerAction(BaseGameScene.this.player);
                     }
                     
                 }
                 if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
                     LevelElement element = (LevelElement)xA.getBody().getUserData();
                     if(element.isPlatform()){
-                        float playerY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - GameLevelScene.this.player.getHeight() / 2;
+                        float playerY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - BaseGameScene.this.player.getHeight() / 2;
                         float elementY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
 
                         if (playerY < elementY) {
@@ -185,7 +187,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
                     }
                     else{
                         contact.setEnabled(false);
-                        element.doPlayerAction(GameLevelScene.this.player);
+                        element.doPlayerAction(BaseGameScene.this.player);
                     }
                 }
             }
@@ -206,7 +208,7 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5){
             @Override
             public void onUpdate(final float pSecondsElapsed) {
-		super.onUpdate(pSecondsElapsed * GameLevelScene.this.parallaxFactor);
+		super.onUpdate(pSecondsElapsed * BaseGameScene.this.parallaxFactor);
             }
         };
         this.setBackground(this.autoParallaxBackground);
@@ -223,28 +225,28 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.player = new Player(PLAYER_X, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld) {
             @Override
             public void onJump() {
-                GameLevelScene.this.activity.vibrate(30);
+                BaseGameScene.this.activity.vibrate(30);
             }
             @Override
             public void onRoll() {
-                GameLevelScene.this.activity.vibrate(30);
+                BaseGameScene.this.activity.vibrate(30);
             }
             @Override
             public void onRollBackJump() {
                 this.reset();
-                GameLevelScene.this.restart();
-                GameLevelScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
+                BaseGameScene.this.restart();
+                BaseGameScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
             }
             @Override
             protected void onBonus() {
-                GameLevelScene.this.activity.vibrate(30);
+                BaseGameScene.this.activity.vibrate(30);
             }
             
             @Override
             protected void onUpdateColor(){
                 super.onUpdateColor();
-                if(GameLevelScene.this.playerTrail != null){
-                    GameLevelScene.this.playerTrail.setColor(this.getColor());
+                if(BaseGameScene.this.playerTrail != null){
+                    BaseGameScene.this.playerTrail.setColor(this.getColor());
                 }
             }
         };
@@ -273,26 +275,36 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.levelReaderAction = new ITimerCallback(){                      
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
-                if(!GameLevelScene.this.level.hasNext()){
-                    GameLevelScene.this.unregisterUpdateHandler(GameLevelScene.this.levelReaderHandler);
-                    //End of level
+                if(!BaseGameScene.this.level.hasNext()){
+                    BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
+                    BaseGameScene.this.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback(){
+                        @Override
+                        public void onTimePassed(TimerHandler pTimerHandler) {
+                            BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
+                            BaseGameScene.this.win.setVisible(true);
+                            AudioManager.getInstance().stop();
+                            AudioManager.getInstance().play("mfx/game/", "win.xm");
+                            BaseGameScene.this.playerTrail.setColorMode(Trail.ColorMode.MULTICOLOR);
+                        }
+                    }));
                 }
                 else{
+                    Debug.d("Spawn");
                     //Level elements spawn
                     final float baseY = GROUND_LEVEL + GROUND_THICKNESS/2;
-                    for(final LevelElement lvlElement : GameLevelScene.this.level.getNext()){
-                    lvlElement.build(RIGHT_SPAWN, baseY, GameLevelScene.this.vbom, GameLevelScene.this.player, GameLevelScene.this.physicWorld);
-                        GameLevelScene.this.attachChild(lvlElement.getBuildedShape());
-                        lvlElement.getBuildedShape().setZIndex(GameLevelScene.this.player.getZIndex() - 2);
-                        GameLevelScene.this.sortChildren();
-                        GameLevelScene.this.levelElements.add(lvlElement.getBuildedShape());
+                    for(final LevelElement lvlElement : BaseGameScene.this.level.getNext()){
+                    lvlElement.build(RIGHT_SPAWN, baseY, BaseGameScene.this.vbom, BaseGameScene.this.player, BaseGameScene.this.physicWorld);
+                        BaseGameScene.this.attachChild(lvlElement.getBuildedShape());
+                        lvlElement.getBuildedShape().setZIndex(BaseGameScene.this.player.getZIndex() - 2);
+                        BaseGameScene.this.sortChildren();
+                        BaseGameScene.this.levelElements.add(lvlElement.getBuildedShape());
                         lvlElement.getBuildedBody().setUserData(lvlElement);
                         lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-15, 0));
-                        GameLevelScene.this.registerUpdateHandler(new TimerHandler(6f, new ITimerCallback(){
+                        BaseGameScene.this.registerUpdateHandler(new TimerHandler(6f, new ITimerCallback(){
                             @Override
                             public void onTimePassed(final TimerHandler pTimerHandler){
-                                GameLevelScene.this.unregisterUpdateHandler(pTimerHandler);
-                                GameLevelScene.this.disposeLevelElement(lvlElement.getBuildedShape());
+                                BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
+                                BaseGameScene.this.disposeLevelElement(lvlElement.getBuildedShape());
                             }
                         }));
                     }
@@ -322,6 +334,11 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.pause = new Text(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2, resourcesManager.fontPixel_200, "PAUSE", vbom);
         this.pause.setVisible(false);
         this.hud.attachChild(this.pause);
+        
+        //win message
+        this.win = new Text(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2, resourcesManager.fontPixel_200, "SUCCESS !", vbom);
+        this.win.setVisible(false);
+        this.hud.attachChild(this.win);
     }
     
     private void restart(){
@@ -336,17 +353,17 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.engine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
-                GameLevelScene.this.engine.unregisterUpdateHandler(pTimerHandler);
-                GameLevelScene.this.parallaxFactor = 1f;
-                GameLevelScene.this.onRestartEnd();
-                GameLevelScene.this.start();
+                BaseGameScene.this.engine.unregisterUpdateHandler(pTimerHandler);
+                BaseGameScene.this.parallaxFactor = 1f;
+                BaseGameScene.this.onRestartEnd();
+                BaseGameScene.this.start();
             }
         }));
     }
     protected abstract void onRestartBegin();
     protected abstract void onRestartEnd();
     public void start(){
-        if(!GameLevelScene.this.isPaused){
+        if(!BaseGameScene.this.isPaused){
             this.level.init();
             this.onStartBegin();
 
@@ -357,28 +374,28 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
 
                 @Override
                 public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-                     GameLevelScene.this.broadcast(GameLevelScene.this.chrono2, new IEntityModifierListener() {
+                     BaseGameScene.this.broadcast(BaseGameScene.this.chrono2, new IEntityModifierListener() {
                         @Override
                         public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                         }
 
                         @Override
                         public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-                            GameLevelScene.this.broadcast(GameLevelScene.this.chrono1, new IEntityModifierListener() {
+                            BaseGameScene.this.broadcast(BaseGameScene.this.chrono1, new IEntityModifierListener() {
                                 @Override
                                 public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                                 }
 
                                 @Override
                                 public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-                                    GameLevelScene.this.broadcast(GameLevelScene.this.chronoStart, new IEntityModifierListener() {
+                                    BaseGameScene.this.broadcast(BaseGameScene.this.chronoStart, new IEntityModifierListener() {
                                         @Override
                                         public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-                                            AudioManager.getInstance().play("mfx/game/", GameLevelScene.this.level.getMusic());
-                                            GameLevelScene.this.playerTrail.show();
-                                            GameLevelScene.this.registerUpdateHandler(GameLevelScene.this.levelReaderHandler = new TimerHandler(GameLevelScene.this.level.getSpawnTime(), true, GameLevelScene.this.levelReaderAction));
-                                            GameLevelScene.this.onStartEnd();
-                                            GameLevelScene.this.isStarted = true;
+                                            AudioManager.getInstance().play("mfx/game/", BaseGameScene.this.level.getMusic());
+                                            BaseGameScene.this.playerTrail.show();
+                                            BaseGameScene.this.registerUpdateHandler(BaseGameScene.this.levelReaderHandler = new TimerHandler(BaseGameScene.this.level.getSpawnTime(), true, BaseGameScene.this.levelReaderAction));
+                                            BaseGameScene.this.onStartEnd();
+                                            BaseGameScene.this.isStarted = true;
                                         }
 
                                         @Override
@@ -443,27 +460,27 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             this.broadcast(this.chrono3, new IEntityModifierListener() {
                 @Override
                 public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-                    GameLevelScene.this.pause.setVisible(false);
+                    BaseGameScene.this.pause.setVisible(false);
                 }
 
                 @Override
                 public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-                     GameLevelScene.this.broadcast(GameLevelScene.this.chrono2, new IEntityModifierListener() {
+                     BaseGameScene.this.broadcast(BaseGameScene.this.chrono2, new IEntityModifierListener() {
                         @Override
                         public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                         }
 
                         @Override
                         public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-                            GameLevelScene.this.broadcast(GameLevelScene.this.chrono1, new IEntityModifierListener() {
+                            BaseGameScene.this.broadcast(BaseGameScene.this.chrono1, new IEntityModifierListener() {
                                 @Override
                                 public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                                 }
 
                                 @Override
                                 public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-                                    GameLevelScene.this.setIgnoreUpdate(false);
-                                    GameLevelScene.this.audioManager.resume();
+                                    BaseGameScene.this.setIgnoreUpdate(false);
+                                    BaseGameScene.this.audioManager.resume();
                                 }
                             });
                         }
@@ -502,6 +519,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
         this.chrono1.dispose();
         this.pause.detachSelf();
         this.pause.dispose();
+        this.win.detachSelf();
+        this.win.dispose();
         
         this.chronoStart.detachSelf();
         this.chronoStart.dispose();
@@ -521,8 +540,8 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
     private void destroyPhysicsWorld(){
         this.engine.runOnUpdateThread(new Runnable(){
             public void run(){
-                PhysicsWorld world = GameLevelScene.this.physicWorld;
-                Iterator<Body> localIterator = GameLevelScene.this.physicWorld.getBodies();
+                PhysicsWorld world = BaseGameScene.this.physicWorld;
+                Iterator<Body> localIterator = BaseGameScene.this.physicWorld.getBodies();
                 while (true){
                     if (!localIterator.hasNext()){
                         world.clearForces();
@@ -551,16 +570,16 @@ public abstract class GameLevelScene extends BaseScene implements IOnSceneTouchL
             public void run() {
                 if (physicsConnector != null){
                      Body body = physicsConnector.getBody();
-                     GameLevelScene.this.physicWorld.unregisterPhysicsConnector(physicsConnector);
+                     BaseGameScene.this.physicWorld.unregisterPhysicsConnector(physicsConnector);
                      body.setActive(false);
-                     GameLevelScene.this.physicWorld.destroyBody(body);
+                     BaseGameScene.this.physicWorld.destroyBody(body);
                 }
                 element.detachSelf();
             }
         });
     }
     private void disposeLevelElements(){
-        for(Shape element : GameLevelScene.this.levelElements){
+        for(Shape element : BaseGameScene.this.levelElements){
             this.disposeLevelElement(element);
         }
     }

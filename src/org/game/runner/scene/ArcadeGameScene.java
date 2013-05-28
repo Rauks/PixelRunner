@@ -4,6 +4,7 @@
  */
 package org.game.runner.scene;
 
+import org.game.runner.scene.base.BaseGameScene;
 import android.content.Context;
 import android.content.SharedPreferences;
 import org.andengine.entity.text.Text;
@@ -18,7 +19,7 @@ import org.game.runner.manager.SceneManager.SceneType;
  *
  * @author Karl
  */
-public class ArcadeGameLevelScene extends GameLevelScene{
+public class ArcadeGameScene extends BaseGameScene{
     private static final String HIGHSCORE_DB_NAME = "highscore";
     private static final String HIGHSCORE_LABEL = "score";
     
@@ -32,7 +33,7 @@ public class ArcadeGameLevelScene extends GameLevelScene{
     private Text highScoreText;
     private boolean isHigtscoring = false;
     
-    public ArcadeGameLevelScene(LevelDescriptor level){
+    public ArcadeGameScene(LevelDescriptor level){
         super(level);
         
         AudioManager.getInstance().prepare("mfx/game/", "arcade_win.xm");
