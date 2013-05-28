@@ -50,7 +50,7 @@ import org.game.runner.game.Player;
 import org.game.runner.game.Trail;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager;
-import org.game.runner.utils.ease.EaseBroadcast;
+import org.game.runner.scene.base.utils.ease.EaseBroadcast;
 
 /**
  *
