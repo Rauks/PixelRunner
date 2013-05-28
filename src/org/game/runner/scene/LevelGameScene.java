@@ -4,8 +4,12 @@
  */
 package org.game.runner.scene;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.manager.SceneManager.SceneType;
+import org.game.runner.manager.db.ArcadeScoreDatabase;
+import org.game.runner.manager.db.ProgressDatabase;
 import org.game.runner.scene.base.BaseGameScene;
 
 /**
@@ -13,8 +17,12 @@ import org.game.runner.scene.base.BaseGameScene;
  * @author Karl
  */
 public class LevelGameScene extends BaseGameScene{
+    private ProgressDatabase progressDb;
+    
     public LevelGameScene(LevelDescriptor level){
         super(level);
+        
+        this.progressDb = new ProgressDatabase(this.activity);
     }
     
     @Override
@@ -39,7 +47,9 @@ public class LevelGameScene extends BaseGameScene{
 
     @Override
     protected void onWin() {
-        
+        if(this.progressDb.get(this.level.getWorldId()) == this.level.getLevelId()){
+            this.progressDb.set(this.level.getWorldId(), this.level.getLevelId() + 1);
+        }
     }
 
     @Override

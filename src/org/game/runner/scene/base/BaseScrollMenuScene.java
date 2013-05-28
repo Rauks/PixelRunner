@@ -227,7 +227,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         }
     }
     
-    private void moveToPage(final int pageNumber) {
+    public void moveToPage(final int pageNumber) {
         if (pageNumber >= 0 && pageNumber < this.mPages.size()) {
             this.mPrevPage = this.mCurrentPage;
             this.mCurrentPage = pageNumber;
@@ -328,8 +328,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     public void disposeScene() {
         super.disposeScene();
         for(Page page : this.mPages){
-            page.detachSelf();
-            page.dispose();
+            page.disposePage();
         }
     }
     

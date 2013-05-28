@@ -27,10 +27,6 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
         PLATFORM
     }
     
-    public ArcadeLevelDescriptor(){
-        super(BackgroundPack.getRamdomBackgroundPack());
-    }
-    
     private Random ranGen = new Random();
     private PrevState prevState;
     private int platLayer;

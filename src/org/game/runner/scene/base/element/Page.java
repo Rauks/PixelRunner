@@ -45,7 +45,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
         this.setCullingEnabled(true);
         this.elements = new SmartList<PageElement>(MAX_ELEMENTS);
         this.worldId = worldId;
-        this.progress = 0;
+        this.progress = 1;
         this.left = new Sprite(0, this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlLeft, this.getVertexBufferObjectManager()){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
@@ -163,7 +163,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     
     private void refreshLocks(){
         for(int i = 0; i < this.elements.size(); i++){
-            if(i <= this.progress){
+            if(i + 1 <= this.progress){
                 this.elements.get(i).setLocked(false);
             }
             else{
