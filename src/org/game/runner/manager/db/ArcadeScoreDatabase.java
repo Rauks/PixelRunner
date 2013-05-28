@@ -11,8 +11,6 @@ import android.content.Context;
  * @author Karl
  */
 public class ArcadeScoreDatabase extends Database{
-    
-    
     protected static final String HIGHSCORE_DB_NAME = "highscore";
     protected static final String HIGHSCORE_LABEL = "score";
     
