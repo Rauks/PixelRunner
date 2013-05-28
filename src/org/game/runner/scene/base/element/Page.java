@@ -13,6 +13,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.debug.Debug;
+import org.game.runner.game.descriptor.utils.World;
 import org.game.runner.manager.ResourcesManager;
 
 /**
@@ -35,16 +36,16 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     private IPageNavigationTouchListener navigationListener;
     private IPageElementTouchListener elementListener;
     
-    private int worldId;
+    private World world;
     private int progress;
     private SmartList<PageElement> elements;
     
-    public Page(final float pWidth, final float pHeight, int worldId, final int nbElements, final VertexBufferObjectManager pVertexBufferObjectManager){
+    public Page(final float pWidth, final float pHeight, World world, final int nbElements, final VertexBufferObjectManager pVertexBufferObjectManager){
         super(0, 0, pWidth, pHeight, pVertexBufferObjectManager);
         this.setColor(Color.TRANSPARENT);
         this.setCullingEnabled(true);
         this.elements = new SmartList<PageElement>(MAX_ELEMENTS);
-        this.worldId = worldId;
+        this.world = world;
         this.progress = 1;
         this.left = new Sprite(0, this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlLeft, this.getVertexBufferObjectManager()){
             @Override
@@ -76,8 +77,8 @@ public class Page extends Rectangle implements IPageElementTouchListener{
         this.refreshLocks();
     }
     
-    public int getWorldId(){
-        return this.worldId;
+    public World getWorld(){
+        return this.world;
     }
     
     public void registerPageNavigationTouchListener(IPageNavigationTouchListener navigationListener){

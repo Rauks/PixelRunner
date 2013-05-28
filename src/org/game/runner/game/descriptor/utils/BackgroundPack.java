@@ -15,7 +15,7 @@ public enum BackgroundPack{
     FOREST(Layer.CLOUDS_2.withSpeed(20), Layer.CLOUDS_1.withSpeed(25), Layer.FOREST_2.withSpeed(30), Layer.FOREST_1.withSpeed(35)), 
     CITY(Layer.CLOUDS_2.withSpeed(20), Layer.CLOUDS_1.withSpeed(25), Layer.CITY_2.withSpeed(30), Layer.CITY_1.withSpeed(35)), 
     DESERT(Layer.CLOUDS_2.withSpeed(20), Layer.CLOUDS_1.withSpeed(25), Layer.DESERT_2.withSpeed(30), Layer.DESERT_1.withSpeed(35)), 
-    HILL(Layer.CLOUDS_2.withSpeed(20), Layer.CLOUDS_1.withSpeed(25), Layer.HILL_2.withSpeed(30), Layer.HILL_1.withSpeed(35)), 
+    HILLS(Layer.CLOUDS_2.withSpeed(20), Layer.CLOUDS_1.withSpeed(25), Layer.HILL_2.withSpeed(30), Layer.HILL_1.withSpeed(35)), 
     SWEETS(Layer.SWEET_4.withSpeed(20), Layer.SWEET_3.withSpeed(25), Layer.SWEET_2.withSpeed(30), Layer.SWEET_1.withSpeed(35)), 
     TRAINING_JUMP(Layer.JUMP_1.withSpeed(25), Layer.JUMP_2.withSpeed(30)), 
     TRAINING_ROLL(Layer.ROLL_1.withSpeed(25), Layer.ROLL_2.withSpeed(30)), 
@@ -34,9 +34,9 @@ public enum BackgroundPack{
         return backgrounds;
     }
     
-    public static BackgroundPack getBackgroundPack(int worldId, int levelId){
-        switch(worldId){
-            case 0:
+    public static BackgroundPack getBackgroundPack(World world, int levelId){
+        switch(world){
+            case TRAINING:
                 switch(levelId){
                     case 1:
                         return BackgroundPack.TRAINING_JUMP;
@@ -48,24 +48,24 @@ public enum BackgroundPack{
                     case 4:
                         return BackgroundPack.TRAINING_PLATFORMS;
                 }
-            case 1:
+            case MOUNTAINS:
                 return BackgroundPack.MOUNTAIN;
-            case 2:
+            case DESERT:
                 return BackgroundPack.DESERT;
-            case 3:
+            case CITY:
                 return BackgroundPack.CITY;
-            case 4:
+            case FOREST:
                 return BackgroundPack.FOREST;
-            case 5:
-                return BackgroundPack.HILL;
+            case HILLS:
+                return BackgroundPack.HILLS;
             default:
-            case 6:
+            case SWEETS:
                 return BackgroundPack.SWEETS;
         }
     }
     
     public static BackgroundPack getRamdomBackgroundPack(){
-        switch(RANDGEN.nextInt(5)){
+        switch(RANDGEN.nextInt(6)){
             case 0:
                 return BackgroundPack.MOUNTAIN;
             case 1:
@@ -74,8 +74,10 @@ public enum BackgroundPack{
                 return BackgroundPack.CITY;
             case 3:
                 return BackgroundPack.FOREST;
-            default:
             case 4:
+                return BackgroundPack.HILLS;
+            default:
+            case 5:
                 return BackgroundPack.SWEETS;
         }
     }

@@ -19,6 +19,7 @@ import org.andengine.util.FileUtils;
 import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.game.runner.game.descriptor.utils.BackgroundPack;
+import org.game.runner.game.descriptor.utils.World;
 import org.game.runner.game.descriptor.utils.xml.LevelHandler;
 import org.game.runner.game.descriptor.utils.xml.LevelHandler.Element;
 import org.game.runner.game.descriptor.utils.xml.MinimizeXMLParser;
@@ -43,14 +44,14 @@ public class ScriptedLevelDescriptor extends LevelDescriptor{
     private SmartList<SmartList<Element>> script;
     private Iterator<SmartList<Element>> scriptIterator;
     
-    public ScriptedLevelDescriptor(int worldId, int levelId, final Context pContext){
-        super(worldId, levelId);
+    public ScriptedLevelDescriptor(World world, int levelId, final Context pContext){
+        super(world, levelId);
         
         LevelHandler levelHandler = new LevelHandler();
         try {
             MinimizeXMLParser parser = new MinimizeXMLParser();
             parser.setElementHandler(levelHandler);
-            parser.parse(new InputStreamReader(pContext.getAssets().open("xml/game/" + this.getWorldId() + "-" + this.getLevelId() + ".xml")));
+            parser.parse(new InputStreamReader(pContext.getAssets().open("xml/game/" + this.getWorld() + "-" + this.getLevelId() + ".xml")));
         } catch (Exception ex) {
             Logger.getLogger(ScriptedLevelDescriptor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -104,7 +105,7 @@ public class ScriptedLevelDescriptor extends LevelDescriptor{
 
     @Override
     public String getMusic() {
-        return this.getWorldId() + "-" + this.getLevelId() + ".xm";
+        return this.getWorld() + "-" + this.getLevelId() + ".xm";
     }
 
     @Override

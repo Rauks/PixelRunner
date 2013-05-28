@@ -16,6 +16,7 @@ import org.game.runner.R;
 import org.game.runner.game.descriptor.ArcadeLevelDescriptor;
 import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.game.descriptor.ScriptedLevelDescriptor;
+import org.game.runner.game.descriptor.utils.World;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.db.InfosDatabase;
 import org.game.runner.manager.db.InfosDatabase.Info;
@@ -44,7 +45,7 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
         super(GameActivity.CAMERA_WIDTH, GameActivity.CAMERA_HEIGHT);
         
         this.progressDb = new ProgressDatabase(this.activity);
-        this.progressDb.set(0, 4);
+        this.progressDb.set(World.TRAINING, 4);
         
         this.registerScrollScenePageListener(new IOnScrollListener() {
             @Override
@@ -63,33 +64,33 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
             }
         });
         
-        this.tutorials = new PageTutorial(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 0, this.vbom);
+        this.tutorials = new PageTutorial(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.TRAINING, this.vbom);
         this.tutorials.setTitle(this.activity.getString(R.string.lvl_tutorials));
-        this.tutorials.setProgress(this.progressDb.get(0));
+        this.tutorials.setProgress(this.progressDb.get(World.TRAINING));
         
-        this.mountains = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 1, 12, this.vbom);
+        this.mountains = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.MOUNTAINS, 12, this.vbom);
         this.mountains.setTitle(this.activity.getString(R.string.lvl_mountains));
-        this.mountains.setProgress(this.progressDb.get(1));
+        this.mountains.setProgress(this.progressDb.get(World.MOUNTAINS));
         
-        this.desert = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 2, 12, this.vbom);
+        this.desert = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.DESERT, 12, this.vbom);
         this.desert.setTitle(this.activity.getString(R.string.lvl_desert));
-        this.desert.setProgress(this.progressDb.get(2));
+        this.desert.setProgress(this.progressDb.get(World.DESERT));
         
-        this.city = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 3, 12, this.vbom);
+        this.city = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.CITY, 12, this.vbom);
         this.city.setTitle(this.activity.getString(R.string.lvl_city));
-        this.city.setProgress(this.progressDb.get(3));
+        this.city.setProgress(this.progressDb.get(World.CITY));
         
-        this.forest = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 4, 12, this.vbom);
+        this.forest = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.FOREST, 12, this.vbom);
         this.forest.setTitle(this.activity.getString(R.string.lvl_forest));
-        this.forest.setProgress(this.progressDb.get(4));
+        this.forest.setProgress(this.progressDb.get(World.FOREST));
         
-        this.hills = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 5, 12, this.vbom);
+        this.hills = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.HILLS, 12, this.vbom);
         this.hills.setTitle(this.activity.getString(R.string.lvl_hills));
-        this.hills.setProgress(this.progressDb.get(5));
+        this.hills.setProgress(this.progressDb.get(World.HILLS));
         
-        this.sweets = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, 6, 12, this.vbom);
+        this.sweets = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.SWEETS, 12, this.vbom);
         this.sweets.setTitle(this.activity.getString(R.string.lvl_sweets));
-        this.sweets.setProgress(this.progressDb.get(6));
+        this.sweets.setProgress(this.progressDb.get(World.SWEETS));
         
         addPages(this.tutorials, this.mountains, this.desert, this.city, this.forest, this.hills, this.sweets);
         
@@ -118,7 +119,7 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
         if(this.getCurrentPage().getProgress() >= element.getId()){
             this.activity.vibrate(30);
             AudioManager.getInstance().stop();
-            SceneManager.getInstance().loadGameLevelScene(SceneType.SCENE_GAME_LEVEL, new ScriptedLevelDescriptor(this.getCurrentPage().getWorldId(), element.getId(), this.activity));
+            SceneManager.getInstance().loadGameLevelScene(SceneType.SCENE_GAME_LEVEL, new ScriptedLevelDescriptor(this.getCurrentPage().getWorld(), element.getId(), this.activity));
         }
         
     }

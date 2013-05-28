@@ -5,6 +5,7 @@
 package org.game.runner.manager.db;
 
 import android.content.Context;
+import org.game.runner.game.descriptor.utils.World;
 
 /**
  *
@@ -18,11 +19,11 @@ public class ProgressDatabase extends Database{
         super(context, PROGRESS_DB_NAME);
     }
     
-    public int get(int worldId){
-        return super.getInt(PROGRESS_LABEL + worldId, 1);
+    public int get(World world){
+        return super.getInt(PROGRESS_LABEL + world, 1);
     }
     
-    public void set(int worldId, int value){
-        super.setInt(PROGRESS_LABEL + worldId, value);
+    public void set(World world, int value){
+        super.setInt(PROGRESS_LABEL + world, value);
     }
 }

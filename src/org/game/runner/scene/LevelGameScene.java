@@ -47,8 +47,8 @@ public class LevelGameScene extends BaseGameScene{
 
     @Override
     protected void onWin() {
-        if(this.progressDb.get(this.level.getWorldId()) == this.level.getLevelId()){
-            this.progressDb.set(this.level.getWorldId(), this.level.getLevelId() + 1);
+        if(this.progressDb.get(this.level.getWorld()) == this.level.getLevelId()){
+            this.progressDb.set(this.level.getWorld(), this.level.getLevelId() + 1);
         }
     }
 

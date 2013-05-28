@@ -5,6 +5,7 @@
 package org.game.runner.scene.base.element;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.game.runner.game.descriptor.utils.World;
 import org.game.runner.manager.ResourcesManager;
 
 /**
@@ -12,8 +13,8 @@ import org.game.runner.manager.ResourcesManager;
  * @author Karl
  */
 public class PageTutorial extends Page{
-    public PageTutorial(final float pWidth, final float pHeight, int worldId, final VertexBufferObjectManager pVertexBufferObjectManager){
-        super(pWidth, pHeight, worldId, 0, pVertexBufferObjectManager);
+    public PageTutorial(final float pWidth, final float pHeight, World world, final VertexBufferObjectManager pVertexBufferObjectManager){
+        super(pWidth, pHeight, world, 0, pVertexBufferObjectManager);
         this.addElement(new PageElement(0, 0, 1, false, ResourcesManager.getInstance().lvlJump, pVertexBufferObjectManager));
         this.addElement(new PageElement(0, 0, 2, false, ResourcesManager.getInstance().lvlRoll, pVertexBufferObjectManager));
         this.addElement(new PageElement(0, 0, 3, false, ResourcesManager.getInstance().lvlDoubleJump, pVertexBufferObjectManager));
