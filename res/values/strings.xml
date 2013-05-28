@@ -19,11 +19,11 @@
     <string name="credits_testers_names">Aurelie Keraval\nCharles Hazard\nGeorges Olivares\nLucas D\'Agui\nNicolas Devenet\nSimon Chevalier</string>
     <string name="credits_thanks_names">ENSISA\nLeonard Daver\nMichel Hassenforder\nNicolas Frutau\nSuzanne Noll\nThibaut Meyer\nValeriane Jean</string>
     
-    <string name="lvl_tutorials">0. Training</string>
-    <string name="lvl_mountains">1. Mountains</string>
-    <string name="lvl_desert">2. Desert</string>
-    <string name="lvl_city">3. City</string>
-    <string name="lvl_forest">4. Forest</string>
-    <string name="lvl_hills">5. Hills</string>
-    <string name="lvl_sweets">6. Sweets</string>
+    <string name="lvl_tutorials">0.Training</string>
+    <string name="lvl_mountains">1.Mountains</string>
+    <string name="lvl_desert">2.Desert</string>
+    <string name="lvl_city">3.City</string>
+    <string name="lvl_forest">4.Forest</string>
+    <string name="lvl_hills">5.Hills</string>
+    <string name="lvl_sweets">6.Sweets</string>
 </resources>
