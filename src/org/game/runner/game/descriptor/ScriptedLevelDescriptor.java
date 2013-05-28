@@ -60,8 +60,6 @@ public class ScriptedLevelDescriptor extends LevelDescriptor{
         }
         this.spawnTime = levelHandler.getSpawnTime();
         this.script = levelHandler.getScript();
-        
-        Debug.d(this.script.toString());
     }
     
     private LevelElement build(int id, int layer){

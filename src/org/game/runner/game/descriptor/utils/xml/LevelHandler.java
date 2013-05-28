@@ -5,7 +5,6 @@
 package org.game.runner.game.descriptor.utils.xml;
 
 import org.andengine.util.adt.list.SmartList;
-import org.game.runner.game.descriptor.ScriptedLevelDescriptor;
 import org.xml.sax.SAXException;
 
 /**
@@ -14,7 +13,7 @@ import org.xml.sax.SAXException;
  */
 public class LevelHandler extends TagHandler{
     private static final String TAG_ROOT = "lvl";
-    private static final String TAG_ROOT_SPAWNTIME = "lvl";
+    private static final String TAG_ROOT_SPAWNTIME = "s";
     private static final String TAG_SCRIPTLINE = "e";
     private static final String TAG_ELEMENT = "o";
     private static final String TAG_ELEMENT_TYPE = "t";
@@ -55,7 +54,7 @@ public class LevelHandler extends TagHandler{
     @Override
     public void handleStartTag() throws SAXException {
         super.handleStartTag();
-        //this.spawnTime = Float.parseFloat()this.getStringAttribute(TAG_ROOT_SPAWNTIME);
+        this.spawnTime = Float.parseFloat(this.getStringAttribute(TAG_ROOT_SPAWNTIME));
     }
 
     @Override

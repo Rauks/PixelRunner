@@ -86,6 +86,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     protected LevelDescriptor level;
     private TimerHandler levelReaderHandler;
     private ITimerCallback levelReaderAction;
+    private TimerHandler levelWinHandler;
     //Background
     private AutoParallaxBackground autoParallaxBackground;
     private List<Sprite> backgroundParallaxLayers = new LinkedList<Sprite>();
@@ -277,37 +278,39 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     protected abstract void onWin();
     private void createLevelSpwaner(){
         //Level elements
+        this.levelWinHandler = new TimerHandler(3f, new ITimerCallback(){
+            @Override
+            public void onTimePassed(TimerHandler pTimerHandler) {
+                BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
+
+                BaseGameScene.this.isWin = true;
+                BaseGameScene.this.onWin();
+
+                Sprite player = BaseGameScene.this.player;
+                final PhysicsConnector physicsConnector = BaseGameScene.this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(player);
+                physicsConnector.getBody().applyForce(135, 0, 0, 0);
+
+                BaseGameScene.this.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback(){
+                    @Override
+                    public void onTimePassed(final TimerHandler pTimerHandler){
+                        BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
+                        physicsConnector.getBody().applyForce(-135, 0, 0, 0);
+                    }
+                }));
+
+                BaseGameScene.this.win.setVisible(true);
+                AudioManager.getInstance().stop();
+                AudioManager.getInstance().play("mfx/game/", "win.xm");
+                BaseGameScene.this.playerTrail.setColorMode(Trail.ColorMode.MULTICOLOR);
+            }
+        });
+
         this.levelReaderAction = new ITimerCallback(){                      
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
                 if(!BaseGameScene.this.level.hasNext()){
                     BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
-                    BaseGameScene.this.registerUpdateHandler(new TimerHandler(3f, new ITimerCallback(){
-                        @Override
-                        public void onTimePassed(TimerHandler pTimerHandler) {
-                            BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
-                            
-                            BaseGameScene.this.isWin = true;
-                            BaseGameScene.this.onWin();
-                            
-                            Sprite player = BaseGameScene.this.player;
-                            final PhysicsConnector physicsConnector = BaseGameScene.this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(player);
-                            physicsConnector.getBody().applyForce(135, 0, 0, 0);
-                            
-                            BaseGameScene.this.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback(){
-                                @Override
-                                public void onTimePassed(final TimerHandler pTimerHandler){
-                                    BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
-                                    physicsConnector.getBody().applyForce(-135, 0, 0, 0);
-                                }
-                            }));
-                            
-                            BaseGameScene.this.win.setVisible(true);
-                            AudioManager.getInstance().stop();
-                            AudioManager.getInstance().play("mfx/game/", "win.xm");
-                            BaseGameScene.this.playerTrail.setColorMode(Trail.ColorMode.MULTICOLOR);
-                        }
-                    }));
+                    BaseGameScene.this.registerUpdateHandler(BaseGameScene.this.levelWinHandler);
                 }
                 else{
                     //Level elements spawn
@@ -327,6 +330,10 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                                 BaseGameScene.this.disposeLevelElement(lvlElement.getBuildedShape());
                             }
                         }));
+                        if(!BaseGameScene.this.level.hasNext()){
+                            BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
+                            BaseGameScene.this.registerUpdateHandler(BaseGameScene.this.levelWinHandler);
+                        }
                     }
                 }
             }
@@ -366,6 +373,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     private void restart(){
         this.isStarted = false;
         this.onRestartBegin();
+        this.unregisterUpdateHandler(this.levelWinHandler);
         this.unregisterUpdateHandler(this.levelReaderHandler);
         AudioManager.getInstance().stop();
         this.player.resetBonus();
