@@ -98,14 +98,11 @@ public class ScriptedLevelDescriptor extends LevelDescriptor{
     
     @Override
     public void init() {
-        Debug.d("Init");
-        Debug.d(this.script.toString());
         this.scriptIterator = this.script.iterator();
     }
 
     @Override
     public LevelElement[] getNext() {
-        Debug.d("Get next");
         return this.buildArray(this.scriptIterator.next());
     }
 
@@ -121,7 +118,6 @@ public class ScriptedLevelDescriptor extends LevelDescriptor{
 
     @Override
     public float getSpawnTime() {
-        Debug.d("Spawntime : " + this.spawnTime);
         return this.spawnTime;
     }
 

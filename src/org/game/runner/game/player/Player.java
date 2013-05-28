@@ -17,6 +17,7 @@ import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
@@ -137,7 +138,7 @@ public abstract class Player extends AnimatedSprite{
         this.jumping = true;
         this.rolling = false;
         this.animate(PLAYER_ANIMATE_JUMP, PLAYER_ANIMATE_JUMP_FRAMES, true);
-        this.body.setLinearVelocity(new Vector2(0, 15));
+        this.body.setLinearVelocity(0, 15);
         this.increaseJumpLevel();
         this.onJump();
     }
@@ -168,7 +169,7 @@ public abstract class Player extends AnimatedSprite{
         this.jumping = true;
         this.rolling = true;
         this.animate(PLAYER_ANIMATE_ROLL, PLAYER_ANIMATE_ROLL_FRAMES, true);
-        this.body.setLinearVelocity(new Vector2(0, 25));
+        this.body.setLinearVelocity(0, 25);
         this.onRollBackJump();
     }
     public void roll(){

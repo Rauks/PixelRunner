@@ -191,6 +191,7 @@ public class ResourcesManager {
         this.gameBackgroundTextureAtlas.load();
         
         AudioManager.getInstance().prepare("mfx/game/", level.getMusic());
+        AudioManager.getInstance().prepare("mfx/game/", "win.xm");
     }
 
     public void unloadGameResources() {

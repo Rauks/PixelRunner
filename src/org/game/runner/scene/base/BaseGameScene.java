@@ -30,12 +30,15 @@ import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.IModifier;
@@ -281,6 +284,19 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                         @Override
                         public void onTimePassed(TimerHandler pTimerHandler) {
                             BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
+                            
+                            Sprite player = BaseGameScene.this.player;
+                            final PhysicsConnector physicsConnector = BaseGameScene.this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(player);
+                            physicsConnector.getBody().applyForce(135, 0, 0, 0);
+                            
+                            BaseGameScene.this.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback(){
+                                @Override
+                                public void onTimePassed(final TimerHandler pTimerHandler){
+                                    BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
+                                    physicsConnector.getBody().applyForce(-135, 0, 0, 0);
+                                }
+                            }));
+                            
                             BaseGameScene.this.win.setVisible(true);
                             AudioManager.getInstance().stop();
                             AudioManager.getInstance().play("mfx/game/", "win.xm");
@@ -289,7 +305,6 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                     }));
                 }
                 else{
-                    Debug.d("Spawn");
                     //Level elements spawn
                     final float baseY = GROUND_LEVEL + GROUND_THICKNESS/2;
                     for(final LevelElement lvlElement : BaseGameScene.this.level.getNext()){
@@ -320,7 +335,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.chrono3 = new Text(0, 0, resourcesManager.fontPixel_200, "3", vbom);
         this.chrono2 = new Text(0, 0, resourcesManager.fontPixel_200, "2", vbom);
         this.chrono1 = new Text(0, 0, resourcesManager.fontPixel_200, "1", vbom);
-        this.chronoStart = new Text(0, 0, resourcesManager.fontPixel_200, "GO !", vbom);
+        this.chronoStart = new Text(0, 0, resourcesManager.fontPixel_200, "GO!", vbom);
         this.chrono3.setVisible(false);
         this.chrono2.setVisible(false);
         this.chrono1.setVisible(false);
@@ -336,8 +351,10 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.hud.attachChild(this.pause);
         
         //win message
-        this.win = new Text(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2, resourcesManager.fontPixel_200, "SUCCESS !", vbom);
+        this.win = new Text(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2 + 130, resourcesManager.fontPixel_200, "EPIC", new TextOptions(HorizontalAlign.CENTER), vbom);
         this.win.setVisible(false);
+        Text winSub = new Text(this.win.getWidth()/2, -25f, resourcesManager.fontPixel_200, "WIN!", new TextOptions(HorizontalAlign.CENTER), vbom);
+        this.win.attachChild(winSub);
         this.hud.attachChild(this.win);
     }
     
