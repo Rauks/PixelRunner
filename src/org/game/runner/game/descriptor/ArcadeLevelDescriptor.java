@@ -28,7 +28,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     }
     
     public ArcadeLevelDescriptor(){
-        super(BackgroundPack.values()[new Random().nextInt(BackgroundPack.values().length)]);
+        super(BackgroundPack.getRamdomBackgroundPack());
     }
     
     private Random ranGen = new Random();

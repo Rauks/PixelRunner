@@ -4,6 +4,8 @@
  */
 package org.game.runner.game.descriptor.utils;
 
+import java.util.Random;
+
 /**
  *
  * @author Karl
@@ -20,6 +22,8 @@ public enum BackgroundPack{
     TRAINING_PLATFORMS(Layer.JUMP_1.withSpeed(25), Layer.JUMP_2.withSpeed(30));
 
     private Layer[] backgrounds;
+    
+    private static Random RANDGEN = new Random();
 
     private BackgroundPack(Layer... backgrounds){
         this.backgrounds = backgrounds;
@@ -53,6 +57,23 @@ public enum BackgroundPack{
                 return BackgroundPack.FOREST;
             default:
             case 5:
+                //return BackgroundPack.SWEETS;
+                return null;
+        }
+    }
+    
+    public static BackgroundPack getRamdomBackgroundPack(){
+        switch(RANDGEN.nextInt(5)){
+            case 0:
+                return BackgroundPack.MOUNTAIN;
+            case 1:
+                return BackgroundPack.DESERT;
+            case 2:
+                return BackgroundPack.CITY;
+            case 3:
+                return BackgroundPack.FOREST;
+            default:
+            case 4:
                 //return BackgroundPack.SWEETS;
                 return null;
         }
