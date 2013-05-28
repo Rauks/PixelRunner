@@ -18,7 +18,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.FileUtils;
 import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.level.simple.SimpleLevelLoader;
-import org.game.runner.R;
 import org.game.runner.game.descriptor.utils.BackgroundPack;
 import org.game.runner.game.descriptor.utils.xml.LevelHandler;
 import org.game.runner.game.descriptor.utils.xml.LevelHandler.Element;
@@ -55,9 +54,7 @@ public class ScriptedLevelDescriptor extends LevelDescriptor{
         try {
             MinimizeXMLParser parser = new MinimizeXMLParser();
             parser.setElementHandler(levelHandler);
-            parser.parse(new InputStreamReader(pContext.getResources().openRawResource(
-                pContext.getResources().getIdentifier("lvl_" + this.worldId + "_" + this.levelId, "raw", pContext.getPackageName())
-            )));
+            parser.parse(new InputStreamReader(pContext.getAssets().open("xml/game/" + this.worldId + "-" + this.levelId + ".xml")));
         } catch (Exception ex) {
             Logger.getLogger(ScriptedLevelDescriptor.class.getName()).log(Level.SEVERE, null, ex);
         }
