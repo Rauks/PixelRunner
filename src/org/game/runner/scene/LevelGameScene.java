@@ -17,6 +17,7 @@ public class LevelGameScene extends BaseGameScene{
         super(level);
     }
     
+    @Override
     protected void onRestartBegin() {
         
     }
