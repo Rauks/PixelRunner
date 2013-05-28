@@ -37,14 +37,14 @@ public enum BackgroundPack{
         switch(worldId){
             case 0:
                 switch(levelId){
-                    case 0:
-                        return BackgroundPack.TRAINING_JUMP;
                     case 1:
-                        return BackgroundPack.TRAINING_ROLL;
+                        return BackgroundPack.TRAINING_JUMP;
                     case 2:
+                        return BackgroundPack.TRAINING_ROLL;
+                    case 3:
                         return BackgroundPack.TRAINING_DOUBLEJUMP;
                     default:
-                    case 3:
+                    case 4:
                         return BackgroundPack.TRAINING_PLATFORMS;
                 }
             case 1:
