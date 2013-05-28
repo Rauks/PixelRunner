@@ -16,6 +16,7 @@ public enum BackgroundPack{
     CITY(Layer.CLOUDS_2.withSpeed(20), Layer.CLOUDS_1.withSpeed(25), Layer.CITY_2.withSpeed(30), Layer.CITY_1.withSpeed(35)), 
     DESERT(Layer.CLOUDS_2.withSpeed(20), Layer.CLOUDS_1.withSpeed(25), Layer.DESERT_2.withSpeed(30), Layer.DESERT_1.withSpeed(35)), 
     HILL(Layer.CLOUDS_2.withSpeed(20), Layer.CLOUDS_1.withSpeed(25), Layer.HILL_2.withSpeed(30), Layer.HILL_1.withSpeed(35)), 
+    SWEETS(Layer.SWEET_4.withSpeed(20), Layer.SWEET_3.withSpeed(25), Layer.SWEET_2.withSpeed(30), Layer.SWEET_1.withSpeed(35)), 
     TRAINING_JUMP(Layer.JUMP_1.withSpeed(25), Layer.JUMP_2.withSpeed(30)), 
     TRAINING_ROLL(Layer.ROLL_1.withSpeed(25), Layer.ROLL_2.withSpeed(30)), 
     TRAINING_DOUBLEJUMP(Layer.DOUBLEJUMP_1.withSpeed(25), Layer.DOUBLEJUMP_2.withSpeed(30)), 
@@ -57,8 +58,7 @@ public enum BackgroundPack{
                 return BackgroundPack.FOREST;
             default:
             case 5:
-                //return BackgroundPack.SWEETS;
-                return null;
+                return BackgroundPack.SWEETS;
         }
     }
     
@@ -74,8 +74,7 @@ public enum BackgroundPack{
                 return BackgroundPack.FOREST;
             default:
             case 4:
-                //return BackgroundPack.SWEETS;
-                return null;
+                return BackgroundPack.SWEETS;
         }
     }
 }
