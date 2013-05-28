@@ -20,7 +20,13 @@ public enum Layer{
     FOREST_1(0, 0, "forest_1"),
     FOREST_2(0, 0, "forest_2"),
     HILL_1(0, 0, "hill_1"),
-    HILL_2(0, 0, "hill_2");
+    HILL_2(0, 0, "hill_2"),
+    JUMP_1(0, 190, "training_1"),
+    JUMP_2(0, 220, "training_2"),
+    ROLL_1(0, 5, "training_3"),
+    ROLL_2(0, 5, "training_4"),
+    DOUBLEJUMP_1(0, 190, "training_5"),
+    DOUBLEJUMP_2(0, 220, "training_6");
 
     public float x;
     public float y;
