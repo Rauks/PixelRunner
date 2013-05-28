@@ -96,10 +96,11 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
 
     @Override
     public void onElementAction(PageElement element) {
-        this.activity.vibrate(30);
-        AudioManager.getInstance().stop();
-        Debug.d("Element selected : " + element.getId() + " @ page " + this.getCurrentPage().getWorldId());
-        SceneManager.getInstance().loadGameLevelScene(SceneType.SCENE_GAME_LEVEL, new ScriptedLevelDescriptor(this.getCurrentPage().getWorldId(), element.getId(), this.activity));
+        if(this.getCurrentPage().getProgress() >= element.getId()){
+            this.activity.vibrate(30);
+            AudioManager.getInstance().stop();
+            SceneManager.getInstance().loadGameLevelScene(SceneType.SCENE_GAME_LEVEL, new ScriptedLevelDescriptor(this.getCurrentPage().getWorldId(), element.getId(), this.activity));
+        }
         
     }
 }
