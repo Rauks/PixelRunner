@@ -37,6 +37,11 @@ public class LevelGameScene extends BaseGameScene{
     }
 
     @Override
+    protected void onWin() {
+        
+    }
+
+    @Override
     public SceneType getSceneType() {
         return SceneType.SCENE_GAME_LEVEL;
     }

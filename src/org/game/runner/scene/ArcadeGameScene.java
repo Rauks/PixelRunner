@@ -143,4 +143,9 @@ public class ArcadeGameScene extends BaseGameScene{
     public SceneType getSceneType() {
         return SceneType.SCENE_GAME_ARCADE;
     }
+
+    @Override
+    protected void onWin() {
+        /* Never called in arcade */
+    }
 }

@@ -274,6 +274,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.groundBody.setUserData("ground");
         this.attachChild(this.ground);
     }
+    protected abstract void onWin();
     private void createLevelSpwaner(){
         //Level elements
         this.levelReaderAction = new ITimerCallback(){                      
@@ -287,6 +288,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                             BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
                             
                             BaseGameScene.this.isWin = true;
+                            BaseGameScene.this.onWin();
                             
                             Sprite player = BaseGameScene.this.player;
                             final PhysicsConnector physicsConnector = BaseGameScene.this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(player);

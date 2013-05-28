@@ -105,6 +105,7 @@ public class SceneManager {
     }
     
     public void unloadGameLevelScene(){
+        final SceneType wasType = this.getCurrentSceneType();
         this.setScene(this.loadingScene);
         ResourcesManager.getInstance().unloadGameResources();
         this.disposeGameScene();
@@ -114,12 +115,24 @@ public class SceneManager {
             public void onTimePassed(final TimerHandler pTimerHandler){
                 SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadMenuResources();
-                SceneManager.this.createMainMenuScene();
+                SceneManager.this.createMenuAfterGameScene(wasType);
                 AudioManager.getInstance().play("mfx/main/", "menu.xm");
             }
         }));
     }
     
+    private void createMenuAfterGameScene(final SceneType type){
+        switch(type){
+            case SCENE_GAME_ARCADE:
+                this.createMainMenuScene();
+                break;
+            case SCENE_GAME_LEVEL:
+                this.createLevelChoiceScene();
+                break;
+            default:
+                Debug.e("PixelRunner", "Not a gaming scene flag in scene manager loading.");
+        }    
+    }
     private void disposeMenuBeforeGameScene(final SceneType type){
         switch(type){
             case SCENE_GAME_ARCADE:
