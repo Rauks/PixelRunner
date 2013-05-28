@@ -20,7 +20,7 @@ import org.andengine.util.modifier.IModifier;
 import org.game.runner.GameActivity;
 import org.game.runner.R;
 import org.game.runner.scene.base.BaseMenuScene;
-import org.game.runner.game.player.Player;
+import org.game.runner.game.Player;
 import org.game.runner.manager.SceneManager;
 import org.game.runner.manager.SceneManager.SceneType;
 

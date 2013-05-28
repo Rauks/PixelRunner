@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.game.runner.game.player;
+package org.game.runner.game;
 
 import android.opengl.GLES20;
 import java.util.Random;

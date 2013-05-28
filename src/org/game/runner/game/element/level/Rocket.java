@@ -7,8 +7,8 @@ package org.game.runner.game.element.level;
 import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.game.runner.game.player.Player;
-import org.game.runner.game.player.Trail;
+import org.game.runner.game.Player;
+import org.game.runner.game.Trail;
 import org.game.runner.manager.ResourcesManager;
 
 /**

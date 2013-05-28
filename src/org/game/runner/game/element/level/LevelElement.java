@@ -13,7 +13,7 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.game.runner.game.descriptor.LevelDescriptor;
-import org.game.runner.game.player.Player;
+import org.game.runner.game.Player;
 
 /**
  *
