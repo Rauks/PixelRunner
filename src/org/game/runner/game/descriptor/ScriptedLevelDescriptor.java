@@ -38,23 +38,19 @@ import org.xml.sax.SAXException;
  * @author Karl
  */
 public class ScriptedLevelDescriptor extends LevelDescriptor{
-    private final int worldId;
-    private final int levelId;
     private final float spawnTime;
     
     private SmartList<SmartList<Element>> script;
     private Iterator<SmartList<Element>> scriptIterator;
     
     public ScriptedLevelDescriptor(int worldId, int levelId, final Context pContext){
-        super(BackgroundPack.getBackgroundPack(worldId, levelId));
-        this.worldId = worldId;
-        this.levelId = levelId;
+        super(worldId, levelId);
         
         LevelHandler levelHandler = new LevelHandler();
         try {
             MinimizeXMLParser parser = new MinimizeXMLParser();
             parser.setElementHandler(levelHandler);
-            parser.parse(new InputStreamReader(pContext.getAssets().open("xml/game/" + this.worldId + "-" + this.levelId + ".xml")));
+            parser.parse(new InputStreamReader(pContext.getAssets().open("xml/game/" + this.getWorldId() + "-" + this.getLevelId() + ".xml")));
         } catch (Exception ex) {
             Logger.getLogger(ScriptedLevelDescriptor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -108,7 +104,7 @@ public class ScriptedLevelDescriptor extends LevelDescriptor{
 
     @Override
     public String getMusic() {
-        return this.worldId + "-" + this.levelId + ".xm";
+        return this.getWorldId() + "-" + this.getLevelId() + ".xm";
     }
 
     @Override

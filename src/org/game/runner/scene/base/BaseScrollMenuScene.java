@@ -328,8 +328,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     public void disposeScene() {
         super.disposeScene();
         for(Page page : this.mPages){
-            page.detachSelf();
-            page.dispose();
+            page.disposePage();
         }
     }
     

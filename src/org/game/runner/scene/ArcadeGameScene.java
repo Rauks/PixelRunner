@@ -4,9 +4,6 @@
  */
 package org.game.runner.scene;
 
-import org.game.runner.scene.base.BaseGameScene;
-import android.content.Context;
-import android.content.SharedPreferences;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
@@ -14,21 +11,20 @@ import org.game.runner.game.descriptor.LevelDescriptor;
 import org.game.runner.game.player.Trail;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.SceneManager.SceneType;
+import org.game.runner.manager.db.ArcadeScoreDatabase;
+import org.game.runner.scene.base.BaseGameScene;
 
 /**
  *
  * @author Karl
  */
 public class ArcadeGameScene extends BaseGameScene{
-    private static final String HIGHSCORE_DB_NAME = "highscore";
-    private static final String HIGHSCORE_LABEL = "score";
-    
     private long score = 0;
     private boolean countScore = false;
     private Text scoreText;
     
-    private SharedPreferences scoreDb;
-    private SharedPreferences.Editor scoreDbEditor;
+    private ArcadeScoreDatabase scoreDb;
+    
     private long highScore;
     private Text highScoreText;
     private boolean isHigtscoring = false;
@@ -38,8 +34,7 @@ public class ArcadeGameScene extends BaseGameScene{
         
         AudioManager.getInstance().prepare("mfx/game/", "arcade_win.xm");
         
-        this.scoreDb = this.activity.getSharedPreferences(HIGHSCORE_DB_NAME, Context.MODE_PRIVATE);
-        this.scoreDbEditor = this.scoreDb.edit();
+        this.scoreDb = new ArcadeScoreDatabase(this.activity);
         this.createScoreOnHud();
     }
     
@@ -82,12 +77,11 @@ public class ArcadeGameScene extends BaseGameScene{
         this.highScoreText.setText("/" + String.valueOf(this.highScore/5));
     }
     
-    private boolean saveHighScore() {
-        this.scoreDbEditor.putLong(HIGHSCORE_LABEL, this.highScore);
-        return this.scoreDbEditor.commit();
+    private void saveHighScore() {
+        this.scoreDb.set(this.highScore);
     }
     private long loadHighScore() {
-            return this.scoreDb.getLong(HIGHSCORE_LABEL, 0);
+        return this.scoreDb.get();
     }
     
     @Override
