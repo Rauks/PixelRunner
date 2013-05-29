@@ -24,7 +24,7 @@ public enum Layer{
     SWEET_1(0, 0, "sweet_1"),
     SWEET_2(0, 0, "sweet_2"),
     SWEET_3(0, 280, "sweet_3"),
-    SWEET_4(0, 220, "sweet_4"),
+    SWEET_4(0, 170, "sweet_4"),
     JUMP_1(0, 190, "training_1"),
     JUMP_2(0, 220, "training_2"),
     ROLL_1(0, 5, "training_3"),
