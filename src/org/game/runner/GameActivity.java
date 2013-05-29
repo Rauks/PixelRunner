@@ -82,7 +82,6 @@ public class GameActivity extends BaseGameActivity{
     @Override
     public synchronized void onPauseGame() {
         super.onPauseGame();
-        Debug.d("PIXEL : PAUSE PAUSE PAUSE PAUSE PAUSE PAUSE PAUSE PAUSE PAUSE");
         if (this.isGameLoaded()){
             SceneManager.getInstance().getCurrentScene().onPause();
         }
@@ -105,7 +104,6 @@ public class GameActivity extends BaseGameActivity{
     @Override
     public void onWindowFocusChanged(final boolean pHasWindowFocus) {
         super.onWindowFocusChanged(pHasWindowFocus);
-        Debug.d("PIXEL : RESUME RESUME RESUME RESUME RESUME RESUME RESUME RESUME");
         if (pHasWindowFocus && this.isEnginePaused) {
             this.isEnginePaused = false;
             if (this.isGameLoaded()){
