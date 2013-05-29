@@ -288,12 +288,14 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                 Sprite player = BaseGameScene.this.player;
                 final PhysicsConnector physicsConnector = BaseGameScene.this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(player);
                 physicsConnector.getBody().applyForce(135, 0, 0, 0);
+                BaseGameScene.this.parallaxFactor = 0.7f;
 
                 BaseGameScene.this.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback(){
                     @Override
                     public void onTimePassed(final TimerHandler pTimerHandler){
                         BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
                         physicsConnector.getBody().applyForce(-135, 0, 0, 0);
+                        BaseGameScene.this.parallaxFactor = 1f;
                     }
                 }));
 
