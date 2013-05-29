@@ -17,6 +17,7 @@ import org.andengine.ui.activity.BaseGameActivity;
 import org.game.runner.manager.AudioManager;
 import org.game.runner.manager.ResourcesManager;
 import org.game.runner.manager.SceneManager;
+import org.andengine.util.debug.Debug;
 
 public class GameActivity extends BaseGameActivity{
     public static float CAMERA_WIDTH = 800;
@@ -26,6 +27,7 @@ public class GameActivity extends BaseGameActivity{
     private Camera camera;
     private ResourcesManager resourcesManager;
     private SceneManager sceneManager;
+    private boolean isEnginePaused = false;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -80,39 +82,36 @@ public class GameActivity extends BaseGameActivity{
     @Override
     public synchronized void onPauseGame() {
         super.onPauseGame();
+        Debug.d("PIXEL : PAUSE PAUSE PAUSE PAUSE PAUSE PAUSE PAUSE PAUSE PAUSE");
         if (this.isGameLoaded()){
             SceneManager.getInstance().getCurrentScene().onPause();
         }
+        this.isEnginePaused = true;
     }
-    
+ 
     @Override
-    public synchronized void onResumeGame() {
+    public void onResumeGame() {
         super.onResumeGame();
-        if (this.isGameLoaded()){
-            SceneManager.getInstance().getCurrentScene().onResume();
-        }
-    }
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (this.isGameLoaded()){
-            SceneManager.getInstance().getCurrentScene().onPause();
-        }
     }
     
-    @Override
-    protected synchronized void onResume() {
-        super.onResume();
-        if (this.isGameLoaded()){
-            SceneManager.getInstance().getCurrentScene().onResume();
-        }
-    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {  
         if (keyCode == KeyEvent.KEYCODE_BACK){
             SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
         }
         return false; 
+    }
+    
+    @Override
+    public void onWindowFocusChanged(final boolean pHasWindowFocus) {
+        super.onWindowFocusChanged(pHasWindowFocus);
+        Debug.d("PIXEL : RESUME RESUME RESUME RESUME RESUME RESUME RESUME RESUME");
+        if (pHasWindowFocus && this.isEnginePaused) {
+            this.isEnginePaused = false;
+            if (this.isGameLoaded()){
+                SceneManager.getInstance().getCurrentScene().onResume();
+            }
+        }
     }
     
     public void vibrate(long pMilliseconds){
