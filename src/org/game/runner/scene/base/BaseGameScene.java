@@ -257,7 +257,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.player.getBody().setUserData("player");
         
         this.attachChild(this.player);
-        this.playerTrail = new Trail(32, 0, 0, 64, -340, -300, -2, 2, 25, 30, 50, Trail.ColorMode.NORMAL, this.resourcesManager.trail, this.vbom);
+        this.playerTrail = new Trail(36, 0, 0, 64, -340, -300, -2, 2, 25, 30, 50, Trail.ColorMode.NORMAL, this.resourcesManager.trail, this.vbom);
         this.playerTrail.bind(this.player);
         this.attachChild(this.playerTrail);
         this.playerTrail.hide();
