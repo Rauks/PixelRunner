@@ -6,8 +6,8 @@ package net.kirauks.pixelrunner.scene;
 
 import net.kirauks.pixelrunner.GameActivity;
 import net.kirauks.pixelrunner.scene.base.BaseScrollMenuScene;
-import net.kirauks.pixelrunner.scene.base.element.Page;
-import net.kirauks.pixelrunner.scene.base.element.PageElement;
+import net.kirauks.pixelrunner.scene.base.element.ScrollPage;
+import net.kirauks.pixelrunner.scene.base.element.ScrollPageElement;
 import net.kirauks.pixelrunner.manager.SceneManager;
 import net.kirauks.pixelrunner.manager.SceneManager.SceneType;
 import net.kirauks.pixelrunner.R;
@@ -17,7 +17,7 @@ import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.db.InfosDatabase;
 import net.kirauks.pixelrunner.manager.db.InfosDatabase.Info;
 import net.kirauks.pixelrunner.manager.db.ProgressDatabase;
-import net.kirauks.pixelrunner.scene.base.element.PageTutorial;
+import net.kirauks.pixelrunner.scene.base.element.ScrollPageTutorial;
 
 /**
  *
@@ -29,13 +29,13 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
     private ProgressDatabase progressDb;
     private InfosDatabase infosDb;
     
-    private Page tutorials;
-    private Page mountains;
-    private Page desert;
-    private Page city;
-    private Page forest;
-    private Page hills;
-    private Page sweets;
+    private ScrollPage tutorials;
+    private ScrollPage mountains;
+    private ScrollPage desert;
+    private ScrollPage city;
+    private ScrollPage forest;
+    private ScrollPage hills;
+    private ScrollPage sweets;
     
     public LevelChoiceScene(){
         super(GameActivity.CAMERA_WIDTH, GameActivity.CAMERA_HEIGHT);
@@ -60,31 +60,31 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
             }
         });
         
-        this.tutorials = new PageTutorial(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.TRAINING, this.vbom);
+        this.tutorials = new ScrollPageTutorial(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.TRAINING, this.vbom);
         this.tutorials.setTitle(this.activity.getString(R.string.lvl_tutorials));
         this.tutorials.setProgress(this.progressDb.get(World.TRAINING));
         
-        this.mountains = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.MOUNTAINS, 12, this.vbom);
+        this.mountains = new ScrollPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.MOUNTAINS, 12, this.vbom);
         this.mountains.setTitle(this.activity.getString(R.string.lvl_mountains));
         this.mountains.setProgress(this.progressDb.get(World.MOUNTAINS));
         
-        this.desert = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.DESERT, 12, this.vbom);
+        this.desert = new ScrollPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.DESERT, 12, this.vbom);
         this.desert.setTitle(this.activity.getString(R.string.lvl_desert));
         this.desert.setProgress(this.progressDb.get(World.DESERT));
         
-        this.city = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.CITY, 12, this.vbom);
+        this.city = new ScrollPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.CITY, 12, this.vbom);
         this.city.setTitle(this.activity.getString(R.string.lvl_city));
         this.city.setProgress(this.progressDb.get(World.CITY));
         
-        this.forest = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.FOREST, 12, this.vbom);
+        this.forest = new ScrollPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.FOREST, 12, this.vbom);
         this.forest.setTitle(this.activity.getString(R.string.lvl_forest));
         this.forest.setProgress(this.progressDb.get(World.FOREST));
         
-        this.hills = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.HILLS, 12, this.vbom);
+        this.hills = new ScrollPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.HILLS, 12, this.vbom);
         this.hills.setTitle(this.activity.getString(R.string.lvl_hills));
         this.hills.setProgress(this.progressDb.get(World.HILLS));
         
-        this.sweets = new Page(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.SWEETS, 12, this.vbom);
+        this.sweets = new ScrollPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.SWEETS, 12, this.vbom);
         this.sweets.setTitle(this.activity.getString(R.string.lvl_sweets));
         this.sweets.setProgress(this.progressDb.get(World.SWEETS));
         
@@ -111,7 +111,7 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
     }
 
     @Override
-    public void onElementAction(PageElement element) {
+    public void onElementAction(ScrollPageElement element) {
         if(this.getCurrentPage().getProgress() >= element.getId()){
             this.activity.vibrate(30);
             AudioManager.getInstance().stop();
