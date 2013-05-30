@@ -5,12 +5,10 @@
 package net.kirauks.pixelrunner.scene.base;
 
 import net.kirauks.pixelrunner.GameActivity;
-import net.kirauks.pixelrunner.manager.SceneManager.SceneType;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.shape.Shape;
@@ -29,7 +27,6 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
     private static final float MAX_ACCEL = 5000;
     private static final double FRICTION = 0.96f;
     
-    private static final int WRAPPER_HEIGHT = 1260;
     private static final float START_Y = GameActivity.CAMERA_HEIGHT;
     private float wrapperHeight;
     private float maxY;
@@ -40,7 +37,7 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
     
     private TimerHandler thandle;
     private SlideState currentState;
-    private double accel, accel1, accel0;
+    private double accel, accel1, accel0; //Moving avenage
     private float currentY;
     private IEntity wrapper;
     private SurfaceScrollDetector scrollDetector;
@@ -116,7 +113,7 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
         if (dt == 0) {
             return;
         }
-        double s =  pDistanceY / (double)dt * 1000.0;  // pixel/second
+        double s = pDistanceY / (double)dt * 1000.0;  // Pixel/Second
         this.accel = (this.accel0 + this.accel1 + s) / 3;
         this.accel0 = this.accel1;
         this.accel1 = this.accel;
