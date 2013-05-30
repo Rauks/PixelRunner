@@ -74,8 +74,8 @@ public class MainMenuScene extends BaseMenuScene implements MenuScene.IOnMenuIte
                 SceneManager.getInstance().loadGameLevelScene(SceneType.SCENE_GAME_ARCADE, new ArcadeLevelDescriptor());
                 return true;
             case MENUID_BONUS:
-                AudioManager.getInstance().stop();
                 SceneManager.getInstance().loadBonusChoiceScene();
+                SceneManager.getInstance().disposeMainMenuScene();
                 return true;
             case MENUID_CREDITS:
                 SceneManager.getInstance().createCreditsScene();
