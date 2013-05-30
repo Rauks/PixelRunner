@@ -32,7 +32,7 @@ public class ArcadeGameScene extends BaseGameScene{
     public ArcadeGameScene(LevelDescriptor level){
         super(level);
         
-        AudioManager.getInstance().prepare("mfx/game/", "arcade_win.xm");
+        AudioManager.getInstance().prepare("mfx/game/", "arcade-win.xm");
         
         this.scoreDb = new ArcadeScoreDatabase(this.activity);
         this.createScoreOnHud();
@@ -61,7 +61,7 @@ public class ArcadeGameScene extends BaseGameScene{
                 if(!this.isHigtscoring){
                     this.isHigtscoring = true;
                     AudioManager.getInstance().stop();
-                    AudioManager.getInstance().play("mfx/game/", "arcade_win.xm");
+                    AudioManager.getInstance().play("mfx/game/", "arcade-win.xm");
                     this.playerTrail.setColorMode(Trail.ColorMode.MULTICOLOR);
                 }
                 this.highScore = this.score;
