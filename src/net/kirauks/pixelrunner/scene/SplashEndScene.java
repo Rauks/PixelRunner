@@ -9,7 +9,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import net.kirauks.pixelrunner.GameActivity;
-import org.game.runner.R;
+import net.kirauks.pixelrunner.R;
 import net.kirauks.pixelrunner.scene.base.BaseSplashScene;
 import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.ResourcesManager;

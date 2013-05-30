@@ -10,7 +10,7 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
-import org.game.runner.R;
+import net.kirauks.pixelrunner.R;
 
 /**
  *

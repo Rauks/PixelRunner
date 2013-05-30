@@ -18,7 +18,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.modifier.IModifier;
 import net.kirauks.pixelrunner.GameActivity;
-import org.game.runner.R;
+import net.kirauks.pixelrunner.R;
 import net.kirauks.pixelrunner.scene.base.BaseMenuScene;
 import net.kirauks.pixelrunner.game.Player;
 import net.kirauks.pixelrunner.manager.SceneManager;
@@ -41,6 +41,8 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
     private Text thanksNames;
     private Text tests;
     private Text testsNames;
+    private Text achieved;
+    private Text achievedNames;
     
     private AnimatedSprite playerDance;
     
@@ -72,11 +74,15 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
         this.thanks.setCullingEnabled(true);
         this.thanksNames = new Text(centerX, 0, this.resourcesManager.fontPixel_60, this.activity.getString(R.string.credits_thanks_names), new TextOptions(HorizontalAlign.CENTER), this.vbom);
         this.thanksNames.setCullingEnabled(true);
+        this.achieved = new Text(centerX, 0, this.resourcesManager.fontPixel_34, this.activity.getString(R.string.credits_achieved), this.vbom);
+        this.achieved.setCullingEnabled(true);
+        this.achievedNames = new Text(centerX, 0, this.resourcesManager.fontPixel_60, this.activity.getString(R.string.credits_achieved_names), new TextOptions(HorizontalAlign.CENTER), this.vbom);
+        this.achievedNames.setCullingEnabled(true);
         this.playerDance = new AnimatedSprite(centerX, 0, this.resourcesManager.player, this.vbom);
         this.playerDance.animate(Player.PLAYER_ANIMATE_DANCE, Player.PLAYER_ANIMATE_DANCE_FRAMES);
         this.playerDance.setCullingEnabled(true);
         
-        this.setFlow(this.title, 30f, 5f, this.prod, this.prodNames, this.design, this.designNames, this.tests, this.testsNames, this.thanks, this.thanksNames, this.playerDance);
+        this.setFlow(this.title, 30f, 5f, this.prod, this.prodNames, this.design, this.designNames, this.tests, this.testsNames, this.thanks, this.thanksNames, this.achieved, this.achievedNames, this.playerDance);
         
         attachChild(this.title);
         attachChild(this.prod);
@@ -87,6 +93,8 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
         attachChild(this.testsNames);
         attachChild(this.thanks);
         attachChild(this.thanksNames);
+        attachChild(this.achieved);
+        attachChild(this.achievedNames);
         attachChild(this.playerDance);
         
         final float startY = this.title.getY() + this.title.getHeight()/2 + centerY;
@@ -163,6 +171,10 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
         this.thanks.dispose();
         this.thanksNames.detachSelf();
         this.thanksNames.dispose();
+        this.achieved.detachSelf();
+        this.achieved.dispose();
+        this.achievedNames.detachSelf();
+        this.achievedNames.dispose();
         this.e.detachSelf();
         this.e.dispose();
         this.detachSelf();

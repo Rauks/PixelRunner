@@ -10,7 +10,7 @@ import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.text.Text;
 import net.kirauks.pixelrunner.GameActivity;
-import org.game.runner.R;
+import net.kirauks.pixelrunner.R;
 import net.kirauks.pixelrunner.scene.base.BaseMenuScene;
 import net.kirauks.pixelrunner.game.descriptor.ArcadeLevelDescriptor;
 import net.kirauks.pixelrunner.manager.AudioManager;

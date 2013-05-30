@@ -10,7 +10,7 @@ import net.kirauks.pixelrunner.scene.base.element.Page;
 import net.kirauks.pixelrunner.scene.base.element.PageElement;
 import net.kirauks.pixelrunner.manager.SceneManager;
 import net.kirauks.pixelrunner.manager.SceneManager.SceneType;
-import org.game.runner.R;
+import net.kirauks.pixelrunner.R;
 import net.kirauks.pixelrunner.game.descriptor.ScriptedLevelDescriptor;
 import net.kirauks.pixelrunner.game.descriptor.utils.World;
 import net.kirauks.pixelrunner.manager.AudioManager;
