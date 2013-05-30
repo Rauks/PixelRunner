@@ -20,7 +20,7 @@ import net.kirauks.pixelrunner.manager.ResourcesManager;
  *
  * @author Karl
  */
-public class Page extends Rectangle implements IPageElementTouchListener{
+public class ScrollPage extends Rectangle implements IScrollPageElementTouchListener{
     protected static final int NB_COLS = 4;
     protected static final int NB_ROWS = 3;
     protected static final int MAX_ELEMENTS = 12;
@@ -33,26 +33,26 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     private Sprite left;
     private Sprite right;
     
-    private IPageNavigationTouchListener navigationListener;
-    private IPageElementTouchListener elementListener;
+    private IScrollPageNavigationTouchListener navigationListener;
+    private IScrollPageElementTouchListener elementListener;
     
     private World world;
     private int progress;
-    private SmartList<PageElement> elements;
+    private SmartList<ScrollPageElement> elements;
     
-    public Page(final float pWidth, final float pHeight, World world, final int nbElements, final VertexBufferObjectManager pVertexBufferObjectManager){
+    public ScrollPage(final float pWidth, final float pHeight, World world, final int nbElements, final VertexBufferObjectManager pVertexBufferObjectManager){
         super(0, 0, pWidth, pHeight, pVertexBufferObjectManager);
         this.setColor(Color.TRANSPARENT);
         this.setCullingEnabled(true);
-        this.elements = new SmartList<PageElement>(MAX_ELEMENTS);
+        this.elements = new SmartList<ScrollPageElement>(MAX_ELEMENTS);
         this.world = world;
         this.progress = 1;
         this.left = new Sprite(0, this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlLeft, this.getVertexBufferObjectManager()){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 if (pSceneTouchEvent.isActionUp()){
-                    if(Page.this.navigationListener != null){
-                        Page.this.navigationListener.onLeft();
+                    if(ScrollPage.this.navigationListener != null){
+                        ScrollPage.this.navigationListener.onLeft();
                     }
                 }
                 return false;
@@ -64,8 +64,8 @@ public class Page extends Rectangle implements IPageElementTouchListener{
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 if (pSceneTouchEvent.isActionUp()){
-                    if(Page.this.navigationListener != null){
-                        Page.this.navigationListener.onRight();
+                    if(ScrollPage.this.navigationListener != null){
+                        ScrollPage.this.navigationListener.onRight();
                     }
                 }
                 return false;
@@ -81,20 +81,20 @@ public class Page extends Rectangle implements IPageElementTouchListener{
         return this.world;
     }
     
-    public void registerPageNavigationTouchListener(IPageNavigationTouchListener navigationListener){
+    public void registerPageNavigationTouchListener(IScrollPageNavigationTouchListener navigationListener){
         this.navigationListener = navigationListener;
     }
     public void unregisterPageNavigationTouchListener(){
         this.navigationListener = null;
     }
-    public void registerPageElementTouchListener(IPageElementTouchListener elementListener){
+    public void registerPageElementTouchListener(IScrollPageElementTouchListener elementListener){
         this.elementListener = elementListener;
     }
     public void unregisterPageElementTouchListener(){
         this.elementListener = null;
     }
     @Override
-    public void onElementActionUp(PageElement element) {
+    public void onElementActionUp(ScrollPageElement element) {
         if(this.elementListener != null){
             this.elementListener.onElementActionUp(element);
         }
@@ -121,7 +121,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     public void setRightVisible(boolean visible){
         this.right.setVisible(visible);
     }
-    protected void addElement(PageElement element){
+    protected void addElement(ScrollPageElement element){
         int index = this.elements.size();
         if(index >= MAX_ELEMENTS){
             Debug.e("Elements limit reached in level choice page.");
@@ -141,14 +141,14 @@ public class Page extends Rectangle implements IPageElementTouchListener{
     }
     private void addElements(int nbElements){
         for (int i = 0; i < nbElements; i++) {
-            this.addElement(new PageElement(0, 0, i + 1, true, this.getVertexBufferObjectManager()));
+            this.addElement(new ScrollPageElement(0, 0, i + 1, true, this.getVertexBufferObjectManager()));
         }
         this.refreshLocks();
     }
     
     public SmartList<ITouchArea> getElementsTouchAreas(){
         SmartList<ITouchArea> areas = new SmartList<ITouchArea>();
-        for(PageElement element : this.elements){
+        for(ScrollPageElement element : this.elements){
             areas.add(element);
         }
         return areas;
@@ -182,7 +182,7 @@ public class Page extends Rectangle implements IPageElementTouchListener{
         this.left.dispose();
         this.right.detachSelf();
         this.right.dispose();
-        for(PageElement element : this.elements){
+        for(ScrollPageElement element : this.elements){
             element.disposeElement();
         }
         this.elements.clear();

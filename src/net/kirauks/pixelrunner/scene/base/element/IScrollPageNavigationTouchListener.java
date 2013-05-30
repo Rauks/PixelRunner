@@ -8,7 +8,7 @@ package net.kirauks.pixelrunner.scene.base.element;
  *
  * @author Karl
  */
-public interface IPageElementTouchListener{
-    public void onElementActionUp(PageElement element);
+public interface IScrollPageNavigationTouchListener{
+    public void onLeft();
+    public void onRight();
 }
-    

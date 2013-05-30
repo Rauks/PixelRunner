@@ -15,16 +15,16 @@ import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
-import net.kirauks.pixelrunner.scene.base.element.IPageElementTouchListener;
-import net.kirauks.pixelrunner.scene.base.element.IPageNavigationTouchListener;
-import net.kirauks.pixelrunner.scene.base.element.Page;
-import net.kirauks.pixelrunner.scene.base.element.PageElement;
+import net.kirauks.pixelrunner.scene.base.element.IScrollPageElementTouchListener;
+import net.kirauks.pixelrunner.scene.base.element.IScrollPageNavigationTouchListener;
+import net.kirauks.pixelrunner.scene.base.element.ScrollPage;
+import net.kirauks.pixelrunner.scene.base.element.ScrollPageElement;
 
 /**
  *
  * @author Karl
  */
-public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSceneTouchListener, IPageNavigationTouchListener, IPageElementTouchListener{
+public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSceneTouchListener, IScrollPageNavigationTouchListener, IScrollPageElementTouchListener{
     public interface IOnScrollListener {
         public void onMoveToPageStarted(final int oldPageNumber, final int newPageNumber);
         public void onMoveToPageFinished(final int oldPageNumber, final int newPageNumber);
@@ -38,7 +38,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     private static final float MINIMUM_TOUCH_LENGTH_TO_SLIDE_DEFAULT = 50f;
     private static final float MINIMUM_TOUCH_LENGTH_TO_CHANGE_PAGE_DEFAULT = 100f;
     
-    private SmartList<Page> mPages = new SmartList<Page>();
+    private SmartList<ScrollPage> mPages = new SmartList<ScrollPage>();
     private ScrollState mState;
     private IOnScrollListener mOnScrollScenePageListener;
 
@@ -121,25 +121,25 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     public void setMinimumLengthToChangePage(float pMinimumTouchLengthToChangePage) {
         this.mMinimumTouchLengthToChagePage = pMinimumTouchLengthToChangePage;
     }
-    public boolean isFirstPage(Page pPage) {
+    public boolean isFirstPage(ScrollPage pPage) {
         if (this.mPages.getFirst().equals(pPage)) {
             return true;
         }
         return false;
     }
-    public boolean isLastPage(Page pPage) {
+    public boolean isLastPage(ScrollPage pPage) {
         if (this.mPages.getLast().equals(pPage)) {
             return true;
         }
         return false;
     }
-    public Page getCurrentPage() {
+    public ScrollPage getCurrentPage() {
         return this.mPages.get(this.mCurrentPage);
     }
     public int getCurrentPageNumber() {
         return this.mCurrentPage;
     }
-    public Page getPreviousPage() {
+    public ScrollPage getPreviousPage() {
         return this.mPages.get(this.mPrevPage);
     }
     public int getPreviousPageNumber() {
@@ -148,7 +148,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
 
     public void updatePages() {
         int i = 0;
-        for (Page page : this.mPages) {
+        for (ScrollPage page : this.mPages) {
             if(this.isFirstPage(page)){
                 page.setLeftVisible(false);
             }
@@ -166,7 +166,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         }
     }
     
-    public void addPage(final Page pPage) {
+    public void addPage(final ScrollPage pPage) {
         this.registerPageTouchAreas(pPage);
         this.mPages.add(pPage);
         this.attachChild(pPage);
@@ -174,13 +174,13 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         this.updatePages();
     }
     
-    public void addPages(final Page... pPages){
-        for(Page pPage : pPages){
+    public void addPages(final ScrollPage... pPages){
+        for(ScrollPage pPage : pPages){
             this.addPage(pPage);
         }
     }
     
-    public void addPage(final Page pPage, final int pPageNumber) {
+    public void addPage(final ScrollPage pPage, final int pPageNumber) {
         this.registerPageTouchAreas(pPage);
         this.mPages.add(pPageNumber, pPage);
         this.attachChild(pPage);
@@ -188,7 +188,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         this.updatePages();
     }
     
-    public void removePage(final Page pPage) {
+    public void removePage(final ScrollPage pPage) {
         //this.unregisterTouchArea(pPage);
         this.unregisterPageTouchAreas(pPage);
         this.detachChild(pPage);
@@ -202,13 +202,13 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
 
     }
     
-    void removePageWithNumber(final Page pPage, final int pPageNumber) {
+    void removePageWithNumber(final ScrollPage pPage, final int pPageNumber) {
         if (pPageNumber < this.mPages.size()) {
             this.removePage(this.mPages.get(pPageNumber));
         }
     }
     
-    private void registerPageTouchAreas(final Page pPage){
+    private void registerPageTouchAreas(final ScrollPage pPage){
         pPage.registerPageNavigationTouchListener(this);
         this.registerTouchArea(pPage.getNavigationLeftTouchArea());
         this.registerTouchArea(pPage.getNavigationRightTouchArea());
@@ -218,7 +218,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         }
     }
     
-    private void unregisterPageTouchAreas(final Page pPage){
+    private void unregisterPageTouchAreas(final ScrollPage pPage){
         pPage.registerPageNavigationTouchListener(null);
         this.unregisterTouchArea(pPage.getNavigationLeftTouchArea());
         this.unregisterTouchArea(pPage.getNavigationRightTouchArea());
@@ -317,7 +317,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     
     public void clearPages() {
         for (int i = this.mPages.size() - 1; i >= 0; i--) {
-            final Page page = this.mPages.remove(i);
+            final ScrollPage page = this.mPages.remove(i);
             this.detachChild(page);
             //this.unregisterTouchArea(page);
             this.unregisterPageTouchAreas(page);
@@ -327,7 +327,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     @Override
     public void disposeScene() {
         super.disposeScene();
-        for(Page page : this.mPages){
+        for(ScrollPage page : this.mPages){
             page.disposePage();
         }
     }
@@ -388,10 +388,10 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     
     //IPageElementTouchListener
     @Override
-    public void onElementActionUp(PageElement element) {
+    public void onElementActionUp(ScrollPageElement element) {
         if(this.mState != ScrollState.SLIDING){
             this.onElementAction(element);
         }
     }
-    public abstract void onElementAction(PageElement element);
+    public abstract void onElementAction(ScrollPageElement element);
 }
