@@ -5,6 +5,8 @@
 package net.kirauks.pixelrunner.scene.base;
 
 import net.kirauks.pixelrunner.GameActivity;
+import net.kirauks.pixelrunner.scene.base.element.IListElementTouchListener;
+import net.kirauks.pixelrunner.scene.base.element.ListElement;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.Entity;
@@ -22,7 +24,7 @@ import org.andengine.util.adt.list.SmartList;
  *
  * @author Karl
  */
-public abstract class BaseListMenuScene extends BaseMenuScene implements IScrollDetectorListener, IOnSceneTouchListener{
+public abstract class BaseListMenuScene extends BaseMenuScene implements IScrollDetectorListener, IOnSceneTouchListener, IListElementTouchListener{
     private static final float FREQ_D = 50.0f;
     private static final float MAX_ACCEL = 5000;
     private static final double FRICTION = 0.96f;
@@ -43,13 +45,13 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
     private SurfaceScrollDetector scrollDetector;
     private long t0;
     
-    private SmartList<Shape> elements;
+    private SmartList<ListElement> elements;
         
     @Override
     public void createScene(){
         super.createScene();
         
-        this.elements = new SmartList<Shape>();
+        this.elements = new SmartList<ListElement>();
         
         this.wrapper = new Entity(GameActivity.CAMERA_WIDTH/2, START_Y);
         this.wrapperHeight = 0;
@@ -69,7 +71,7 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
         this.currentState = SlideState.WAIT;
     }
     
-    public void addElementAtEnd(Shape element, float margin){
+    public void addListElement(ListElement element, float margin){
         if(this.elements.isEmpty()){
             element.setPosition(0, -element.getHeight()/2 - margin);
             this.wrapperHeight += element.getHeight() + 2*margin;
@@ -80,25 +82,33 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
             this.wrapperHeight += element.getHeight() + margin;
         }
         this.maxY = (this.wrapperHeight > GameActivity.CAMERA_HEIGHT) ? (this.wrapperHeight - GameActivity.CAMERA_HEIGHT) : 0;
+        this.registerTouchArea(element);
+        element.registerListElementTouchListener(this);
         this.wrapper.attachChild(element);
         this.elements.add(element);
     }
-    public void addElementAtEnd(Shape element){
-        this.addElementAtEnd(element, 0);
+    public void addListElement(ListElement element){
+        this.addListElement(element, 0);
     }
     
     //IOnSceneTouchListener
     @Override
     public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
-        if (this.currentState == SlideState.DISABLE) {
-            return true;
+        switch(pSceneTouchEvent.getAction()) {
+            case TouchEvent.ACTION_DOWN:
+            case TouchEvent.ACTION_MOVE:
+                if (this.currentState == SlideState.DISABLE) {
+                    return true;
+                }
+                if (this.currentState == SlideState.MOMENTUM) {
+                    this.accel0 = this.accel1 = this.accel = 0;
+                    this.currentState = SlideState.WAIT;
+                }
+                this.scrollDetector.onTouchEvent(pSceneTouchEvent);
+                return true;
+            default:
+                return false;
         }
-        if (this.currentState == SlideState.MOMENTUM) {
-            this.accel0 = this.accel1 = this.accel = 0;
-            this.currentState = SlideState.WAIT;
-        }
-        this.scrollDetector.onTouchEvent(pSceneTouchEvent);
-        return true;
     }
 
     //IScrollDetectorListener
@@ -161,6 +171,15 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
         }
         this.accel = (this.accel * FRICTION);
     }
+    
+    //IScrollPageElementTouchListener
+    @Override
+    public void onElementActionUp(ListElement element) {
+        if(this.currentState != SlideState.SCROLLING){
+            this.onElementAction(element);
+        }
+    }
+    public abstract void onElementAction(ListElement element);
     
     @Override
     public void disposeScene() {

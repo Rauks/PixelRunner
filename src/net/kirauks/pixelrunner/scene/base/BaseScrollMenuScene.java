@@ -189,7 +189,6 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     }
     
     public void removePage(final ScrollPage pPage) {
-        //this.unregisterTouchArea(pPage);
         this.unregisterPageTouchAreas(pPage);
         this.detachChild(pPage);
         this.mPages.remove(pPage);
