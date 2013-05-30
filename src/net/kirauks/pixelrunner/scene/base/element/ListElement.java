@@ -23,7 +23,7 @@ public class ListElement extends Text{
     private String name;
     
     public ListElement(String name, VertexBufferObjectManager pVertexBufferObjectManager){
-        super(-200, 0, ResourcesManager.getInstance().fontPixel_60, name, new TextOptions(HorizontalAlign.LEFT), pVertexBufferObjectManager);
+        super(0, 0, ResourcesManager.getInstance().fontPixel_60, name, new TextOptions(HorizontalAlign.LEFT), pVertexBufferObjectManager);
         this.name = name;
     }
     
