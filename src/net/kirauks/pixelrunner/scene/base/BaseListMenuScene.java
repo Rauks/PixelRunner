@@ -25,33 +25,38 @@ import org.andengine.util.adt.list.SmartList;
  * @author Karl
  */
 public abstract class BaseListMenuScene extends BaseMenuScene implements IScrollDetectorListener, IOnSceneTouchListener{
-    private static final float FREQ_D = 120.0f;
-    private static final int WRAPPER_HEIGHT = 1260;
+    private static final float FREQ_D = 50.0f;
     private static final float MAX_ACCEL = 5000;
     private static final double FRICTION = 0.96f;
+    
+    private static final int WRAPPER_HEIGHT = 1260;
+    private static final float START_Y = GameActivity.CAMERA_HEIGHT;
+    private float wrapperHeight;
+    private float maxY;
     
     private enum SlideState{
         WAIT, SCROLLING, MOMENTUM, DISABLE;
     }
     
     private TimerHandler thandle;
-    private SlideState mState;
+    private SlideState currentState;
     private double accel, accel1, accel0;
-    private float mCurrentY;
-    private IEntity mWrapper;
-    private SurfaceScrollDetector mScrollDetector;
+    private float currentY;
+    private IEntity wrapper;
+    private SurfaceScrollDetector scrollDetector;
     private long t0;
     
     private SmartList<Shape> elements;
-
-    public BaseListMenuScene() {
-        this.elements = new SmartList<Shape>();
-        
-    }
         
     @Override
     public void createScene(){
         super.createScene();
+        
+        this.elements = new SmartList<Shape>();
+        
+        this.wrapper = new Entity(GameActivity.CAMERA_WIDTH/2, START_Y);
+        this.wrapperHeight = 0;
+        this.attachChild(this.wrapper);
 
         this.thandle = new TimerHandler(1.0f / FREQ_D, true, new ITimerCallback() {
             @Override
@@ -60,31 +65,25 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
             }
         });
         
-        this.mScrollDetector = new SurfaceScrollDetector(this);
+        this.scrollDetector = new SurfaceScrollDetector(this);
         this.setOnSceneTouchListener(this);
         
-        //Test purpose only
-        this.mWrapper = new Entity(0, 0);
-        for (int i = 0; i < 20; i++) {
-            Rectangle r = new Rectangle(17.5f, i * 100 + 20, 445, 80, this.vbom);
-            this.mWrapper.attachChild(r);
-        }
-        this.attachChild(this.mWrapper);
-        //End test purpose
-        
         this.registerUpdateHandler(this.thandle);
-        this.mState = SlideState.WAIT;
+        this.currentState = SlideState.WAIT;
     }
     
     public void addElementAtEnd(Shape element, float margin){
         if(this.elements.isEmpty()){
-            element.setPosition(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2);
+            element.setPosition(0, -element.getHeight()/2 - margin);
+            this.wrapperHeight += element.getHeight() + 2*margin;
         }
         else{
             Shape last = this.elements.getLast();
             element.setPosition(last.getX(), last.getY() - last.getHeight()/2 - element.getHeight()/2 - margin);
+            this.wrapperHeight += element.getHeight() + margin;
         }
-        this.attachChild(element);
+        this.maxY = (this.wrapperHeight > GameActivity.CAMERA_HEIGHT) ? (this.wrapperHeight - GameActivity.CAMERA_HEIGHT) : 0;
+        this.wrapper.attachChild(element);
         this.elements.add(element);
     }
     public void addElementAtEnd(Shape element){
@@ -94,14 +93,14 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
     //IOnSceneTouchListener
     @Override
     public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
-        if (this.mState == SlideState.DISABLE) {
+        if (this.currentState == SlideState.DISABLE) {
             return true;
         }
-        if (this.mState == SlideState.MOMENTUM) {
+        if (this.currentState == SlideState.MOMENTUM) {
             this.accel0 = this.accel1 = this.accel = 0;
-            this.mState = SlideState.WAIT;
+            this.currentState = SlideState.WAIT;
         }
-        this.mScrollDetector.onTouchEvent(pSceneTouchEvent);
+        this.scrollDetector.onTouchEvent(pSceneTouchEvent);
         return true;
     }
 
@@ -109,7 +108,7 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
     @Override
     public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
         this.t0 = System.currentTimeMillis();
-        this.mState = SlideState.SCROLLING;
+        this.currentState = SlideState.SCROLLING;
     }
     @Override
     public void onScroll(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
@@ -123,11 +122,11 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
         this.accel1 = this.accel;
 
         this.t0 = System.currentTimeMillis();
-        this.mState = SlideState.SCROLLING;
+        this.currentState = SlideState.SCROLLING;
     }
     @Override
     public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID, float pDistanceX, float pDistanceY) {
-        this.mState = SlideState.MOMENTUM;
+        this.currentState = SlideState.MOMENTUM;
     }
     
     protected synchronized void doSetPos() {
@@ -135,33 +134,33 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
             return;
         }
 
-        if (this.mCurrentY > 0) {
-            this.mCurrentY = 0;
-            this.mState = SlideState.WAIT;
+        if (this.currentY < 0) {
+            this.currentY = 0;
+            this.currentState = SlideState.WAIT;
             this.accel0 = this.accel1 = this.accel = 0;
         }
-        if (this.mCurrentY < -WRAPPER_HEIGHT) {
-            this.mCurrentY = -WRAPPER_HEIGHT;
-            this.mState = SlideState.WAIT;
+        if (this.currentY > this.maxY) {
+            this.currentY = this.maxY;
+            this.currentState = SlideState.WAIT;
             this.accel0 = this.accel1 = this.accel = 0;
         }
-        this.mWrapper.setPosition(0, this.mCurrentY);
+        this.wrapper.setY(START_Y + this.currentY);
 
         if (this.accel < 0 && this.accel < -MAX_ACCEL) {
-            this.accel0 = this.accel1 = this.accel = - MAX_ACCEL;
+            this.accel0 = this.accel1 = this.accel = -MAX_ACCEL;
         }
         if (this.accel > 0 && this.accel > MAX_ACCEL) {
             this.accel0 = this.accel1 = this.accel = MAX_ACCEL;
         }
 
-        double ny = accel / FREQ_D;
-        if (ny >= -1 && ny <= 1) {
-            this.mState = SlideState.WAIT;
+        double deltaY = accel / FREQ_D;
+        if (deltaY >= -1 && deltaY <= 1) {
+            this.currentState = SlideState.WAIT;
             this.accel0 = this.accel1 = this.accel = 0;
             return;
         }
-        if (! (Double.isNaN(ny) || Double.isInfinite(ny))) {
-            this.mCurrentY += ny;
+        if (!Double.isNaN(deltaY) && !Double.isInfinite(deltaY)) {
+            this.currentY -= deltaY;
         }
         this.accel = (this.accel * FRICTION);
     }

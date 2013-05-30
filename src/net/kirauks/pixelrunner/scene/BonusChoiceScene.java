@@ -16,6 +16,7 @@ import org.andengine.entity.text.Text;
  */
 public class BonusChoiceScene extends BaseListMenuScene{
     public BonusChoiceScene(){
+        super();
         this.addElementAtEnd(new Text(0, 0, this.resourcesManager.fontPixel_100, this.activity.getString(R.string.menu_credits), this.vbom));
         this.addElementAtEnd(new Text(0, 0, this.resourcesManager.fontPixel_100, this.activity.getString(R.string.menu_credits), this.vbom));
         this.addElementAtEnd(new Text(0, 0, this.resourcesManager.fontPixel_100, this.activity.getString(R.string.menu_credits), this.vbom));
