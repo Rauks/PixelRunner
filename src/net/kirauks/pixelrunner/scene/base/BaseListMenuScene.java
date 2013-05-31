@@ -72,6 +72,7 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
     }
     
     public void addListElement(ListElement element, float margin){
+        element.setCullingEnabled(true);
         if(this.elements.isEmpty()){
             element.setPosition(0, -element.getHeight()/2 - margin);
             this.wrapperHeight += element.getHeight() + 2*margin;

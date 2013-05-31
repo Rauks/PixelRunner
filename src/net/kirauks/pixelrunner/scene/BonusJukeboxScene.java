@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.kirauks.pixelrunner.R;
 import net.kirauks.pixelrunner.game.Player;
 import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.SceneManager;
@@ -19,6 +20,9 @@ import net.kirauks.pixelrunner.scene.base.element.XmAudioListElement;
 import net.kirauks.pixelrunner.scene.base.utils.comparator.AlphanumComparator;
 import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.AnimatedSprite;
+import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
+import org.andengine.util.adt.align.HorizontalAlign;
 
 /**
  *
@@ -26,6 +30,8 @@ import org.andengine.entity.sprite.AnimatedSprite;
  */
 public class BonusJukeboxScene extends BaseListMenuScene{
     private final AnimatedSprite playerDance;
+    private Text nowPlaying;
+    private Text playing;
     
     public BonusJukeboxScene(){
         super();
@@ -39,13 +45,20 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         } catch (IOException ex) {
             Logger.getLogger(BonusChoiceScene.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.setListX(0);
+        this.setListX(430);
         
         this.playerDance = new AnimatedSprite(200, 280, this.resourcesManager.player, this.vbom);
         this.playerDance.animate(Player.PLAYER_ANIMATE_DANCE, Player.PLAYER_ANIMATE_DANCE_FRAMES);
         this.playerDance.setCullingEnabled(true);
         this.playerDance.setScale(4);
         this.attachChild(this.playerDance);
+        
+        this.nowPlaying = new Text(200, 110, this.resourcesManager.fontPixel_34, this.activity.getString(R.string.jukebox_playing), this.vbom);
+        this.nowPlaying.setVisible(false);
+        this.attachChild(this.nowPlaying);
+        this.playing = new Text(200, 80, this.resourcesManager.fontPixel_60, "0123456789", this.vbom);
+        this.playing.setVisible(false);
+        this.attachChild(this.playing);
     }
 
     @Override
@@ -74,6 +87,9 @@ public class BonusJukeboxScene extends BaseListMenuScene{
     @Override
     public void onElementAction(ListElement element) {
         this.audioManager.stop();
+        this.nowPlaying.setVisible(true);
+        this.playing.setVisible(true);
+        this.playing.setText(element.getName());
         this.audioManager.play("mfx/game/", ((XmAudioListElement)element).getXmFileName());
     }
     
@@ -82,6 +98,10 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         super.disposeScene();
         this.playerDance.detachSelf();
         this.playerDance.dispose();
+        this.nowPlaying.detachSelf();
+        this.nowPlaying.dispose();
+        this.playing.detachSelf();
+        this.playing.dispose();
         this.detachSelf();
         this.dispose();
     }
