@@ -53,7 +53,7 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
         
         this.elements = new SmartList<ListElement>();
         
-        this.wrapper = new Entity(GameActivity.CAMERA_WIDTH/2, START_Y);
+        this.wrapper = new Entity(0, START_Y);
         this.wrapperHeight = 0;
         this.attachChild(this.wrapper);
 
@@ -73,7 +73,7 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
     
     public void addListElement(ListElement element, float margin){
         if(this.elements.isEmpty()){
-            element.setPosition(-200, -element.getHeight()/2 - margin);
+            element.setPosition(0, -element.getHeight()/2 - margin);
             this.wrapperHeight += element.getHeight() + 2*margin;
         }
         else{
@@ -90,6 +90,9 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
     public void addListElement(ListElement element){
         this.addListElement(element, 0);
     }
+    public void setListX(float px){
+        this.wrapper.setX(px);
+    }
     
     //IOnSceneTouchListener
     @Override
@@ -97,12 +100,16 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
         switch(pSceneTouchEvent.getAction()) {
             case TouchEvent.ACTION_DOWN:
             case TouchEvent.ACTION_MOVE:
+            case TouchEvent.ACTION_CANCEL:
                 if (this.currentState == SlideState.DISABLE) {
                     return true;
                 }
                 if (this.currentState == SlideState.MOMENTUM) {
                     this.accel0 = this.accel1 = this.accel = 0;
                     this.currentState = SlideState.WAIT;
+                }
+                if (this.currentState == SlideState.SCROLLING){
+                    this.currentState = SlideState.MOMENTUM;
                 }
                 this.scrollDetector.onTouchEvent(pSceneTouchEvent);
                 return true;
