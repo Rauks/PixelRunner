@@ -125,7 +125,7 @@ public class ResourcesManager {
         this.lvlRoll = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_roll.png", 94, 73);
         this.lvlPlatform = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_platform.png", 80, 64);
         this.lvlTextureAtlas.load();
-        AudioManager.getInstance().prepare("mfx/main/", "menu.xm");
+        AudioManager.getInstance().prepare("mfx/", "menu.xm");
     }
     
     public void unloadMenuResources(){
@@ -190,8 +190,8 @@ public class ResourcesManager {
         }
         this.gameBackgroundTextureAtlas.load();
         
-        AudioManager.getInstance().prepare("mfx/game/", level.getMusic());
-        AudioManager.getInstance().prepare("mfx/game/", "win.xm");
+        AudioManager.getInstance().prepare("mfx/", level.getMusic());
+        AudioManager.getInstance().prepare("mfx/", "win.xm");
     }
 
     public void unloadGameResources() {

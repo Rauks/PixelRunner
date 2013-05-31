@@ -42,7 +42,7 @@ public class BonusJukeboxScene extends BaseListMenuScene{
     public BonusJukeboxScene(){
         super();
         try {
-            List<String> fileNames = Arrays.asList(this.activity.getAssets().list("mfx/game"));
+            List<String> fileNames = Arrays.asList(this.activity.getAssets().list("mfx"));
             Collections.sort(fileNames, new AlphanumComparator());
             for(final String name : fileNames){    
                 ListElement file = new XmAudioListElement(name.substring(0, name.length() - 3), name, this.vbom);
@@ -106,7 +106,7 @@ public class BonusJukeboxScene extends BaseListMenuScene{
     @Override
     public void onBackKeyPressed() {
         this.audioManager.stop();
-        this.audioManager.play("mfx/main/", "menu.xm");
+        this.audioManager.play("mfx/", "menu.xm");
         SceneManager.getInstance().createBonusChoiceScene();
         SceneManager.getInstance().disposeBonusJukeboxScene();
     }
@@ -122,7 +122,7 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         this.nowPlaying.setVisible(true);
         this.playing.setVisible(true);
         this.playing.setText(element.getName());
-        this.audioManager.play("mfx/game/", ((XmAudioListElement)element).getXmFileName());
+        this.audioManager.play("mfx/", ((XmAudioListElement)element).getXmFileName());
     }
     
     @Override

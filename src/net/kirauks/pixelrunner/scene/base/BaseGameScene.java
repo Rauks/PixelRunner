@@ -300,7 +300,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
 
                 BaseGameScene.this.win.setVisible(true);
                 AudioManager.getInstance().stop();
-                AudioManager.getInstance().play("mfx/game/", "win.xm");
+                AudioManager.getInstance().play("mfx/", "win.xm");
                 BaseGameScene.this.playerTrail.setColorMode(Trail.ColorMode.MULTICOLOR);
             }
         });
@@ -421,7 +421,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                                     BaseGameScene.this.broadcast(BaseGameScene.this.chronoStart, new IEntityModifierListener() {
                                         @Override
                                         public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-                                            AudioManager.getInstance().play("mfx/game/", BaseGameScene.this.level.getMusic());
+                                            AudioManager.getInstance().play("mfx/", BaseGameScene.this.level.getMusic());
                                             BaseGameScene.this.playerTrail.show();
                                             BaseGameScene.this.registerUpdateHandler(BaseGameScene.this.levelReaderHandler = new TimerHandler(BaseGameScene.this.level.getSpawnTime(), true, BaseGameScene.this.levelReaderAction));
                                             BaseGameScene.this.onStartEnd();

@@ -122,7 +122,7 @@ public class SceneManager {
                 SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadMenuResources();
                 SceneManager.this.createMenuAfterGameScene(wasType);
-                AudioManager.getInstance().play("mfx/main/", "menu.xm");
+                AudioManager.getInstance().play("mfx/", "menu.xm");
             }
         }));
     }
