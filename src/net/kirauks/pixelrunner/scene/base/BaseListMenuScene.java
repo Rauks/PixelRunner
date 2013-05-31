@@ -160,7 +160,8 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
             this.accel0 = this.accel1 = this.accel = 0;
         }
         this.wrapper.setY(START_Y + this.currentY);
-
+        this.onListMove(this.currentY, 0, this.maxY);
+        
         if (this.accel < 0 && this.accel < -MAX_ACCEL) {
             this.accel0 = this.accel1 = this.accel = -MAX_ACCEL;
         }
@@ -179,6 +180,7 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
         }
         this.accel = (this.accel * FRICTION);
     }
+    protected abstract void onListMove(float newPos, float minPos, float maxPos);
     
     //IScrollPageElementTouchListener
     @Override
