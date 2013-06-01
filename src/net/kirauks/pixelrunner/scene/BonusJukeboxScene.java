@@ -66,13 +66,31 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         this.playing.setVisible(false);
         this.attachChild(this.playing);
         
-        this.top = new Sprite(760, 450, ResourcesManager.getInstance().lvlLeft, this.vbom);
+        this.top = new Sprite(760, 450, ResourcesManager.getInstance().lvlLeft, this.vbom){
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
+                if (pSceneTouchEvent.isActionUp()){
+                    BonusJukeboxScene.this.impulseUp();
+                }
+                return false;
+            };
+        };;
         this.top.setScale(6f);
         this.top.setRotation(90f);
+        this.registerTouchArea(this.top);
         this.attachChild(this.top);
-        this.bottom = new Sprite(760, 30, ResourcesManager.getInstance().lvlRight, this.vbom);
+        this.bottom = new Sprite(760, 30, ResourcesManager.getInstance().lvlRight, this.vbom){
+            @Override
+            public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
+                if (pSceneTouchEvent.isActionUp()){
+                    BonusJukeboxScene.this.impulseDown();
+                }
+                return false;
+            };
+        };;
         this.bottom.setScale(6f);
         this.bottom.setRotation(90f);
+        this.registerTouchArea(this.bottom);
         this.attachChild(this.bottom);
         this.onListMove(0, 0, 1);
     }

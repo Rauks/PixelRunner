@@ -4,6 +4,7 @@
  */
 package net.kirauks.pixelrunner.scene.base;
 
+import android.util.Log;
 import net.kirauks.pixelrunner.GameActivity;
 import net.kirauks.pixelrunner.scene.base.element.IListElementTouchListener;
 import net.kirauks.pixelrunner.scene.base.element.ListElement;
@@ -27,6 +28,7 @@ import org.andengine.util.adt.list.SmartList;
 public abstract class BaseListMenuScene extends BaseMenuScene implements IScrollDetectorListener, IOnSceneTouchListener, IListElementTouchListener{
     private static final float FREQ_D = 50.0f;
     private static final float MAX_ACCEL = 5000;
+    private static final float IMPULSE_ACCEL = 1000;
     private static final double FRICTION = 0.96f;
     
     private static final float START_Y = GameActivity.CAMERA_HEIGHT;
@@ -95,6 +97,13 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
         this.wrapper.setX(px);
     }
     
+    public void impulseUp(){
+        this.accel0 = this.accel1 = this.accel = IMPULSE_ACCEL;
+    }
+    public void impulseDown(){
+        this.accel0 = this.accel1 = this.accel = -IMPULSE_ACCEL;
+    }
+    
     //IOnSceneTouchListener
     @Override
     public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
@@ -160,6 +169,7 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
             this.accel0 = this.accel1 = this.accel = 0;
         }
         this.wrapper.setY(START_Y + this.currentY);
+        Log.d("ACCEL", this.accel0 + " / " + this.accel1 + " / " + this.accel);
         this.onListMove(this.currentY, 0, this.maxY);
         
         if (this.accel < 0 && this.accel < -MAX_ACCEL) {
