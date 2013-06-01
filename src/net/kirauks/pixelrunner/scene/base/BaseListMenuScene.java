@@ -75,12 +75,12 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
     public void addListElement(ListElement element, float margin){
         element.setCullingEnabled(true);
         if(this.elements.isEmpty()){
-            element.setPosition(0, -element.getHeight()/2 - margin);
+            element.setPosition(element.getWidth()/2, -element.getHeight()/2 - margin);
             this.wrapperHeight += element.getHeight() + 2*margin;
         }
         else{
             Shape last = this.elements.getLast();
-            element.setPosition(last.getX() - last.getWidth()/2 + element.getWidth()/2, last.getY() - last.getHeight()/2 - element.getHeight()/2 - margin);
+            element.setPosition(element.getWidth()/2, last.getY() - last.getHeight()/2 - element.getHeight()/2 - margin);
             this.wrapperHeight += element.getHeight() + margin;
         }
         this.maxY = (this.wrapperHeight > GameActivity.CAMERA_HEIGHT) ? (this.wrapperHeight - GameActivity.CAMERA_HEIGHT) : 0;

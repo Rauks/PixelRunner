@@ -58,7 +58,7 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         } catch (IOException ex) {
             Logger.getLogger(BonusChoiceScene.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.getListWrapper().setX(430);
+        this.getListWrapper().setX(390);
         
         this.listBackground = new Rectangle(550, GameActivity.CAMERA_HEIGHT/2, 350, GameActivity.CAMERA_HEIGHT, this.vbom);
         this.listBackground.setZIndex(this.getListWrapper().getZIndex() - 1);

@@ -75,6 +75,8 @@ public class BonusChoiceScene extends BaseMenuScene implements MenuScene.IOnMenu
                 return true;
             case MENUID_ACHIEVEMENTS:
                 this.activity.vibrate(30);
+                SceneManager.getInstance().createBonusSuccessScene();
+                SceneManager.getInstance().disposeBonusChoiceScene();
                 return true;
             default:
                 return false;
