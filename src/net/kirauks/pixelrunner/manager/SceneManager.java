@@ -13,6 +13,8 @@ import net.kirauks.pixelrunner.GameActivity;
 import net.kirauks.pixelrunner.scene.base.BaseScene;
 import net.kirauks.pixelrunner.game.descriptor.LevelDescriptor;
 import net.kirauks.pixelrunner.scene.ArcadeGameScene;
+import net.kirauks.pixelrunner.scene.BonusChoiceScene;
+import net.kirauks.pixelrunner.scene.BonusJukeboxScene;
 import net.kirauks.pixelrunner.scene.CreditScene;
 import net.kirauks.pixelrunner.scene.base.BaseGameScene;
 import net.kirauks.pixelrunner.scene.LevelChoiceScene;
@@ -27,12 +29,14 @@ import net.kirauks.pixelrunner.scene.SplashEndScene;
  * @author Karl
  */
 public class SceneManager {
-
     public enum SceneType{
         SCENE_SPLASH,
         SCENE_SPLASH_END,
         SCENE_MENU,
         SCENE_LEVEL_CHOICE,
+        SCENE_BONUS_CHOICE,
+        SCENE_BONUS_JUKEBOX,
+        SCENE_BONUS_SUCCESS,
         SCENE_GAME_ARCADE,
         SCENE_GAME_LEVEL,
         SCENE_LOADING,
@@ -44,6 +48,8 @@ public class SceneManager {
     private BaseScene splashEndScene;
     private BaseScene mainMenuScene;
     private BaseScene levelChoiceScene;
+    private BaseScene bonusChoiceScene;
+    private BaseScene bonusJukeboxScene;
     private BaseScene gameLevelScene;
     
     private LoadingScene loadingScene;
@@ -116,7 +122,7 @@ public class SceneManager {
                 SceneManager.this.engine.unregisterUpdateHandler(pTimerHandler);
                 ResourcesManager.getInstance().loadMenuResources();
                 SceneManager.this.createMenuAfterGameScene(wasType);
-                AudioManager.getInstance().play("mfx/main/", "menu.xm");
+                AudioManager.getInstance().play("mfx/", "menu.xm");
             }
         }));
     }
@@ -181,6 +187,37 @@ public class SceneManager {
             public void run() {
                 SceneManager.this.mainMenuScene.disposeScene();
                 SceneManager.this.mainMenuScene = null;
+            }
+        });
+    }
+
+    public void createBonusChoiceScene() {
+        this.bonusChoiceScene = new BonusChoiceScene();
+        this.setScene(this.bonusChoiceScene);
+    }
+
+    public void disposeBonusChoiceScene() {
+        this.activity.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                SceneManager.this.bonusChoiceScene.disposeScene();
+                SceneManager.this.bonusChoiceScene = null;
+            }
+        });
+    }
+    
+    
+    public void createBonusJukeboxScene() {
+        this.bonusJukeboxScene = new BonusJukeboxScene();
+        this.setScene(this.bonusJukeboxScene);
+    }
+    
+    public void disposeBonusJukeboxScene(){
+        this.activity.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                SceneManager.this.bonusJukeboxScene.disposeScene();
+                SceneManager.this.bonusJukeboxScene = null;
             }
         });
     }

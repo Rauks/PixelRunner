@@ -43,10 +43,27 @@ public class AudioManager {
     
     public void play(final String dir, final String file){
         if(FileUtils.isExternalStorageReadable()){
-            if(!FileUtils.isFileExistingOnExternalStorage(this.activity, dir + file)){
-                this.prepare(dir, file);
+            if(FileUtils.isFileExistingOnExternalStorage(this.activity, dir + file)){
+                this.mModPlayer.play(FileUtils.getAbsolutePathOnExternalStorage(this.activity, dir + file), this.looping);
             }
-            this.mModPlayer.play(FileUtils.getAbsolutePathOnExternalStorage(this.activity, dir + file), this.looping);
+            else{
+                AudioManager.this.activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                        FileUtils.ensureDirectoriesExistOnExternalStorage(AudioManager.this.activity, dir);
+                        FileUtils.copyToExternalStorage(AudioManager.this.activity, dir + file, dir + file);
+                        } catch (IOException ex) {
+                            Logger.getLogger(GameActivity.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        AudioManager.this.mModPlayer.play(FileUtils.getAbsolutePathOnExternalStorage(AudioManager.this.activity, dir + file), AudioManager.this.looping);
+                    }
+                });
+            }
+            
+            
+            
+                this.prepare(dir, file);
         }
     }
     

@@ -7,7 +7,13 @@
     
     <string name="menu_play">Play</string>
     <string name="menu_arcade">Arcade</string>
+    <string name="menu_bonus">Bonus</string>
     <string name="menu_credits">Credits</string>
+    
+    <string name="menu_bonus_jukebox">Jukebox</string>
+    <string name="menu_bonus_success">Achievements</string>
+    
+    <string name="jukebox_playing">Playing :</string>
     
     <string name="credits_programming">Programming</string>
     <string name="credits_design">Design</string>

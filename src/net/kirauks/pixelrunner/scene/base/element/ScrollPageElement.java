@@ -16,15 +16,15 @@ import net.kirauks.pixelrunner.manager.ResourcesManager;
  *
  * @author Karl
  */
-public class PageElement extends Sprite{
+public class ScrollPageElement extends Sprite{
     private int id;
     private boolean locked;
-    private IPageElementTouchListener listener;
+    private IScrollPageElementTouchListener listener;
     
     private Shape picto;
     private Sprite lock;
     
-    public PageElement(float pX, float pY, int id, boolean locked, ITextureRegion texture, VertexBufferObjectManager pVertexBufferObjectManager){
+    public ScrollPageElement(float pX, float pY, int id, boolean locked, ITextureRegion texture, VertexBufferObjectManager pVertexBufferObjectManager){
         super(pX, pY, ResourcesManager.getInstance().lvlBack, pVertexBufferObjectManager);
         this.setCullingEnabled(true);
         this.id = id;
@@ -34,7 +34,7 @@ public class PageElement extends Sprite{
         this.attachChild(this.picto);
         this.refreshEntity();
     }
-    public PageElement(float pX, float pY, int id, boolean locked, VertexBufferObjectManager pVertexBufferObjectManager){
+    public ScrollPageElement(float pX, float pY, int id, boolean locked, VertexBufferObjectManager pVertexBufferObjectManager){
         super(pX, pY, ResourcesManager.getInstance().lvlBack, pVertexBufferObjectManager);
         this.setCullingEnabled(true);
         this.id = id;
@@ -57,14 +57,14 @@ public class PageElement extends Sprite{
     @Override
     public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
         if (pSceneTouchEvent.isActionUp()){
-            if(PageElement.this.listener != null){
-                PageElement.this.listener.onElementActionUp(this);
+            if(ScrollPageElement.this.listener != null){
+                ScrollPageElement.this.listener.onElementActionUp(this);
             }
         }
         return false;
     };
     
-    public void registerPageElementTouchListener(IPageElementTouchListener listener){
+    public void registerPageElementTouchListener(IScrollPageElementTouchListener listener){
         this.listener = listener;
     }
     public void unregisterPageElementTouchListener(){

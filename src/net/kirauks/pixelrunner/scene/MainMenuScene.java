@@ -25,13 +25,14 @@ public class MainMenuScene extends BaseMenuScene implements MenuScene.IOnMenuIte
     private MenuScene menuChildScene;
     private final int MENUID_PLAY = 0;
     private final int MENUID_ARCADE = 1;
-    private final int MENUID_CREDITS = 2;
+    private final int MENUID_BONUS = 2;
+    private final int MENUID_CREDITS = 3;
 
     @Override
     public void createScene() {
         super.createScene();
         this.createMenuChildScene();
-        attachChild(new Text(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2 + 150, resourcesManager.fontPixel_100, "PIXEL RUNNER", vbom));
+        attachChild(new Text(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2 + 170, resourcesManager.fontPixel_100, this.activity.getString(R.string.app_name), vbom));
     }
     
     private void createMenuChildScene(){
@@ -40,18 +41,21 @@ public class MainMenuScene extends BaseMenuScene implements MenuScene.IOnMenuIte
         
         final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_PLAY, this.resourcesManager.fontPixel_60, this.activity.getString(R.string.menu_play), vbom), 1.4f, 1);
         final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_ARCADE, this.resourcesManager.fontPixel_60, this.activity.getString(R.string.menu_arcade), vbom), 1.4f, 1);
+        final IMenuItem bonusMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_BONUS, this.resourcesManager.fontPixel_60, this.activity.getString(R.string.menu_bonus), vbom), 1.4f, 1);
         final IMenuItem creditsMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENUID_CREDITS, this.resourcesManager.fontPixel_60, this.activity.getString(R.string.menu_credits), vbom), 1.4f, 1);
 
         this.menuChildScene.addMenuItem(playMenuItem);
         this.menuChildScene.addMenuItem(optionsMenuItem);
+        this.menuChildScene.addMenuItem(bonusMenuItem);
         this.menuChildScene.addMenuItem(creditsMenuItem);
 
         this.menuChildScene.buildAnimations();
         this.menuChildScene.setBackgroundEnabled(false);
 
-        playMenuItem.setPosition(playMenuItem.getX(), playMenuItem.getY() - 10);
-        optionsMenuItem.setPosition(optionsMenuItem.getX(), optionsMenuItem.getY() - 40);
-        creditsMenuItem.setPosition(creditsMenuItem.getX(), creditsMenuItem.getY() - 70);
+        playMenuItem.setPosition(playMenuItem.getX(), playMenuItem.getY() -15);
+        optionsMenuItem.setPosition(optionsMenuItem.getX(), optionsMenuItem.getY() - 35);
+        bonusMenuItem.setPosition(bonusMenuItem.getX(), bonusMenuItem.getY() - 55);
+        creditsMenuItem.setPosition(creditsMenuItem.getX(), creditsMenuItem.getY() - 75);
 
         this.menuChildScene.setOnMenuItemClickListener(this);
 
@@ -68,6 +72,10 @@ public class MainMenuScene extends BaseMenuScene implements MenuScene.IOnMenuIte
             case MENUID_ARCADE:
                 AudioManager.getInstance().stop();
                 SceneManager.getInstance().loadGameLevelScene(SceneType.SCENE_GAME_ARCADE, new ArcadeLevelDescriptor());
+                return true;
+            case MENUID_BONUS:
+                SceneManager.getInstance().createBonusChoiceScene();
+                SceneManager.getInstance().disposeMainMenuScene();
                 return true;
             case MENUID_CREDITS:
                 SceneManager.getInstance().createCreditsScene();
