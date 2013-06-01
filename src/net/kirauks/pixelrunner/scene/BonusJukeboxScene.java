@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.kirauks.pixelrunner.GameActivity;
 import net.kirauks.pixelrunner.R;
 import net.kirauks.pixelrunner.game.Player;
 import net.kirauks.pixelrunner.manager.AudioManager;
@@ -20,6 +21,7 @@ import net.kirauks.pixelrunner.scene.base.element.ListElement;
 import net.kirauks.pixelrunner.scene.base.element.ScrollPage;
 import net.kirauks.pixelrunner.scene.base.element.XmAudioListElement;
 import net.kirauks.pixelrunner.scene.base.utils.comparator.AlphanumComparator;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
@@ -27,6 +29,7 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.adt.align.HorizontalAlign;
+import org.andengine.util.adt.color.Color;
 
 /**
  *
@@ -38,6 +41,8 @@ public class BonusJukeboxScene extends BaseListMenuScene{
     private Text playing;
     private Sprite top;
     private Sprite bottom;
+    private final Rectangle listBackground;
+    private final Rectangle listBorders;
     
     public BonusJukeboxScene(){
         super();
@@ -51,7 +56,18 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         } catch (IOException ex) {
             Logger.getLogger(BonusChoiceScene.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.setListX(430);
+        this.getListWrapper().setX(430);
+        
+        this.listBackground = new Rectangle(550, GameActivity.CAMERA_HEIGHT/2, 350, GameActivity.CAMERA_HEIGHT, this.vbom);
+        this.listBackground.setZIndex(this.getListWrapper().getZIndex() - 1);
+        this.listBackground.setColor(Color.BLACK);
+        this.attachChild(this.listBackground);
+        this.listBorders = new Rectangle(550, GameActivity.CAMERA_HEIGHT/2, 358, GameActivity.CAMERA_HEIGHT, this.vbom);
+        this.listBorders.setZIndex(this.listBackground.getZIndex() - 1);
+        this.listBorders.setColor(new Color(0.4f, 0.4f, 0.4f));
+        this.attachChild(this.listBorders);
+        
+        this.sortChildren();
         
         this.playerDance = new AnimatedSprite(190, 280, this.resourcesManager.player, this.vbom);
         this.playerDance.animate(Player.PLAYER_ANIMATE_DANCE, Player.PLAYER_ANIMATE_DANCE_FRAMES);
@@ -66,7 +82,7 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         this.playing.setVisible(false);
         this.attachChild(this.playing);
         
-        this.top = new Sprite(760, 450, ResourcesManager.getInstance().lvlLeft, this.vbom){
+        this.top = new Sprite(765, 450, ResourcesManager.getInstance().lvlLeft, this.vbom){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 if (pSceneTouchEvent.isActionUp()){
@@ -74,12 +90,12 @@ public class BonusJukeboxScene extends BaseListMenuScene{
                 }
                 return false;
             };
-        };;
+        };
         this.top.setScale(6f);
         this.top.setRotation(90f);
         this.registerTouchArea(this.top);
         this.attachChild(this.top);
-        this.bottom = new Sprite(760, 30, ResourcesManager.getInstance().lvlRight, this.vbom){
+        this.bottom = new Sprite(765, 30, ResourcesManager.getInstance().lvlRight, this.vbom){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 if (pSceneTouchEvent.isActionUp()){
@@ -87,7 +103,7 @@ public class BonusJukeboxScene extends BaseListMenuScene{
                 }
                 return false;
             };
-        };;
+        };
         this.bottom.setScale(6f);
         this.bottom.setRotation(90f);
         this.registerTouchArea(this.bottom);
@@ -152,6 +168,10 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         this.nowPlaying.dispose();
         this.playing.detachSelf();
         this.playing.dispose();
+        this.listBackground.detachSelf();
+        this.listBackground.dispose();
+        this.listBorders.detachSelf();
+        this.listBorders.dispose();
         this.detachSelf();
         this.dispose();
     }

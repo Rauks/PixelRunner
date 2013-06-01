@@ -4,7 +4,6 @@
  */
 package net.kirauks.pixelrunner.scene.base;
 
-import android.util.Log;
 import net.kirauks.pixelrunner.GameActivity;
 import net.kirauks.pixelrunner.scene.base.element.IListElementTouchListener;
 import net.kirauks.pixelrunner.scene.base.element.ListElement;
@@ -43,7 +42,7 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
     private SlideState currentState;
     private double accel, accel1, accel0; //Moving avenage
     private float currentY;
-    private IEntity wrapper;
+    private IEntity listWrapper;
     private SurfaceScrollDetector scrollDetector;
     private long t0;
     
@@ -55,9 +54,9 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
         
         this.elements = new SmartList<ListElement>();
         
-        this.wrapper = new Entity(0, START_Y);
+        this.listWrapper = new Entity(0, START_Y);
         this.wrapperHeight = 0;
-        this.attachChild(this.wrapper);
+        this.attachChild(this.listWrapper);
 
         this.thandle = new TimerHandler(1.0f / FREQ_D, true, new ITimerCallback() {
             @Override
@@ -87,14 +86,14 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
         this.maxY = (this.wrapperHeight > GameActivity.CAMERA_HEIGHT) ? (this.wrapperHeight - GameActivity.CAMERA_HEIGHT) : 0;
         this.registerTouchArea(element);
         element.registerListElementTouchListener(this);
-        this.wrapper.attachChild(element);
+        this.listWrapper.attachChild(element);
         this.elements.add(element);
     }
     public void addListElement(ListElement element){
         this.addListElement(element, 0);
     }
-    public void setListX(float px){
-        this.wrapper.setX(px);
+    public IEntity getListWrapper(){
+        return this.listWrapper;
     }
     
     public void impulseUp(){
@@ -168,8 +167,7 @@ public abstract class BaseListMenuScene extends BaseMenuScene implements IScroll
             this.currentState = SlideState.WAIT;
             this.accel0 = this.accel1 = this.accel = 0;
         }
-        this.wrapper.setY(START_Y + this.currentY);
-        Log.d("ACCEL", this.accel0 + " / " + this.accel1 + " / " + this.accel);
+        this.listWrapper.setY(START_Y + this.currentY);
         this.onListMove(this.currentY, 0, this.maxY);
         
         if (this.accel < 0 && this.accel < -MAX_ACCEL) {
