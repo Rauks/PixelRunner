@@ -37,4 +37,13 @@ public abstract class Database {
         this.dbEditor.putInt(label, value);
         this.dbEditor.commit();
     }
+    
+    protected boolean getBoolean(String label, boolean defaultValue){
+        return this.db.getBoolean(label, defaultValue);
+    }
+    
+    protected void setBoolean(String label, boolean value){
+        this.dbEditor.putBoolean(label, value);
+        this.dbEditor.commit();
+    }
 }
