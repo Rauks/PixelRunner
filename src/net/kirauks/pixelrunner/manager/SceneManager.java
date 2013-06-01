@@ -270,6 +270,7 @@ public class SceneManager {
     
     public void createLoadingScene(OnCreateSceneCallback pOnCreateSceneCallback) {
         ResourcesManager.getInstance().loadFonts();
+        ResourcesManager.getInstance().loadCommon();
         this.loadingScene = new LoadingScene();
         this.setScene(this.loadingScene);
         pOnCreateSceneCallback.onCreateSceneFinished(this.loadingScene);
