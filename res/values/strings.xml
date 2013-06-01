@@ -35,7 +35,7 @@
     <string name="lvl_hills">5.Hills</string>
     <string name="lvl_sweets">6.Sweets</string>
     
-    <string name="success_tutorials">Never Skip Leg Day</string>
+    <string name="success_tutorials">Never Skip\nLeg Day</string>
     <string name="success_tutorials_sub">Do all trainings</string>
     <string name="success_mountains">Himalayan Runner</string>
     <string name="success_mountains_sub">Finish World 1 (Mountains)</string>
@@ -61,12 +61,12 @@
     <string name="success_arcade_gold_sub">Score 10000 in Arcade</string>
     <string name="success_arcade_crazy">Crasy Runner</string>
     <string name="success_arcade_crazy_sub">Score 25000 in Arcade</string>
-    <string name="success_arcade_mordor">One Does Not Simply Walk Into Mordor</string>
+    <string name="success_arcade_mordor">One Does Not\nSimply Walk Into\nMordor</string>
     <string name="success_arcade_mordor_sub">Score 50000 in Arcade</string>
     <string name="success_arcade_wtf">Seriously WTF?</string>
     <string name="success_arcade_wtf_sub">Score 100000 in Arcade</string>
-    <string name="success_arcade_roll">Don\'t do a barrel roll!</string>
-    <string name="success_arcade_roll_sub">Score 2500 in Arcade without any roll</string>
-    <string name="success_nyan">Nyanyanyanyanyanyanya!</string>
-    <string name="success_nyan_sub">Secret Success</string>
+    <string name="success_arcade_roll">Dont do\na barrel roll!</string>
+    <string name="success_arcade_roll_sub">Score 2500 in Arcade\nwithout any roll</string>
+    <string name="success_nyan">Nyan!</string>
+    <string name="success_nyan_sub">Nyan nyanyan nyanya nyan</string>
 </resources>
