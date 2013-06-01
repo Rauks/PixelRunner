@@ -88,6 +88,7 @@ public class BonusJukeboxScene extends BaseListMenuScene{
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 if (pSceneTouchEvent.isActionUp()){
+                    BonusJukeboxScene.this.activity.vibrate(30);
                     BonusJukeboxScene.this.impulseUp();
                 }
                 return false;
@@ -101,6 +102,7 @@ public class BonusJukeboxScene extends BaseListMenuScene{
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 if (pSceneTouchEvent.isActionUp()){
+                    BonusJukeboxScene.this.activity.vibrate(30);
                     BonusJukeboxScene.this.impulseDown();
                 }
                 return false;
@@ -171,6 +173,7 @@ public class BonusJukeboxScene extends BaseListMenuScene{
 
     @Override
     public void onElementAction(ListElement element) {
+        this.activity.vibrate(30);
         this.audioManager.stop();
         this.nowPlaying.setVisible(true);
         this.playing.setVisible(true);
