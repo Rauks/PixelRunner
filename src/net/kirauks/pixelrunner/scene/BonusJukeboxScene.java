@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import net.kirauks.pixelrunner.GameActivity;
 import net.kirauks.pixelrunner.R;
 import net.kirauks.pixelrunner.game.Player;
+import net.kirauks.pixelrunner.game.Trail;
 import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.ResourcesManager;
 import net.kirauks.pixelrunner.manager.SceneManager;
@@ -37,6 +38,7 @@ import org.andengine.util.adt.color.Color;
  */
 public class BonusJukeboxScene extends BaseListMenuScene{
     private final AnimatedSprite playerDance;
+    private final AnimatedSprite nyan;
     private Text nowPlaying;
     private Text playing;
     private Sprite top;
@@ -109,6 +111,23 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         this.registerTouchArea(this.bottom);
         this.attachChild(this.bottom);
         this.onListMove(0, 0, 1);
+        
+        //Nyan ester egg
+        this.nyan = new AnimatedSprite(190, 280, this.resourcesManager.nyan, this.vbom);
+        this.nyan.animate(new long[]{80, 80, 80, 80, 80}, new int[]{0, 1, 2, 3, 4});
+        this.nyan.setCullingEnabled(true);
+        this.nyan.setScale(4);
+        this.nyan.setVisible(false);
+        this.attachChild(this.nyan);
+    }
+    
+    private void enableNyan(){
+        this.nyan.setVisible(true);
+        this.playerDance.setVisible(false);
+    }
+    private void disableNyan(){
+        this.nyan.setVisible(false);
+        this.playerDance.setVisible(true);
     }
 
     @Override
@@ -156,6 +175,12 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         this.nowPlaying.setVisible(true);
         this.playing.setVisible(true);
         this.playing.setText(element.getName());
+        if(element.getName().equals("nyan")){
+            this.enableNyan();
+        }
+        else{
+            this.disableNyan();
+        }
         this.audioManager.play("mfx/", ((XmAudioListElement)element).getXmFileName());
     }
     
@@ -164,6 +189,8 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         super.disposeScene();
         this.playerDance.detachSelf();
         this.playerDance.dispose();
+        this.nyan.detachSelf();
+        this.nyan.dispose();
         this.nowPlaying.detachSelf();
         this.nowPlaying.dispose();
         this.playing.detachSelf();
