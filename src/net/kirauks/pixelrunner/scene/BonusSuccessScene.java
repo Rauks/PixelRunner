@@ -75,7 +75,7 @@ public class BonusSuccessScene extends BaseListMenuScene{
     }
     
     private void addSuccess(int redIdName, int resIdSub){
-        this.addListElement(new SuccessListElement(this.activity.getString(redIdName), this.activity.getString(resIdSub), this.vbom), 0);
+        this.addListElement(new SuccessListElement(this.activity.getString(redIdName), this.activity.getString(resIdSub), true, this.vbom), 30);
     }
     
     @Override
