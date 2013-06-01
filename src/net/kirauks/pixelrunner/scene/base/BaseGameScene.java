@@ -42,6 +42,7 @@ import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.IModifier;
 import net.kirauks.pixelrunner.GameActivity;
+import net.kirauks.pixelrunner.game.IPlayerListener;
 import net.kirauks.pixelrunner.scene.base.BaseScene;
 import net.kirauks.pixelrunner.game.descriptor.LevelDescriptor;
 import net.kirauks.pixelrunner.game.element.background.BackgroundElement;
@@ -226,7 +227,17 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         }
     }
     private void createPlayer(){
-        this.player = new Player(PLAYER_X, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld) {
+        this.player = new Player(PLAYER_X, GROUND_LEVEL + GROUND_THICKNESS/2 + 32, this.resourcesManager.player, this.vbom, this.physicWorld) {            
+            @Override
+            protected void onUpdateColor(){
+                super.onUpdateColor();
+                if(BaseGameScene.this.playerTrail != null){
+                    BaseGameScene.this.playerTrail.setColor(this.getColor());
+                }
+            }
+        };
+        this.player.getBody().setUserData("player");
+        this.player.registerPlayerListener(new IPlayerListener() {
             @Override
             public void onJump() {
                 BaseGameScene.this.activity.vibrate(30);
@@ -237,24 +248,15 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
             }
             @Override
             public void onRollBackJump() {
-                this.reset();
+                BaseGameScene.this.player.reset();
                 BaseGameScene.this.restart();
                 BaseGameScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
             }
             @Override
-            protected void onBonus() {
+            public void onBonus() {
                 BaseGameScene.this.activity.vibrate(30);
             }
-            
-            @Override
-            protected void onUpdateColor(){
-                super.onUpdateColor();
-                if(BaseGameScene.this.playerTrail != null){
-                    BaseGameScene.this.playerTrail.setColor(this.getColor());
-                }
-            }
-        };
-        this.player.getBody().setUserData("player");
+        });
         
         this.attachChild(this.player);
         this.playerTrail = new Trail(36, 0, 0, 64, -340, -300, -2, 2, 25, 30, 50, Trail.ColorMode.NORMAL, this.resourcesManager.trail, this.vbom);

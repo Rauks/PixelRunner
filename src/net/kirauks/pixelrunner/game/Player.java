@@ -27,7 +27,6 @@ import net.kirauks.pixelrunner.game.descriptor.LevelDescriptor;
  * @author Karl
  */
 public abstract class Player extends AnimatedSprite{
-
     public enum JumpMode{
         DOUBLE, INFINITE
     }
@@ -71,17 +70,16 @@ public abstract class Player extends AnimatedSprite{
         }
     };
     
+    private IPlayerListener listener;
+    
     private Body body;
     
     private JumpMode jumpMode;
     private final float JUMP_INFINITE_MAX_Y = LevelDescriptor.LAYERS_MAX * LevelDescriptor.LAYER_HIGH + 150;
     private int jumpCount;
     private boolean jumping;
-    
     private boolean rolling;
-    
     private float speed;
-    
     private boolean hasLife;
     
     public Player(float pX, float pY, ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager, PhysicsWorld physicWorld){
@@ -138,7 +136,9 @@ public abstract class Player extends AnimatedSprite{
         this.animate(PLAYER_ANIMATE_JUMP, PLAYER_ANIMATE_JUMP_FRAMES, true);
         this.body.setLinearVelocity(0, 15);
         this.increaseJumpLevel();
-        this.onJump();
+        if(this.listener != null){
+            this.listener.onJump();
+        }
     }
 
     public float getSpeed() {
@@ -147,17 +147,23 @@ public abstract class Player extends AnimatedSprite{
     public void setSpeed(float speed){
         this.speed = speed;
         this.fireBonusTimer();
-        this.onBonus();
+        if(this.listener != null){
+            this.listener.onBonus();
+        }
     }
     public void setJumpMode(JumpMode jumpMode){
         this.jumpMode = jumpMode;
         this.fireBonusTimer();
-        this.onBonus();
+        if(this.listener != null){
+            this.listener.onBonus();
+        }
     }
     public void getLife(){
         this.hasLife = true;
         this.fireBonusTimer();
-        this.onBonus();
+        if(this.listener != null){
+            this.listener.onBonus();
+        }
     }
     public boolean hasLife(){
         return this.hasLife;
@@ -168,7 +174,9 @@ public abstract class Player extends AnimatedSprite{
         this.rolling = true;
         this.animate(PLAYER_ANIMATE_ROLL, PLAYER_ANIMATE_ROLL_FRAMES, true);
         this.body.setLinearVelocity(0, 25);
-        this.onRollBackJump();
+        if(this.listener != null){
+            this.listener.onRollBackJump();
+        }
     }
     public void roll(){
         if(!this.rolling){
@@ -192,7 +200,9 @@ public abstract class Player extends AnimatedSprite{
                     Player.this.run();
                 }
             });
-            this.onRoll();
+        if(this.listener != null){
+            this.listener.onRoll();
+        }
         }
     }
     public void run(){
@@ -215,8 +225,10 @@ public abstract class Player extends AnimatedSprite{
         this.registerUpdateHandler(new TimerHandler(8, this.bonusPickAction));
     }
     
-    protected abstract void onJump();
-    protected abstract void onRoll();
-    protected abstract void onRollBackJump();
-    protected abstract void onBonus();
+    public void registerPlayerListener(IPlayerListener listener){
+        this.listener = listener;
+    }
+    public void unregisterPlayerListener(){
+        this.listener = null;
+    }
 }
