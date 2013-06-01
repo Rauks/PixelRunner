@@ -202,6 +202,10 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         this.listBackground.dispose();
         this.listBorders.detachSelf();
         this.listBorders.dispose();
+        this.top.detachSelf();
+        this.top.dispose();
+        this.bottom.detachSelf();
+        this.bottom.dispose();
         this.detachSelf();
         this.dispose();
     }
