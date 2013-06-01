@@ -18,6 +18,7 @@ public class XmAudioListElement extends ListElement{
     
     public XmAudioListElement(String name, String xmFile, VertexBufferObjectManager pVertexBufferObjectManager){
         super(name, pVertexBufferObjectManager);
+        this.setCullingEnabled(true);
         this.xmFile = xmFile;
     }
     

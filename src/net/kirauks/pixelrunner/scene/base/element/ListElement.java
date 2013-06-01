@@ -37,7 +37,11 @@ public class ListElement extends Text{
             ListElement.this.listener.onElementActionUp(this);
         }
         return false;
-    };  
+    };
+    
+    public float getWrappingHeight(){
+        return this.getHeight();
+    }
     
     public void registerListElementTouchListener(IListElementTouchListener listener){
         this.listener = listener;

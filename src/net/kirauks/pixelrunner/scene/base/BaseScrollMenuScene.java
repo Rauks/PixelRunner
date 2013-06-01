@@ -378,10 +378,12 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     //IPageNavigationTouchListener
     @Override
     public void onLeft(){
+        this.activity.vibrate(30);
         this.moveToPage(BaseScrollMenuScene.this.mCurrentPage - 1);
     }
     @Override
     public void onRight(){
+        this.activity.vibrate(30);
         this.moveToPage(BaseScrollMenuScene.this.mCurrentPage + 1);
     }
     

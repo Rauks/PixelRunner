@@ -67,6 +67,27 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     private final float BROADCAST_LEFT = -100;
     private final float BROADCAST_RIGHT = 1000;
     
+    public class BaseGamePlayerListener implements IPlayerListener{
+        @Override
+        public void onJump() {
+            BaseGameScene.this.activity.vibrate(30);
+        }
+        @Override
+        public void onRoll() {
+            BaseGameScene.this.activity.vibrate(30);
+        }
+        @Override
+        public void onRollBackJump() {
+            BaseGameScene.this.player.reset();
+            BaseGameScene.this.restart();
+            BaseGameScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
+        }
+        @Override
+        public void onBonus() {
+            BaseGameScene.this.activity.vibrate(30);
+        }
+    };
+    
     private boolean isPaused = false;
     private boolean isStarted = false;
     private boolean isWin = false;
@@ -237,26 +258,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
             }
         };
         this.player.getBody().setUserData("player");
-        this.player.registerPlayerListener(new IPlayerListener() {
-            @Override
-            public void onJump() {
-                BaseGameScene.this.activity.vibrate(30);
-            }
-            @Override
-            public void onRoll() {
-                BaseGameScene.this.activity.vibrate(30);
-            }
-            @Override
-            public void onRollBackJump() {
-                BaseGameScene.this.player.reset();
-                BaseGameScene.this.restart();
-                BaseGameScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
-            }
-            @Override
-            public void onBonus() {
-                BaseGameScene.this.activity.vibrate(30);
-            }
-        });
+        this.player.registerPlayerListener(new BaseGamePlayerListener());
         
         this.attachChild(this.player);
         this.playerTrail = new Trail(36, 0, 0, 64, -340, -300, -2, 2, 25, 30, 50, Trail.ColorMode.NORMAL, this.resourcesManager.trail, this.vbom);

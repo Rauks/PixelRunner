@@ -17,6 +17,8 @@ import net.kirauks.pixelrunner.game.Trail;
 import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.ResourcesManager;
 import net.kirauks.pixelrunner.manager.SceneManager;
+import net.kirauks.pixelrunner.manager.db.SuccessDatabase;
+import net.kirauks.pixelrunner.manager.db.SuccessDatabase.Success;
 import net.kirauks.pixelrunner.scene.base.BaseListMenuScene;
 import net.kirauks.pixelrunner.scene.base.element.ListElement;
 import net.kirauks.pixelrunner.scene.base.element.ScrollPage;
@@ -58,7 +60,7 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         } catch (IOException ex) {
             Logger.getLogger(BonusChoiceScene.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.getListWrapper().setX(430);
+        this.getListWrapper().setX(390);
         
         this.listBackground = new Rectangle(550, GameActivity.CAMERA_HEIGHT/2, 350, GameActivity.CAMERA_HEIGHT, this.vbom);
         this.listBackground.setZIndex(this.getListWrapper().getZIndex() - 1);
@@ -88,6 +90,7 @@ public class BonusJukeboxScene extends BaseListMenuScene{
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 if (pSceneTouchEvent.isActionUp()){
+                    BonusJukeboxScene.this.activity.vibrate(30);
                     BonusJukeboxScene.this.impulseUp();
                 }
                 return false;
@@ -101,6 +104,7 @@ public class BonusJukeboxScene extends BaseListMenuScene{
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
                 if (pSceneTouchEvent.isActionUp()){
+                    BonusJukeboxScene.this.activity.vibrate(30);
                     BonusJukeboxScene.this.impulseDown();
                 }
                 return false;
@@ -171,17 +175,20 @@ public class BonusJukeboxScene extends BaseListMenuScene{
 
     @Override
     public void onElementAction(ListElement element) {
+        this.activity.vibrate(30);
         this.audioManager.stop();
         this.nowPlaying.setVisible(true);
         this.playing.setVisible(true);
         this.playing.setText(element.getName());
         if(element.getName().equals("nyan")){
             this.enableNyan();
+            new SuccessDatabase(this.activity).unlockSuccess(Success.NYAN);
         }
         else{
             this.disableNyan();
         }
         this.audioManager.play("mfx/", ((XmAudioListElement)element).getXmFileName());
+            new SuccessDatabase(this.activity).unlockSuccess(Success.JUKEBOX);
     }
     
     @Override
@@ -199,6 +206,10 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         this.listBackground.dispose();
         this.listBorders.detachSelf();
         this.listBorders.dispose();
+        this.top.detachSelf();
+        this.top.dispose();
+        this.bottom.detachSelf();
+        this.bottom.dispose();
         this.detachSelf();
         this.dispose();
     }

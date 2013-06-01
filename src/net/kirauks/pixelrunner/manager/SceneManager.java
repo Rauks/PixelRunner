@@ -15,6 +15,7 @@ import net.kirauks.pixelrunner.game.descriptor.LevelDescriptor;
 import net.kirauks.pixelrunner.scene.ArcadeGameScene;
 import net.kirauks.pixelrunner.scene.BonusChoiceScene;
 import net.kirauks.pixelrunner.scene.BonusJukeboxScene;
+import net.kirauks.pixelrunner.scene.BonusSuccessScene;
 import net.kirauks.pixelrunner.scene.CreditScene;
 import net.kirauks.pixelrunner.scene.base.BaseGameScene;
 import net.kirauks.pixelrunner.scene.LevelChoiceScene;
@@ -49,6 +50,7 @@ public class SceneManager {
     private BaseScene mainMenuScene;
     private BaseScene levelChoiceScene;
     private BaseScene bonusChoiceScene;
+    private BaseScene bonusSuccessScene;
     private BaseScene bonusJukeboxScene;
     private BaseScene gameLevelScene;
     
@@ -206,6 +208,20 @@ public class SceneManager {
         });
     }
     
+    public void createBonusSuccessScene() {
+        this.bonusSuccessScene = new BonusSuccessScene();
+        this.setScene(this.bonusSuccessScene);
+    }
+    
+    public void disposeBonusSuccessScene() {
+        this.activity.runOnUpdateThread(new Runnable() {
+            @Override
+            public void run() {
+                SceneManager.this.bonusSuccessScene.disposeScene();
+                SceneManager.this.bonusSuccessScene = null;
+            }
+        });
+    }
     
     public void createBonusJukeboxScene() {
         this.bonusJukeboxScene = new BonusJukeboxScene();

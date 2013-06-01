@@ -66,18 +66,22 @@ public class MainMenuScene extends BaseMenuScene implements MenuScene.IOnMenuIte
     public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
         switch(pMenuItem.getID()){
             case MENUID_PLAY:
+                this.activity.vibrate(30);
                 SceneManager.getInstance().createLevelChoiceScene();
                 SceneManager.getInstance().disposeMainMenuScene();
                 return true;
             case MENUID_ARCADE:
+                this.activity.vibrate(30);
                 AudioManager.getInstance().stop();
                 SceneManager.getInstance().loadGameLevelScene(SceneType.SCENE_GAME_ARCADE, new ArcadeLevelDescriptor());
                 return true;
             case MENUID_BONUS:
+                this.activity.vibrate(30);
                 SceneManager.getInstance().createBonusChoiceScene();
                 SceneManager.getInstance().disposeMainMenuScene();
                 return true;
             case MENUID_CREDITS:
+                this.activity.vibrate(30);
                 SceneManager.getInstance().createCreditsScene();
                 SceneManager.getInstance().disposeMainMenuScene();
                 return true;

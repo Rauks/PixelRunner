@@ -68,12 +68,15 @@ public class BonusChoiceScene extends BaseMenuScene implements MenuScene.IOnMenu
     public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
         switch(pMenuItem.getID()){
             case MENUID_JUKEBOX:
+                this.activity.vibrate(30);
                 SceneManager.getInstance().createBonusJukeboxScene();
                 AudioManager.getInstance().stop();
                 SceneManager.getInstance().disposeBonusChoiceScene();
                 return true;
             case MENUID_ACHIEVEMENTS:
-                
+                this.activity.vibrate(30);
+                SceneManager.getInstance().createBonusSuccessScene();
+                SceneManager.getInstance().disposeBonusChoiceScene();
                 return true;
             default:
                 return false;
