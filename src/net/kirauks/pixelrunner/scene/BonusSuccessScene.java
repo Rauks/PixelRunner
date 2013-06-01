@@ -8,6 +8,8 @@ import net.kirauks.pixelrunner.R;
 import net.kirauks.pixelrunner.manager.ResourcesManager;
 import net.kirauks.pixelrunner.manager.SceneManager;
 import net.kirauks.pixelrunner.manager.SceneManager.SceneType;
+import net.kirauks.pixelrunner.manager.db.SuccessDatabase;
+import net.kirauks.pixelrunner.manager.db.SuccessDatabase.Success;
 import net.kirauks.pixelrunner.scene.base.BaseListMenuScene;
 import net.kirauks.pixelrunner.scene.base.element.ListElement;
 import net.kirauks.pixelrunner.scene.base.element.SuccessListElement;
@@ -23,23 +25,10 @@ public class BonusSuccessScene extends BaseListMenuScene{
     private Sprite bottom;
     
     public BonusSuccessScene(){
-        this.addSuccess(R.string.success_tutorials, R.string.success_tutorials_sub);
-        this.addSuccess(R.string.success_mountains, R.string.success_mountains_sub);
-        this.addSuccess(R.string.success_desert, R.string.success_desert_sub);
-        this.addSuccess(R.string.success_city, R.string.success_city_sub);
-        this.addSuccess(R.string.success_forest, R.string.success_forest_sub);
-        this.addSuccess(R.string.success_hills, R.string.success_hills_sub);
-        this.addSuccess(R.string.success_sweets, R.string.success_sweets_sub);
-        this.addSuccess(R.string.success_endgame, R.string.success_endgame_sub);
-        this.addSuccess(R.string.success_jukebox, R.string.success_jukebox_sub);
-        this.addSuccess(R.string.success_arcade_bronze, R.string.success_arcade_bronze_sub);
-        this.addSuccess(R.string.success_arcade_silver, R.string.success_arcade_silver_sub);
-        this.addSuccess(R.string.success_arcade_gold, R.string.success_arcade_gold_sub);
-        this.addSuccess(R.string.success_arcade_crazy, R.string.success_arcade_crazy_sub);
-        this.addSuccess(R.string.success_arcade_mordor, R.string.success_arcade_mordor_sub);
-        this.addSuccess(R.string.success_arcade_wtf, R.string.success_arcade_wtf_sub);
-        this.addSuccess(R.string.success_arcade_roll, R.string.success_arcade_roll_sub);
-        this.addSuccess(R.string.success_nyan, R.string.success_nyan_sub);
+        SuccessDatabase successDb = new SuccessDatabase(this.activity);
+        for(Success success : Success.values()){
+            this.addSuccess(success.getTitleResId(), success.getSubTitleResId(), successDb.getSuccessStatus(success));
+        }
         
         this.getListWrapper().setX(100);
         
@@ -74,8 +63,8 @@ public class BonusSuccessScene extends BaseListMenuScene{
         this.onListMove(0, 0, 1);
     }
     
-    private void addSuccess(int redIdName, int resIdSub){
-        this.addListElement(new SuccessListElement(this.activity.getString(redIdName), this.activity.getString(resIdSub), true, this.vbom), 30);
+    private void addSuccess(int redIdName, int resIdSub, boolean has){
+        this.addListElement(new SuccessListElement(this.activity.getString(redIdName), this.activity.getString(resIdSub), !has, this.vbom), 30);
     }
     
     @Override
