@@ -106,11 +106,22 @@ public class ResourcesManager {
         this.fontPixel_200.load();
     }
     
-    public void loadMenuResources(){
+    public void loadCommon(){
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
         this.playerTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 224, 256);
         this.player = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.playerTextureAtlas, this.activity, "player.png", 0, 0, 4, 4);
         this.playerTextureAtlas.load();
+        this.trailTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 4, 4);
+        this.trail = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.trailTextureAtlas, this.activity, "trail.png", 0, 0);
+        this.trailTextureAtlas.load();
+        
+    }
+    
+    public void loadMenuResources(){
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+        this.nyanTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 198, 84);
+        this.nyan = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.nyanTextureAtlas, this.activity, "nyan.png", 0, 0, 3, 2);
+        this.nyanTextureAtlas.load();
         
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/main/");
         this.menuTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 240, 240);
@@ -129,12 +140,13 @@ public class ResourcesManager {
         this.lvlRoll = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_roll.png", 94, 73);
         this.lvlPlatform = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_platform.png", 80, 64);
         this.lvlTextureAtlas.load();
+        
         AudioManager.getInstance().prepare("mfx/", "menu.xm");
     }
     
     public void unloadMenuResources(){
-        this.playerTextureAtlas.unload();
-        this.player = null;
+        this.nyanTextureAtlas.unload();
+        this.nyan = null;
         this.menuTextureAtlas.unload();
         this.mainMenuParallaxLayer1 = null;
         this.mainMenuParallaxLayer2 = null;
@@ -164,14 +176,6 @@ public class ResourcesManager {
     }
 
     public void loadGameResources(LevelDescriptor level) {
-	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-        this.playerTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 224, 256);
-        this.player = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.playerTextureAtlas, this.activity, "player.png", 0, 0, 4, 4);
-        this.playerTextureAtlas.load();
-        this.trailTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 4, 4);
-        this.trail = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.trailTextureAtlas, this.activity, "trail.png", 0, 0);
-        this.trailTextureAtlas.load();
-        
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/elements/");
         this.rocketTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 368, 36);
         this.rocket = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.rocketTextureAtlas, this.activity, "rocket.png", 0, 0, 4, 1);
@@ -199,10 +203,6 @@ public class ResourcesManager {
     }
 
     public void unloadGameResources() {
-        this.playerTextureAtlas.unload();
-        this.player = null;
-        this.trailTextureAtlas.unload();
-        this.trail = null;
         this.rocketTextureAtlas.unload();
         this.rocket = null;
         this.trapTextureAtlas.unload();
@@ -211,18 +211,6 @@ public class ResourcesManager {
         this.wall = null;
         this.gameBackgroundTextureAtlas.unload();
         this.gameParallaxLayers.clear();
-    }
-    
-    public void loadNyanResources(){
-	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-        this.nyanTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 198, 84);
-        this.nyan = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.nyanTextureAtlas, this.activity, "nyan.png", 0, 0, 3, 2);
-        this.nyanTextureAtlas.load();
-    }
-    
-    public void unloadNyanResources(){
-        this.nyanTextureAtlas.unload();
-        this.nyan = null;
     }
     
     public static ResourcesManager getInstance(){
