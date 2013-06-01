@@ -12,6 +12,8 @@ import net.kirauks.pixelrunner.game.Trail;
 import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.SceneManager.SceneType;
 import net.kirauks.pixelrunner.manager.db.ArcadeScoreDatabase;
+import net.kirauks.pixelrunner.manager.db.SuccessDatabase;
+import net.kirauks.pixelrunner.manager.db.SuccessDatabase.Success;
 import net.kirauks.pixelrunner.scene.base.BaseGameScene;
 
 /**
@@ -19,6 +21,8 @@ import net.kirauks.pixelrunner.scene.base.BaseGameScene;
  * @author Karl
  */
 public class ArcadeGameScene extends BaseGameScene{
+    public static float SCORE_CORRECTION_FACTOR = 0.2f;
+    
     private long score = 0;
     private boolean countScore = false;
     private Text scoreText;
@@ -28,6 +32,7 @@ public class ArcadeGameScene extends BaseGameScene{
     private long highScore;
     private Text highScoreText;
     private boolean isHigtscoring = false;
+    private boolean hasRoll = false;
     
     public ArcadeGameScene(LevelDescriptor level){
         super(level);
@@ -36,6 +41,14 @@ public class ArcadeGameScene extends BaseGameScene{
         
         this.scoreDb = new ArcadeScoreDatabase(this.activity);
         this.createScoreOnHud();
+        
+        this.player.registerPlayerListener(new BaseGamePlayerListener(){
+            @Override
+            public void onRoll() {
+                super.onRoll();
+                ArcadeGameScene.this.hasRoll = true;
+            }
+        });
     }
     
     private void createScoreOnHud(){
@@ -47,7 +60,7 @@ public class ArcadeGameScene extends BaseGameScene{
         this.hud.attachChild(this.scoreText);
         this.highScoreText = new Text(20, 415, resourcesManager.fontPixel_60_gray, "0123456789/", new TextOptions(HorizontalAlign.LEFT), vbom);
         this.highScoreText.setAnchorCenter(0, 0);
-        this.highScoreText.setText("/" + String.valueOf(this.highScore/5));
+        this.highScoreText.setText("/" + String.valueOf(this.highScore * SCORE_CORRECTION_FACTOR));
         this.highScoreText.setPosition(this.scoreText.getWidth(), 0);
         this.scoreText.attachChild(this.highScoreText);
     }
@@ -55,7 +68,7 @@ public class ArcadeGameScene extends BaseGameScene{
     private void addScore(int score){
         if(this.countScore){
             this.score += score;
-            this.scoreText.setText(String.valueOf(this.score/5));
+            this.scoreText.setText(String.valueOf(this.score * SCORE_CORRECTION_FACTOR));
             this.highScoreText.setPosition(this.scoreText.getWidth(), 0);
             if(this.highScore < this.score){
                 if(!this.isHigtscoring){
@@ -65,7 +78,7 @@ public class ArcadeGameScene extends BaseGameScene{
                     this.playerTrail.setColorMode(Trail.ColorMode.MULTICOLOR);
                 }
                 this.highScore = this.score;
-                this.highScoreText.setText("/" + String.valueOf(this.highScore/5));
+                this.highScoreText.setText("/" + String.valueOf(this.highScore * SCORE_CORRECTION_FACTOR));
             }
         }
     }
@@ -74,11 +87,14 @@ public class ArcadeGameScene extends BaseGameScene{
         this.score = 0;
         this.scoreText.setText("0");
         this.highScoreText.setPosition(this.scoreText.getWidth(), 0);
-        this.highScoreText.setText("/" + String.valueOf(this.highScore/5));
+        this.highScoreText.setText("/" + String.valueOf(this.highScore * SCORE_CORRECTION_FACTOR));
     }
     
     private void saveHighScore() {
         this.scoreDb.set(this.highScore);
+        if(!this.hasRoll && this.highScore >= 2500){
+            new SuccessDatabase(this.activity).unlockSuccess(Success.ARCADE_ROLL);
+        }
     }
     private long loadHighScore() {
         return this.scoreDb.get();

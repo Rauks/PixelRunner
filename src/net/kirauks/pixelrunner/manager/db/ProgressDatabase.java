@@ -6,6 +6,7 @@ package net.kirauks.pixelrunner.manager.db;
 
 import android.content.Context;
 import net.kirauks.pixelrunner.game.descriptor.utils.World;
+import net.kirauks.pixelrunner.manager.db.SuccessDatabase.Success;
 
 /**
  *
@@ -25,5 +26,44 @@ public class ProgressDatabase extends Database{
     
     public void set(World world, int value){
         super.setInt(PROGRESS_LABEL + world, value);
+        SuccessDatabase successDb = new SuccessDatabase(this.getContext());
+        switch(world){
+            case TRAINING:
+                successDb.unlockSuccess(Success.TUTORIALS);
+                break;
+            case MOUNTAINS:
+                if(value > 12){
+                    successDb.unlockSuccess(Success.MOUNTAINS);
+                }
+                break;
+            case DESERT:
+                if(value > 12){
+                    successDb.unlockSuccess(Success.DESERT);
+                }
+                break;
+            case FOREST:
+                if(value > 12){
+                    successDb.unlockSuccess(Success.FOREST);
+                }
+                break;
+            case CITY:
+                if(value > 12){
+                    successDb.unlockSuccess(Success.CITY);
+                }
+                break;
+            case HILLS:
+                if(value > 12){
+                    successDb.unlockSuccess(Success.HILLS);
+                }
+                break;
+            case SWEETS:
+                if(value > 12){
+                    successDb.unlockSuccess(Success.SWEETS);
+                }
+                break;
+        }
+        if(successDb.getSuccessStatus(Success.MOUNTAINS) && successDb.getSuccessStatus(Success.DESERT) && successDb.getSuccessStatus(Success.FOREST) && successDb.getSuccessStatus(Success.CITY) && successDb.getSuccessStatus(Success.HILLS) && successDb.getSuccessStatus(Success.SWEETS)){
+            successDb.unlockSuccess(Success.ENDGAME);
+        }
     }
 }

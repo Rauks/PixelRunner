@@ -17,6 +17,8 @@ import net.kirauks.pixelrunner.game.Trail;
 import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.ResourcesManager;
 import net.kirauks.pixelrunner.manager.SceneManager;
+import net.kirauks.pixelrunner.manager.db.SuccessDatabase;
+import net.kirauks.pixelrunner.manager.db.SuccessDatabase.Success;
 import net.kirauks.pixelrunner.scene.base.BaseListMenuScene;
 import net.kirauks.pixelrunner.scene.base.element.ListElement;
 import net.kirauks.pixelrunner.scene.base.element.ScrollPage;
@@ -180,11 +182,13 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         this.playing.setText(element.getName());
         if(element.getName().equals("nyan")){
             this.enableNyan();
+            new SuccessDatabase(this.activity).unlockSuccess(Success.NYAN);
         }
         else{
             this.disableNyan();
         }
         this.audioManager.play("mfx/", ((XmAudioListElement)element).getXmFileName());
+            new SuccessDatabase(this.activity).unlockSuccess(Success.JUKEBOX);
     }
     
     @Override

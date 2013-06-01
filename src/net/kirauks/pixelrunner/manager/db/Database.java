@@ -15,9 +15,16 @@ public abstract class Database {
     private SharedPreferences db;
     private SharedPreferences.Editor dbEditor;
     
+    private Context context;
+    
     public Database(Context context, String databaseName){
         this.db = context.getSharedPreferences(databaseName, Context.MODE_PRIVATE);
         this.dbEditor = this.db.edit();
+        this.context = context;
+    }
+    
+    protected Context getContext(){
+        return this.context;
     }
     
     protected long getLong(String label, long defaultValue){
