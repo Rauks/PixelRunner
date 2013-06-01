@@ -33,7 +33,7 @@ public class SuccessListElement extends ListElement{
             this.setColor(new Color(0.4f, 0.4f, 0.4f));
         }
         else{
-            this.picto = new Sprite(-50, this.getHeight() - 37, ResourcesManager.getInstance().lvlLock, pVertexBufferObjectManager);
+            this.picto = new Sprite(-50, this.getHeight() - 37, ResourcesManager.getInstance().lvlStar, pVertexBufferObjectManager);
         }
         this.attachChild(this.picto);
     }
