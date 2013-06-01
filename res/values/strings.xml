@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">Pixel Runner</string>
     
-    <string name="splash_touch">Press to Start !</string>
-    <string name="splash_headphones">Awesome with\nHeadphones !</string>
+    <string name="splash_touch">Press to Start!</string>
+    <string name="splash_headphones">Awesome with\nHeadphones!</string>
     
     <string name="menu_play">Play</string>
     <string name="menu_arcade">Arcade</string>
@@ -13,7 +13,7 @@
     <string name="menu_bonus_jukebox">Jukebox</string>
     <string name="menu_bonus_success">Achievements</string>
     
-    <string name="jukebox_playing">Playing :</string>
+    <string name="jukebox_playing">Playing:</string>
     
     <string name="credits_programming">Programming</string>
     <string name="credits_design">Design</string>
@@ -34,4 +34,39 @@
     <string name="lvl_forest">4.Forest</string>
     <string name="lvl_hills">5.Hills</string>
     <string name="lvl_sweets">6.Sweets</string>
+    
+    <string name="success_tutorials">Never Skip Leg Day</string>
+    <string name="success_tutorials_sub">Do all trainings</string>
+    <string name="success_mountains">Himalayan Runner</string>
+    <string name="success_mountains_sub">Finish World 1 (Mountains)</string>
+    <string name="success_desert">Oasis Discoverer</string>
+    <string name="success_desert_sub">Finish world 2 (Desert)</string>
+    <string name="success_city">Big City Life</string>
+    <string name="success_city_sub">Finish world 3 (City)</string>
+    <string name="success_forest">Run Forrest Run!</string>
+    <string name="success_forest_sub">Finish world 4 (Forest)</string>
+    <string name="success_hills">Hill Valley</string>
+    <string name="success_hills_sub">Finish world 5 (Hills)</string>
+    <string name="success_sweets">Oh Piece of Candy!</string>
+    <string name="success_sweets_sub">Finish world 6 (Sweets)</string>
+    <string name="success_endgame">The Flash</string>
+    <string name="success_endgame_sub">Finish all worlds</string>
+    <string name="success_jukebox">Music Lover</string>
+    <string name="success_jukebox_sub">Listen to music in the Jukebox</string>
+    <string name="success_arcade_bronze">Bronze Runner</string>
+    <string name="success_arcade_bronze_sub">Score 1000 in Arcade</string>
+    <string name="success_arcade_silver">Silver Runner</string>
+    <string name="success_arcade_silver_sub">Score 5000 in Arcade</string>
+    <string name="success_arcade_gold">Gold Runner</string>
+    <string name="success_arcade_gold_sub">Score 10000 in Arcade</string>
+    <string name="success_arcade_crazy">Crasy Runner</string>
+    <string name="success_arcade_crazy_sub">Score 25000 in Arcade</string>
+    <string name="success_arcade_mordor">One Does Not Simply Walk Into Mordor</string>
+    <string name="success_arcade_mordor_sub">Score 50000 in Arcade</string>
+    <string name="success_arcade_wtf">Seriously WTF?</string>
+    <string name="success_arcade_wtf_sub">Score 100000 in Arcade</string>
+    <string name="success_arcade_roll">Don\'t do a barrel roll!</string>
+    <string name="success_arcade_roll_sub">Score 2500 in Arcade without any roll</string>
+    <string name="success_nyan">Nyanyanyanyanyanyanya!</string>
+    <string name="success_nyan_sub">Secret Success</string>
 </resources>
