@@ -320,24 +320,29 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                     //Level elements spawn
                     final float baseY = GROUND_LEVEL + GROUND_THICKNESS/2;
                     for(final LevelElement lvlElement : BaseGameScene.this.level.getNext()){
-                    lvlElement.build(RIGHT_SPAWN, baseY, BaseGameScene.this.vbom, BaseGameScene.this.player, BaseGameScene.this.physicWorld);
-                        BaseGameScene.this.attachChild(lvlElement.getBuildedShape());
-                        lvlElement.getBuildedShape().setZIndex(BaseGameScene.this.player.getZIndex() - 2);
-                        BaseGameScene.this.sortChildren();
-                        BaseGameScene.this.levelElements.add(lvlElement.getBuildedShape());
-                        lvlElement.getBuildedBody().setUserData(lvlElement);
-                        lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-15, 0));
-                        BaseGameScene.this.registerUpdateHandler(new TimerHandler(6f, new ITimerCallback(){
-                            @Override
-                            public void onTimePassed(final TimerHandler pTimerHandler){
-                                BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
-                                BaseGameScene.this.disposeLevelElement(lvlElement.getBuildedShape());
+                    
+                        BaseGameScene.this.engine.runOnUpdateThread(new Runnable(){
+                            public void run(){
+                                lvlElement.build(RIGHT_SPAWN, baseY, BaseGameScene.this.vbom, BaseGameScene.this.player, BaseGameScene.this.physicWorld);
+                                BaseGameScene.this.attachChild(lvlElement.getBuildedShape());
+                                lvlElement.getBuildedShape().setZIndex(BaseGameScene.this.player.getZIndex() - 2);
+                                BaseGameScene.this.sortChildren();
+                                BaseGameScene.this.levelElements.add(lvlElement.getBuildedShape());
+                                lvlElement.getBuildedBody().setUserData(lvlElement);
+                                lvlElement.getBuildedBody().setLinearVelocity(new Vector2(-15, 0));
+                                BaseGameScene.this.registerUpdateHandler(new TimerHandler(6f, new ITimerCallback(){
+                                    @Override
+                                    public void onTimePassed(final TimerHandler pTimerHandler){
+                                        BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
+                                        BaseGameScene.this.disposeLevelElement(lvlElement.getBuildedShape());
+                                    }
+                                }));
                             }
-                        }));
-                        if(!BaseGameScene.this.level.hasNext()){
-                            BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
-                            BaseGameScene.this.registerUpdateHandler(BaseGameScene.this.levelWinHandler);
-                        }
+                        });
+                    }
+                    if(!BaseGameScene.this.level.hasNext()){
+                        BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
+                        BaseGameScene.this.registerUpdateHandler(BaseGameScene.this.levelWinHandler);
                     }
                 }
             }
@@ -379,20 +384,38 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.onRestartBegin();
         this.unregisterUpdateHandler(this.levelWinHandler);
         this.unregisterUpdateHandler(this.levelReaderHandler);
-        this.disposeLevelElements();
+        
         AudioManager.getInstance().stop();
         this.player.resetBonus();
         this.playerTrail.hide();
         this.parallaxFactor = -10f;
-        this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
+        
+        final Shape[] elements = this.levelElements.toArray(new Shape[this.levelElements.size()]);
+        this.levelElements.clear();
+        this.engine.runOnUpdateThread(new Runnable() {
             @Override
-            public void onTimePassed(final TimerHandler pTimerHandler){
-                BaseGameScene.this.engine.unregisterUpdateHandler(pTimerHandler);
-                BaseGameScene.this.parallaxFactor = 1f;
-                BaseGameScene.this.onRestartEnd();
-                BaseGameScene.this.start();
+            public void run() {
+                for(Shape element : elements){
+                    PhysicsConnector physicsConnector = BaseGameScene.this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(element);
+                    if (physicsConnector != null){
+                         Body body = physicsConnector.getBody();
+                         body.setActive(false);
+                         BaseGameScene.this.physicWorld.unregisterPhysicsConnector(physicsConnector);
+                         BaseGameScene.this.physicWorld.destroyBody(body);
+                    }
+                    element.detachSelf();
+                }
+                BaseGameScene.this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
+                    @Override
+                    public void onTimePassed(final TimerHandler pTimerHandler){
+                        BaseGameScene.this.engine.unregisterUpdateHandler(pTimerHandler);
+                        BaseGameScene.this.parallaxFactor = 1f;
+                        BaseGameScene.this.onRestartEnd();
+                        BaseGameScene.this.start();
+                    }
+                }));
             }
-        }));
+        });
     }
     protected abstract void onRestartBegin();
     protected abstract void onRestartEnd();
@@ -547,7 +570,6 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     public void disposeScene() {
         this.clearUpdateHandlers();
         this.destroyPhysicsWorld();
-        this.disposeLevelElements();
         
         this.camera.setHUD(null);
         this.chrono3.detachSelf();
@@ -577,6 +599,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.dispose();
     }
     private void destroyPhysicsWorld(){
+        this.levelElements.clear();
         this.engine.runOnUpdateThread(new Runnable(){
             public void run(){
                 PhysicsWorld world = BaseGameScene.this.physicWorld;
@@ -601,25 +624,23 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
             }
         });
     }
-    private void disposeLevelElement(final Shape element){
-        this.levelElements.remove(element);
-        final PhysicsConnector physicsConnector = this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(element);
-        this.engine.runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                if (physicsConnector != null){
-                     Body body = physicsConnector.getBody();
-                     BaseGameScene.this.physicWorld.unregisterPhysicsConnector(physicsConnector);
-                     body.setActive(false);
-                     BaseGameScene.this.physicWorld.destroyBody(body);
+    private synchronized void disposeLevelElement(final Shape element){
+        if(this.levelElements.contains(element)){
+            this.levelElements.remove(element);
+            this.engine.runOnUpdateThread(new Runnable() {
+                @Override
+                public void run() {
+                    final PhysicsConnector physicsConnector = BaseGameScene.this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(element);
+                    if (physicsConnector != null){
+                         Body body = physicsConnector.getBody();
+                         body.setActive(false);
+                         BaseGameScene.this.physicWorld.unregisterPhysicsConnector(physicsConnector);
+
+                         BaseGameScene.this.physicWorld.destroyBody(body);
+                    }
+                    element.detachSelf();
                 }
-                element.detachSelf();
-            }
-        });
-    }
-    private void disposeLevelElements(){
-        for(Shape element : BaseGameScene.this.levelElements){
-            this.disposeLevelElement(element);
+            });
         }
     }
 
