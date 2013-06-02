@@ -150,7 +150,9 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                 //Player contacts
                 if (xA.getBody().getUserData().equals("player") && xB.getBody().getUserData().equals("ground")
                  || xB.getBody().getUserData().equals("player") && xA.getBody().getUserData().equals("ground")){
-                    BaseGameScene.this.player.resetMovements();
+                    if(!BaseGameScene.this.player.isRolling()){
+                        BaseGameScene.this.player.resetMovements();
+                    }
                 }
                 if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
                     LevelElement element = (LevelElement)xB.getBody().getUserData();
@@ -160,7 +162,9 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                         
                         if (playerY >= elementY && xA.getBody().getLinearVelocity().y < 0.5) {
                             element.doPlayerAction(BaseGameScene.this.player);
-                            BaseGameScene.this.player.resetMovements();
+                            if(!BaseGameScene.this.player.isRolling()){
+                                BaseGameScene.this.player.resetMovements();
+                            }
                         }
                     }
                 }
@@ -172,7 +176,9 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                         
                         if (playerY >= elementY && xB.getBody().getLinearVelocity().y < 0.5) {
                             element.doPlayerAction(BaseGameScene.this.player);
-                            BaseGameScene.this.player.resetMovements();
+                            if(!BaseGameScene.this.player.isRolling()){
+                                BaseGameScene.this.player.resetMovements();
+                            }
                         }
                     }
                 }
@@ -421,6 +427,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                         public void onTimePassed(final TimerHandler pTimerHandler){
                             BaseGameScene.this.engine.unregisterUpdateHandler(pTimerHandler);
                             BaseGameScene.this.parallaxFactor = 1f;
+                            BaseGameScene.this.player.resetMovements();
                             BaseGameScene.this.onRestartEnd();
                             BaseGameScene.this.start();
                         }

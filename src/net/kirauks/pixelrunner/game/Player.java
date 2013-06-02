@@ -196,7 +196,7 @@ public abstract class Player extends AnimatedSprite{
 
                 @Override
                 public void onAnimationFinished(AnimatedSprite pAnimatedSprite) {
-                    Player.this.rolling = false;
+                    Player.this.resetMovements();
                     Player.this.run();
                 }
             });
