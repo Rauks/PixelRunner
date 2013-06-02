@@ -400,8 +400,9 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                     if (physicsConnector != null){
                          Body body = physicsConnector.getBody();
                          body.setActive(false);
-                         BaseGameScene.this.physicWorld.unregisterPhysicsConnector(physicsConnector);
-                         BaseGameScene.this.physicWorld.destroyBody(body);
+                         // The body will be destoyed by the unspwaner later
+                         //BaseGameScene.this.physicWorld.unregisterPhysicsConnector(physicsConnector);
+                         //BaseGameScene.this.physicWorld.destroyBody(body);
                     }
                     element.detachSelf();
                 }
