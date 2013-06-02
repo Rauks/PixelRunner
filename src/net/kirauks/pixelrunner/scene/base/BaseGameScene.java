@@ -379,12 +379,12 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.onRestartBegin();
         this.unregisterUpdateHandler(this.levelWinHandler);
         this.unregisterUpdateHandler(this.levelReaderHandler);
+        this.disposeLevelElements();
         AudioManager.getInstance().stop();
         this.player.resetBonus();
         this.playerTrail.hide();
         this.parallaxFactor = -10f;
-        this.disposeLevelElements();
-        this.engine.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
+        this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
             @Override
             public void onTimePassed(final TimerHandler pTimerHandler){
                 BaseGameScene.this.engine.unregisterUpdateHandler(pTimerHandler);
