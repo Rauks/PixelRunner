@@ -185,35 +185,44 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                 final Fixture xA = contact.getFixtureA();
                 final Fixture xB = contact.getFixtureB();
                 
-                if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
-                    LevelElement element = (LevelElement)xB.getBody().getUserData();
-                    if(element.isPlatform()){
-                        float playerY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - BaseGameScene.this.player.getHeight() / 2;
-                        float elementY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
-                        
-                        if (playerY < elementY) {
-                            contact.setEnabled(false);
-                        }
-                    }
-                    else{
-                        contact.setEnabled(false);
-                        element.doPlayerAction(BaseGameScene.this.player);
-                    }
-                    
-                }
-                if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
-                    LevelElement element = (LevelElement)xA.getBody().getUserData();
-                    if(element.isPlatform()){
-                        float playerY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - BaseGameScene.this.player.getHeight() / 2;
-                        float elementY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
+                    if(xA.getBody().getUserData().equals("player") && xB.getBody().getUserData() instanceof LevelElement){
+                        if(BaseGameScene.this.isStarted){
+                            LevelElement element = (LevelElement)xB.getBody().getUserData();
+                            if(element.isPlatform()){
+                                float playerY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - BaseGameScene.this.player.getHeight() / 2;
+                                float elementY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
 
-                        if (playerY < elementY) {
+                                if (playerY < elementY) {
+                                    contact.setEnabled(false);
+                                }
+                            }
+                            else{
+                                contact.setEnabled(false);
+                                element.doPlayerAction(BaseGameScene.this.player);
+                            }
+                        }
+                        else{
                             contact.setEnabled(false);
                         }
-                    }
-                    else{
-                        contact.setEnabled(false);
-                        element.doPlayerAction(BaseGameScene.this.player);
+                    if(xB.getBody().getUserData().equals("player") && xA.getBody().getUserData() instanceof LevelElement){
+                        if(BaseGameScene.this.isStarted){
+                            LevelElement element = (LevelElement)xA.getBody().getUserData();
+                            if(element.isPlatform()){
+                                float playerY = xB.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT - BaseGameScene.this.player.getHeight() / 2;
+                                float elementY = xA.getBody().getPosition().y * PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT + LevelElement.PLATFORM_THICKNESS / 2;
+
+                                if (playerY < elementY) {
+                                    contact.setEnabled(false);
+                                }
+                            }
+                            else{
+                                contact.setEnabled(false);
+                                element.doPlayerAction(BaseGameScene.this.player);
+                            }
+                        }
+                        else{
+                            contact.setEnabled(false);
+                        }
                     }
                 }
             }
@@ -379,48 +388,50 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.hud.attachChild(this.win);
     }
     
-    private void restart(){
-        this.isStarted = false;
-        this.onRestartBegin();
-        this.unregisterUpdateHandler(this.levelWinHandler);
-        this.unregisterUpdateHandler(this.levelReaderHandler);
-        
-        AudioManager.getInstance().stop();
-        this.player.resetBonus();
-        this.playerTrail.hide();
-        this.parallaxFactor = -10f;
-        
-        final Shape[] elements = this.levelElements.toArray(new Shape[this.levelElements.size()]);
-        this.levelElements.clear();
-        this.engine.runOnUpdateThread(new Runnable() {
-            @Override
-            public void run() {
-                for(Shape element : elements){
-                    PhysicsConnector physicsConnector = BaseGameScene.this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(element);
-                    if (physicsConnector != null){
-                         Body body = physicsConnector.getBody();
-                         body.setActive(false);
-                         // The body will be destoyed by the unspwaner later
-                         //BaseGameScene.this.physicWorld.unregisterPhysicsConnector(physicsConnector);
-                         //BaseGameScene.this.physicWorld.destroyBody(body);
+    private synchronized void restart(){
+        if(this.isStarted){
+            this.isStarted = false;
+            this.onRestartBegin();
+            this.unregisterUpdateHandler(this.levelWinHandler);
+            this.unregisterUpdateHandler(this.levelReaderHandler);
+
+            AudioManager.getInstance().stop();
+            this.player.resetBonus();
+            this.playerTrail.hide();
+            this.parallaxFactor = -10f;
+
+            final Shape[] elements = this.levelElements.toArray(new Shape[this.levelElements.size()]);
+            this.levelElements.clear();
+            this.engine.runOnUpdateThread(new Runnable() {
+                @Override
+                public void run() {
+                    for(Shape element : elements){
+                        PhysicsConnector physicsConnector = BaseGameScene.this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(element);
+                        if (physicsConnector != null){
+                             Body body = physicsConnector.getBody();
+                             body.setActive(false);
+                             // The body will be destoyed by the unspwaner later
+                             //BaseGameScene.this.physicWorld.unregisterPhysicsConnector(physicsConnector);
+                             //BaseGameScene.this.physicWorld.destroyBody(body);
+                        }
+                        element.detachSelf();
                     }
-                    element.detachSelf();
+                    BaseGameScene.this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
+                        @Override
+                        public void onTimePassed(final TimerHandler pTimerHandler){
+                            BaseGameScene.this.engine.unregisterUpdateHandler(pTimerHandler);
+                            BaseGameScene.this.parallaxFactor = 1f;
+                            BaseGameScene.this.onRestartEnd();
+                            BaseGameScene.this.start();
+                        }
+                    }));
                 }
-                BaseGameScene.this.registerUpdateHandler(new TimerHandler(1f, new ITimerCallback(){
-                    @Override
-                    public void onTimePassed(final TimerHandler pTimerHandler){
-                        BaseGameScene.this.engine.unregisterUpdateHandler(pTimerHandler);
-                        BaseGameScene.this.parallaxFactor = 1f;
-                        BaseGameScene.this.onRestartEnd();
-                        BaseGameScene.this.start();
-                    }
-                }));
-            }
-        });
+            });
+        }
     }
     protected abstract void onRestartBegin();
     protected abstract void onRestartEnd();
-    public void start(){
+    public synchronized void start(){
         if(!BaseGameScene.this.isPaused){
             this.level.init();
             this.onStartBegin();
@@ -449,6 +460,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                                     BaseGameScene.this.broadcast(BaseGameScene.this.chronoStart, new IEntityModifierListener() {
                                         @Override
                                         public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+                                            AudioManager.getInstance().stop();
                                             AudioManager.getInstance().play("mfx/", BaseGameScene.this.level.getMusic());
                                             BaseGameScene.this.playerTrail.show();
                                             BaseGameScene.this.registerUpdateHandler(BaseGameScene.this.levelReaderHandler = new TimerHandler(BaseGameScene.this.level.getSpawnTime(), true, BaseGameScene.this.levelReaderAction));
