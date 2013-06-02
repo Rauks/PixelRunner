@@ -54,4 +54,9 @@ public class Rocket extends LevelElement{
             player.rollBackJump();
         }
     }
+    
+    @Override
+    protected float getBodyHeight(){
+        return 20;
+    }
 }

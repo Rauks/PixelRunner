@@ -60,7 +60,7 @@ public abstract class LevelElement{
         this.actionDone = false;
     }
 
-    protected float getHeigth() {
+    protected float getHeight() {
         return this.heigth;
     }
 
@@ -68,10 +68,17 @@ public abstract class LevelElement{
         return this.width;
     }
     
+    protected float getBodyHeight(){
+        return this.heigth;
+    }
+    protected float getBodyWidth(){
+        return this.width;
+    }
+    
     public void build(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player, PhysicsWorld physicWorld){
         this.shape = this.buildShape(pX, pY + this.heigth/2 + this.level*LevelDescriptor.LAYER_HIGH, pVertexBufferObjectManager, player);
         this.shape.setColor(this.getColor());
-        this.body = PhysicsFactory.createBoxBody(physicWorld, this.shape, BodyDef.BodyType.KinematicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+        this.body = PhysicsFactory.createBoxBody(physicWorld, this.shape.getX(), this.shape.getY(), this.getBodyWidth(), this.getBodyHeight(), BodyDef.BodyType.KinematicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
         this.body.setFixedRotation(true);
         physicWorld.registerPhysicsConnector(new PhysicsConnector(this.shape, this.body, true, false));
     }

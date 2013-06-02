@@ -27,7 +27,7 @@ public class BonusLife  extends LevelElement{
 
     @Override
     protected Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player) {
-        return new Rectangle(pX, pY, this.getWidth(), this.getHeigth(), pVertexBufferObjectManager);
+        return new Rectangle(pX, pY, this.getWidth(), this.getHeight(), pVertexBufferObjectManager);
     }
 
     @Override
