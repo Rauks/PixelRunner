@@ -21,7 +21,7 @@ import net.kirauks.pixelrunner.scene.base.BaseGameScene;
  * @author Karl
  */
 public class ArcadeGameScene extends BaseGameScene{
-    public static float SCORE_CORRECTION_FACTOR = 0.2f;
+    public static int SCORE_CORRECTION_RATIO = 5;
     
     private long score = 0;
     private boolean countScore = false;
@@ -60,7 +60,7 @@ public class ArcadeGameScene extends BaseGameScene{
         this.hud.attachChild(this.scoreText);
         this.highScoreText = new Text(20, 415, resourcesManager.fontPixel_60_gray, "0123456789/", new TextOptions(HorizontalAlign.LEFT), vbom);
         this.highScoreText.setAnchorCenter(0, 0);
-        this.highScoreText.setText("/" + String.valueOf(this.highScore * SCORE_CORRECTION_FACTOR));
+        this.highScoreText.setText("/" + String.valueOf(this.highScore / SCORE_CORRECTION_RATIO));
         this.highScoreText.setPosition(this.scoreText.getWidth(), 0);
         this.scoreText.attachChild(this.highScoreText);
     }
@@ -68,7 +68,7 @@ public class ArcadeGameScene extends BaseGameScene{
     private void addScore(int score){
         if(this.countScore){
             this.score += score;
-            this.scoreText.setText(String.valueOf(this.score * SCORE_CORRECTION_FACTOR));
+            this.scoreText.setText(String.valueOf(this.score / SCORE_CORRECTION_RATIO));
             this.highScoreText.setPosition(this.scoreText.getWidth(), 0);
             if(this.highScore < this.score){
                 if(!this.isHigtscoring){
@@ -78,7 +78,7 @@ public class ArcadeGameScene extends BaseGameScene{
                     this.playerTrail.setColorMode(Trail.ColorMode.MULTICOLOR);
                 }
                 this.highScore = this.score;
-                this.highScoreText.setText("/" + String.valueOf(this.highScore * SCORE_CORRECTION_FACTOR));
+                this.highScoreText.setText("/" + String.valueOf(this.highScore / SCORE_CORRECTION_RATIO));
             }
         }
     }
@@ -87,7 +87,7 @@ public class ArcadeGameScene extends BaseGameScene{
         this.score = 0;
         this.scoreText.setText("0");
         this.highScoreText.setPosition(this.scoreText.getWidth(), 0);
-        this.highScoreText.setText("/" + String.valueOf(this.highScore * SCORE_CORRECTION_FACTOR));
+        this.highScoreText.setText("/" + String.valueOf(this.highScore / SCORE_CORRECTION_RATIO));
     }
     
     private void saveHighScore() {

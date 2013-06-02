@@ -27,7 +27,7 @@ public class ArcadeScoreDatabase extends Database{
     public void set(long value){
         super.setLong(HIGHSCORE_LABEL, value);
         SuccessDatabase successDb = new SuccessDatabase(this.getContext());
-        float score = value * ArcadeGameScene.SCORE_CORRECTION_FACTOR;
+        float score = value / ArcadeGameScene.SCORE_CORRECTION_RATIO;
         if(score >= 1000){
             successDb.unlockSuccess(Success.ARCADE_BRONZE);
         }
