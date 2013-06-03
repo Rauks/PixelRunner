@@ -35,7 +35,7 @@ public class BonusSuccessScene extends BaseListMenuScene{
         this.top = new Sprite(765, 450, ResourcesManager.getInstance().lvlLeft, this.vbom){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
-                if (pSceneTouchEvent.isActionUp()){
+                if (pSceneTouchEvent.isActionUp() && this.isVisible()){
                     BonusSuccessScene.this.activity.vibrate(30);
                     BonusSuccessScene.this.impulseUp();
                 }
@@ -49,7 +49,7 @@ public class BonusSuccessScene extends BaseListMenuScene{
         this.bottom = new Sprite(765, 30, ResourcesManager.getInstance().lvlRight, this.vbom){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
-                if (pSceneTouchEvent.isActionUp()){
+                if (pSceneTouchEvent.isActionUp() && this.isVisible()){
                     BonusSuccessScene.this.activity.vibrate(30);
                     BonusSuccessScene.this.impulseDown();
                 }

@@ -50,7 +50,7 @@ public class ScrollPage extends Rectangle implements IScrollPageElementTouchList
         this.left = new Sprite(0, this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlLeft, this.getVertexBufferObjectManager()){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
-                if (pSceneTouchEvent.isActionUp()){
+                if (pSceneTouchEvent.isActionUp() && this.isVisible()){
                     if(ScrollPage.this.navigationListener != null){
                         ScrollPage.this.navigationListener.onLeft();
                     }
@@ -63,7 +63,7 @@ public class ScrollPage extends Rectangle implements IScrollPageElementTouchList
         this.right = new Sprite(this.getWidth(), this.getHeight()/2 - MARGIN_TOP, ResourcesManager.getInstance().lvlRight, this.getVertexBufferObjectManager()){
             @Override
             public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y){
-                if (pSceneTouchEvent.isActionUp()){
+                if (pSceneTouchEvent.isActionUp() && this.isVisible()){
                     if(ScrollPage.this.navigationListener != null){
                         ScrollPage.this.navigationListener.onRight();
                     }
