@@ -334,10 +334,10 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                 else{
                     //Level elements spawn
                     final float baseY = GROUND_LEVEL + GROUND_THICKNESS/2;
-                    for(final LevelElement lvlElement : BaseGameScene.this.level.getNext()){
-                    
-                        BaseGameScene.this.engine.runOnUpdateThread(new Runnable(){
-                            public void run(){
+                    final LevelElement[] elementsToSpawn = BaseGameScene.this.level.getNext();
+                    BaseGameScene.this.engine.runOnUpdateThread(new Runnable(){
+                        public void run(){
+                            for(final LevelElement lvlElement : elementsToSpawn){
                                 lvlElement.build(RIGHT_SPAWN, baseY, BaseGameScene.this.vbom, BaseGameScene.this.player, BaseGameScene.this.physicWorld);
                                 BaseGameScene.this.attachChild(lvlElement.getBuildedShape());
                                 lvlElement.getBuildedShape().setZIndex(BaseGameScene.this.player.getZIndex() - 2);
@@ -353,8 +353,8 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                                     }
                                 }));
                             }
-                        });
-                    }
+                        }
+                    });
                     if(!BaseGameScene.this.level.hasNext()){
                         BaseGameScene.this.unregisterUpdateHandler(pTimerHandler);
                         BaseGameScene.this.registerUpdateHandler(BaseGameScene.this.levelWinHandler);
