@@ -16,13 +16,15 @@ import net.kirauks.pixelrunner.game.Player;
  * @author Karl
  */
 public class BonusSpeed extends LevelElement{
+    public static Color DEFAULT_COLOR = Color.PINK;
+    
     public BonusSpeed(int level){
         super(level, BONUS_WIDTH, BONUS_HEIGHT);
     }
     
     @Override
     public Color getColor() {
-        return Color.PINK;
+        return DEFAULT_COLOR;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class BonusSpeed extends LevelElement{
     @Override
     protected void playerAction(Player player) {
         player.resetBonus();
-        player.setColor(this.getColor());
+        player.changeColor(this.getColor());
         player.setSpeed(1.4f);
         this.getBuildedShape().registerEntityModifier(new AlphaModifier(0.5f, 1f, 0f));
     }

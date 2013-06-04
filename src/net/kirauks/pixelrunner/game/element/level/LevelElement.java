@@ -14,6 +14,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import net.kirauks.pixelrunner.game.descriptor.LevelDescriptor;
 import net.kirauks.pixelrunner.game.Player;
+import org.andengine.entity.modifier.ColorModifier;
 
 /**
  *
@@ -92,6 +93,11 @@ public abstract class LevelElement{
     public Color getColor(){
         return COLOR_DEFAULT;
     }
+    public void changeColor(Color color){
+        this.getBuildedShape().clearEntityModifiers();
+        this.getBuildedShape().registerEntityModifier(new ColorModifier(0.5f, this.getBuildedShape().getColor(), color));
+    }
+    
     protected abstract Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player);
     protected abstract void playerAction(Player player);
     public void doPlayerAction(Player player){

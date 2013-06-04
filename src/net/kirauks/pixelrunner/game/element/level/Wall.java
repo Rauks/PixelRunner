@@ -39,6 +39,7 @@ public class Wall extends LevelElement{
     protected void playerAction(Player player) {
         if(!player.isRolling()){
             if(player.hasLife()){
+                this.changeColor(BonusLife.DEFAULT_COLOR);
                 player.resetBonus();
             }
             else{

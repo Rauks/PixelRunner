@@ -16,13 +16,15 @@ import net.kirauks.pixelrunner.game.Player;
  * @author Karl
  */
 public class BonusJump extends LevelElement{
+    public static Color DEFAULT_COLOR = Color.BLUE;
+    
     public BonusJump(int level){
         super(level, BONUS_WIDTH, BONUS_HEIGHT);
     }
     
     @Override
     public Color getColor() {
-        return Color.BLUE;
+        return DEFAULT_COLOR;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class BonusJump extends LevelElement{
     @Override
     protected void playerAction(Player player) {
         player.resetBonus();
-        player.setColor(this.getColor());
+        player.changeColor(this.getColor());
         player.setJumpMode(Player.JumpMode.INFINITE);
         this.getBuildedShape().registerEntityModifier(new AlphaModifier(0.5f, 1f, 0f));
     }

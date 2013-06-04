@@ -78,7 +78,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         }
         @Override
         public void onRollBackJump() {
-            BaseGameScene.this.player.reset();
+            BaseGameScene.this.player.resetBonus();
             BaseGameScene.this.restart();
             BaseGameScene.this.activity.vibrate(new long[]{100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100, 50, 100});
         }

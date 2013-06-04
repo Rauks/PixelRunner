@@ -105,9 +105,9 @@ public abstract class Player extends AnimatedSprite{
         this.run();
     }
     public void resetBonus(){
-        this.endBonus();
         this.clearUpdateHandlers();
         this.clearEntityModifiers();
+        this.endBonus();
     }
     private void endBonus() {
         this.jumpMode = JumpMode.DOUBLE;
@@ -230,5 +230,10 @@ public abstract class Player extends AnimatedSprite{
     }
     public void unregisterPlayerListener(){
         this.listener = null;
+    }
+    
+    public void changeColor(Color color){
+        this.clearEntityModifiers();
+        this.registerEntityModifier(new ColorModifier(0.5f, this.getColor(), color));
     }
 }
