@@ -31,6 +31,8 @@ public class SuccessDatabase extends Database{
         ARCADE_MORDOR("arcade_mordor", R.string.success_arcade_mordor, R.string.success_arcade_mordor_sub),
         ARCADE_WTF("arcade_wtf", R.string.success_arcade_wtf, R.string.success_arcade_wtf_sub),
         ARCADE_ROLL("arcade_roll", R.string.success_arcade_roll, R.string.success_arcade_roll_sub),
+        ARCADE_BONUS("arcade_bonus", R.string.success_arcade_bonus, R.string.success_arcade_bonus_sub),
+        ARCADE_ROLL_AND_BONUS("arcade_roll_and_bonus", R.string.success_arcade_roll_and_bonus, R.string.success_arcade_roll_and_bonus_sub),
         NYAN("nyan", R.string.success_nyan, R.string.success_nyan_sub);
         
         private String label;
@@ -65,5 +67,9 @@ public class SuccessDatabase extends Database{
     
     public void unlockSuccess(Success success){
         super.setBoolean(success.getLabel(), true);
+    }
+    
+    public void lockSuccess(Success success){
+        super.setBoolean(success.getLabel(), false);
     }
 }

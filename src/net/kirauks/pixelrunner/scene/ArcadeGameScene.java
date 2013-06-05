@@ -4,6 +4,7 @@
  */
 package net.kirauks.pixelrunner.scene;
 
+import android.util.Log;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
@@ -32,7 +33,8 @@ public class ArcadeGameScene extends BaseGameScene{
     private long highScore;
     private Text highScoreText;
     private boolean isHigtscoring = false;
-    private boolean hasRoll = false;
+    private boolean hasRollOnce = false;
+    private boolean hasBonusOnce = false;
     
     public ArcadeGameScene(LevelDescriptor level){
         super(level);
@@ -46,7 +48,18 @@ public class ArcadeGameScene extends BaseGameScene{
             @Override
             public void onRoll() {
                 super.onRoll();
-                ArcadeGameScene.this.hasRoll = true;
+                ArcadeGameScene.this.hasRollOnce = true;
+            }
+            @Override
+            public void onBonus() {
+                super.onBonus();
+                ArcadeGameScene.this.hasBonusOnce = true;
+            }
+            @Override
+            public void onRollBackJump() {
+                super.onRollBackJump();
+                ArcadeGameScene.this.hasRollOnce = false;
+                ArcadeGameScene.this.hasBonusOnce = false;
             }
         });
     }
@@ -80,6 +93,17 @@ public class ArcadeGameScene extends BaseGameScene{
                 this.highScore = this.score;
                 this.highScoreText.setText("/" + String.valueOf(this.highScore / SCORE_CORRECTION_RATIO));
             }
+                
+            final float correctedScore = this.score / SCORE_CORRECTION_RATIO;
+            if(!this.hasRollOnce && correctedScore >= 2500){
+                new SuccessDatabase(this.activity).unlockSuccess(Success.ARCADE_ROLL);
+                if(!this.hasBonusOnce){
+                    new SuccessDatabase(this.activity).unlockSuccess(Success.ARCADE_ROLL_AND_BONUS);
+                }
+            }
+            if(!this.hasBonusOnce && correctedScore >= 5000){
+                new SuccessDatabase(this.activity).unlockSuccess(Success.ARCADE_BONUS); 
+            }
         }
     }
     private void resetScore(){
@@ -92,9 +116,6 @@ public class ArcadeGameScene extends BaseGameScene{
     
     private void saveHighScore() {
         this.scoreDb.set(this.highScore);
-        if(!this.hasRoll && this.highScore >= 2500){
-            new SuccessDatabase(this.activity).unlockSuccess(Success.ARCADE_ROLL);
-        }
     }
     private long loadHighScore() {
         return this.scoreDb.get();
