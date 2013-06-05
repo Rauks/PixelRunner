@@ -439,7 +439,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     protected abstract void onRestartBegin();
     protected abstract void onRestartEnd();
     public synchronized void start(){
-        if(!BaseGameScene.this.isPaused){
+        if(!BaseGameScene.this.isPaused && !this.isStarted){
             this.level.init();
             this.onStartBegin();
 
@@ -507,6 +507,9 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
 
     @Override
     public void onBackKeyPressed() {
+        this.clearUpdateHandlers();
+        this.clearEntityModifiers();
+        this.engine.clearUpdateHandlers();
         AudioManager.getInstance().stop();
         SceneManager.getInstance().unloadGameLevelScene();
     }
