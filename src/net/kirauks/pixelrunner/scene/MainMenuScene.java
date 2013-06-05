@@ -92,7 +92,6 @@ public class MainMenuScene extends BaseMenuScene implements MenuScene.IOnMenuIte
     
     @Override
     public void onBackKeyPressed() {
-        this.audioManager.stop();
         System.exit(0);    
     }
 

@@ -74,7 +74,6 @@ public class GameActivity extends BaseGameActivity{
     protected void onDestroy() {
         super.onDestroy();
         if (this.isGameLoaded()){
-            AudioManager.getInstance().stop();
             System.exit(0);    
         } 
     }
