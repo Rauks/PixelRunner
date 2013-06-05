@@ -65,8 +65,12 @@
     <string name="success_arcade_mordor_sub">Score 50000 in Arcade</string>
     <string name="success_arcade_wtf">Seriously WTF?</string>
     <string name="success_arcade_wtf_sub">Score 100000 in Arcade</string>
-    <string name="success_arcade_roll">Dont do\na barrel roll!</string>
-    <string name="success_arcade_roll_sub">Score 2500 in Arcade\nwithout any roll</string>
+    <string name="success_arcade_roll">Don\'t do\na barrel roll!</string>
+    <string name="success_arcade_roll_sub">Score 2500 in Arcade\nwithout making any roll</string>
+    <string name="success_arcade_bonus">Look at all these\nbonus I take</string>
+    <string name="success_arcade_bonus_sub">Score 5000 in Arcade\nwithout taking bonus</string>
+    <string name="success_arcade_roll_and_bonus">Like a sir</string>
+    <string name="success_arcade_roll_and_bonus_sub">Score 2500 in Arcade\nwithout making any roll\nor taking bonus</string>
     <string name="success_nyan">Nyan!</string>
     <string name="success_nyan_sub">Nyan nyanyan nyanya nyan</string>
 </resources>
