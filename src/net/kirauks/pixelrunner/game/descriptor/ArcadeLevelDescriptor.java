@@ -28,6 +28,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
     }
     
     private Random ranGen = new Random();
+    private String music = "arcade-" + String.valueOf(1 + this.ranGen.nextInt(2)) + ".xm";
     private PrevState prevState;
     private int platLayer;
     
@@ -142,7 +143,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
 
     @Override
     public String getMusic() {
-        return "arcade-" + String.valueOf(1 + this.ranGen.nextInt(2)) + ".xm";
+        return this.music;
     }
 
     @Override
