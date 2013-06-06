@@ -142,7 +142,7 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
 
     @Override
     public String getMusic() {
-        return "arcade.xm";
+        return "arcade-" + String.valueOf(1 + this.ranGen.nextInt(2)) + ".xm";
     }
 
     @Override
