@@ -68,8 +68,8 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
                 if(rand < (100 - deviation)){ // Platform @ 100% ~ 50%
                     this.prevState = PrevState.PLATFORM;
                     rand = ranGen.nextInt(100);
-                    if(rand < 90 && this.platLayer != LAYERS_MAX){ // Plateform @ layer +1 @ 90%
-                        this.platLayer++;
+                    if(rand < 90 && this.platLayer != LAYERS_MAX){ // Plateform @ layer + @ 90%
+                        this.platLayer += 1 + this.ranGen.nextInt(2);
                     }
                     if(this.platLayer > 4){
                         return new LevelElement[]{new Platform(this.platLayer), this.getTrap()};
