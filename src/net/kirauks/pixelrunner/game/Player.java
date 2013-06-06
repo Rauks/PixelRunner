@@ -27,6 +27,7 @@ import net.kirauks.pixelrunner.game.descriptor.LevelDescriptor;
  * @author Karl
  */
 public abstract class Player extends AnimatedSprite{
+
     public enum JumpMode{
         DOUBLE, INFINITE
     }
@@ -79,6 +80,7 @@ public abstract class Player extends AnimatedSprite{
     private int jumpCount;
     private boolean jumping;
     private boolean rolling;
+    private boolean swapped;
     private float speed;
     private boolean hasLife;
     
@@ -113,6 +115,7 @@ public abstract class Player extends AnimatedSprite{
         this.jumpMode = JumpMode.DOUBLE;
         this.speed = 1f;
         this.setAlpha(1f);
+        this.swapped = false;
         this.hasLife = false;
         this.setColor(Color.WHITE);
     }
@@ -167,6 +170,16 @@ public abstract class Player extends AnimatedSprite{
     }
     public boolean hasLife(){
         return this.hasLife;
+    }
+    public void setSwapped() {
+        this.swapped = true;
+        this.fireBonusTimer();
+        if(this.listener != null){
+            this.listener.onBonus();
+        }
+    }
+    public boolean isSwapped(){
+        return this.swapped;
     }
     public void rollBackJump(){
         this.jumpCount = 2;

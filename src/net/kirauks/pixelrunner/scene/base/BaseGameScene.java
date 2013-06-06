@@ -677,11 +677,21 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
             else{
                 if(pSceneTouchEvent.getY() >= 240){
                     //Jump
-                    this.player.jump();
+                    if(this.player.isSwapped()){
+                        this.player.roll();
+                    }
+                    else{
+                        this.player.jump();
+                    }
                 }
                 else if(pSceneTouchEvent.getY() < 240){
                     //Roll
-                    this.player.roll();
+                    if(this.player.isSwapped()){
+                        this.player.jump();
+                    }
+                    else{
+                        this.player.roll();
+                    }
                 }
             }
         }
