@@ -9,6 +9,7 @@ import net.kirauks.pixelrunner.game.element.level.BonusJump;
 import net.kirauks.pixelrunner.game.element.level.BonusLife;
 import net.kirauks.pixelrunner.game.element.level.BonusSlow;
 import net.kirauks.pixelrunner.game.element.level.BonusSpeed;
+import net.kirauks.pixelrunner.game.element.level.BonusSwap;
 import net.kirauks.pixelrunner.game.element.level.LevelElement;
 import net.kirauks.pixelrunner.game.element.level.Platform;
 import net.kirauks.pixelrunner.game.element.level.Rocket;
@@ -94,15 +95,17 @@ public class ArcadeLevelDescriptor extends LevelDescriptor{
         }
     }
     private LevelElement getBonus(int layer){
-        switch(this.ranGen.nextInt(4)){
+        switch(this.ranGen.nextInt(5)){
             case 0:
                 return new BonusJump(layer);
             case 1:
                 return new BonusLife(layer);
             case 2:
                 return new BonusSlow(layer);
-            default:
             case 3:
+                return new BonusSwap(layer);
+            default:
+            case 4:
                 return new BonusSpeed(layer);
         }
     }
