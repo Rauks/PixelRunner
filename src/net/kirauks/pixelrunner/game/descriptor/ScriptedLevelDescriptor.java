@@ -18,6 +18,7 @@ import net.kirauks.pixelrunner.game.element.level.BonusJump;
 import net.kirauks.pixelrunner.game.element.level.BonusLife;
 import net.kirauks.pixelrunner.game.element.level.BonusSlow;
 import net.kirauks.pixelrunner.game.element.level.BonusSpeed;
+import net.kirauks.pixelrunner.game.element.level.BonusSwap;
 import net.kirauks.pixelrunner.game.element.level.LevelElement;
 import net.kirauks.pixelrunner.game.element.level.Platform;
 import net.kirauks.pixelrunner.game.element.level.Rocket;
@@ -65,9 +66,11 @@ public class ScriptedLevelDescriptor extends LevelDescriptor{
                 return new Rocket(layer);
             case 7:
                 return new Trap(layer);
-            default:
             case 8:
                 return new Wall(layer);
+            default:
+            case 9:
+                return new BonusSwap(layer);
         }
     }
     private LevelElement[] buildArray(SmartList<Element> elements){
