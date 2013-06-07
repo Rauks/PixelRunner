@@ -46,7 +46,8 @@ public class BonusJukeboxScene extends BaseListMenuScene{
     private Sprite top;
     private Sprite bottom;
     private final Rectangle listBackground;
-    private final Rectangle listBorders;
+    private final Rectangle listBordersLeft;
+    private final Rectangle listBordersRight;
     
     public BonusJukeboxScene(){
         super();
@@ -65,11 +66,16 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         this.listBackground = new Rectangle(550, GameActivity.CAMERA_HEIGHT/2, 350, GameActivity.CAMERA_HEIGHT, this.vbom);
         this.listBackground.setZIndex(this.getListWrapper().getZIndex() - 1);
         this.listBackground.setColor(Color.BLACK);
+        this.listBackground.setAlpha(0.6f);
         this.attachChild(this.listBackground);
-        this.listBorders = new Rectangle(550, GameActivity.CAMERA_HEIGHT/2, 358, GameActivity.CAMERA_HEIGHT, this.vbom);
-        this.listBorders.setZIndex(this.listBackground.getZIndex() - 1);
-        this.listBorders.setColor(new Color(0.4f, 0.4f, 0.4f));
-        this.attachChild(this.listBorders);
+        this.listBordersLeft = new Rectangle(373, GameActivity.CAMERA_HEIGHT/2, 4, GameActivity.CAMERA_HEIGHT, this.vbom);
+        this.listBordersLeft.setZIndex(this.listBackground.getZIndex() - 1);
+        this.listBordersLeft.setColor(new Color(0.4f, 0.4f, 0.4f));
+        this.attachChild(this.listBordersLeft);
+        this.listBordersRight = new Rectangle(727, GameActivity.CAMERA_HEIGHT/2, 4, GameActivity.CAMERA_HEIGHT, this.vbom);
+        this.listBordersRight.setZIndex(this.listBackground.getZIndex() - 1);
+        this.listBordersRight.setColor(new Color(0.4f, 0.4f, 0.4f));
+        this.attachChild(this.listBordersRight);
         
         this.sortChildren();
         
@@ -204,8 +210,10 @@ public class BonusJukeboxScene extends BaseListMenuScene{
         this.playing.dispose();
         this.listBackground.detachSelf();
         this.listBackground.dispose();
-        this.listBorders.detachSelf();
-        this.listBorders.dispose();
+        this.listBordersLeft.detachSelf();
+        this.listBordersLeft.dispose();
+        this.listBordersRight.detachSelf();
+        this.listBordersRight.dispose();
         this.top.detachSelf();
         this.top.dispose();
         this.bottom.detachSelf();
