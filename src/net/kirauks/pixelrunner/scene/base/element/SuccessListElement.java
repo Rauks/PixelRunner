@@ -5,7 +5,6 @@
 package net.kirauks.pixelrunner.scene.base.element;
 
 import net.kirauks.pixelrunner.manager.ResourcesManager;
-import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;

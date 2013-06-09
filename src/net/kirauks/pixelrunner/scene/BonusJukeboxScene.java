@@ -13,25 +13,19 @@ import java.util.logging.Logger;
 import net.kirauks.pixelrunner.GameActivity;
 import net.kirauks.pixelrunner.R;
 import net.kirauks.pixelrunner.game.Player;
-import net.kirauks.pixelrunner.game.Trail;
-import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.ResourcesManager;
 import net.kirauks.pixelrunner.manager.SceneManager;
 import net.kirauks.pixelrunner.manager.db.SuccessDatabase;
 import net.kirauks.pixelrunner.manager.db.SuccessDatabase.Success;
 import net.kirauks.pixelrunner.scene.base.BaseListMenuScene;
 import net.kirauks.pixelrunner.scene.base.element.ListElement;
-import net.kirauks.pixelrunner.scene.base.element.ScrollPage;
 import net.kirauks.pixelrunner.scene.base.element.XmAudioListElement;
 import net.kirauks.pixelrunner.scene.base.utils.comparator.AlphanumComparator;
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
-import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 
 /**

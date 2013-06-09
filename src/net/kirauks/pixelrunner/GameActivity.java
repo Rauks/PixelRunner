@@ -14,10 +14,8 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.ui.activity.BaseGameActivity;
-import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.ResourcesManager;
 import net.kirauks.pixelrunner.manager.SceneManager;
-import org.andengine.util.debug.Debug;
 
 public class GameActivity extends BaseGameActivity{
     public static float CAMERA_WIDTH = 800;

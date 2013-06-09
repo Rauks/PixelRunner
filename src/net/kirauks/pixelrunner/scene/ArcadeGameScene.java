@@ -4,7 +4,6 @@
  */
 package net.kirauks.pixelrunner.scene;
 
-import android.util.Log;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;

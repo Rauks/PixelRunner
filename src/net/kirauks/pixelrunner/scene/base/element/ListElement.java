@@ -4,14 +4,10 @@
  */
 package net.kirauks.pixelrunner.scene.base.element;
 
-import android.util.Log;
-import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.ResourcesManager;
 import org.andengine.entity.text.Text;
-import org.andengine.entity.text.TextOptions;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.align.HorizontalAlign;
 
 /**
  *

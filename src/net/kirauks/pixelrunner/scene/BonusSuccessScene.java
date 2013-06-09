@@ -4,7 +4,6 @@
  */
 package net.kirauks.pixelrunner.scene;
 
-import net.kirauks.pixelrunner.R;
 import net.kirauks.pixelrunner.manager.ResourcesManager;
 import net.kirauks.pixelrunner.manager.SceneManager;
 import net.kirauks.pixelrunner.manager.SceneManager.SceneType;

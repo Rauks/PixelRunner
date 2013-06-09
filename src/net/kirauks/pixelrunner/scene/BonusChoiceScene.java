@@ -4,23 +4,11 @@
  */
 package net.kirauks.pixelrunner.scene;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.kirauks.pixelrunner.GameActivity;
 import net.kirauks.pixelrunner.R;
-import net.kirauks.pixelrunner.game.descriptor.ArcadeLevelDescriptor;
 import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.SceneManager;
-import net.kirauks.pixelrunner.manager.SceneManager.SceneType;
-import net.kirauks.pixelrunner.scene.base.BaseListMenuScene;
 import net.kirauks.pixelrunner.scene.base.BaseMenuScene;
-import net.kirauks.pixelrunner.scene.base.element.ListElement;
-import net.kirauks.pixelrunner.scene.base.element.XmAudioListElement;
-import net.kirauks.pixelrunner.scene.base.utils.comparator.AlphanumComparator;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;

@@ -4,10 +4,7 @@
  */
 package net.kirauks.pixelrunner.scene.base.element;
 
-import net.kirauks.pixelrunner.manager.ResourcesManager;
-import org.andengine.entity.text.TextOptions;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.align.HorizontalAlign;
 
 /**
  *
