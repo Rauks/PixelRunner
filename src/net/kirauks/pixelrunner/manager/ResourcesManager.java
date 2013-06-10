@@ -126,13 +126,13 @@ public class ResourcesManager {
         this.nyanTextureAtlas.load();
         
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/main/");
-        this.menuTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 240, 240);
+        this.menuTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 256, 256);
         this.mainMenuParallaxLayer1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_1.png", 0, 0);
         this.mainMenuParallaxLayer2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_2.png", 120, 0);
         this.mainMenuParallaxLayer3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_3.png", 0, 120);
         this.mainMenuParallaxLayer4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.menuTextureAtlas, this.activity, "menu_bg_4.png", 120, 120);
         this.menuTextureAtlas.load();
-        this.lvlTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 154, 109);
+        this.lvlTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 256, 256);
         this.lvlBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_bg.png", 0, 0);
         this.lvlLock = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_lock.png", 69, 0);
         this.lvlStar = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.lvlTextureAtlas, this.activity, "lvl_star.png", 108, 0);
