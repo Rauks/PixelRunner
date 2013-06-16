@@ -519,7 +519,9 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     
     @Override
     public void onMenuKeyPressed(){
-        this.onPause();
+        if(!this.isWin){
+            this.onPause();
+        }
     }
     @Override
     public void onPause() {
