@@ -77,4 +77,8 @@ public abstract class BaseMenuScene extends BaseScene{
         this.parallaxLayer4.detachSelf();
         this.parallaxLayer4.dispose();
     }
+    
+    @Override
+    public void onMenuKeyPressed(){  
+    }
 }

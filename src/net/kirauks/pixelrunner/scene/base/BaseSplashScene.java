@@ -34,6 +34,10 @@ public abstract class BaseSplashScene extends BaseScene{
     public void onBackKeyPressed() {
         System.exit(0);
     }
+    
+    @Override
+    public void onMenuKeyPressed(){  
+    }
 
     @Override
     public void onPause() {

@@ -38,6 +38,7 @@ public abstract class BaseScene extends Scene{
     public abstract void createScene();
     
     public abstract void onBackKeyPressed();
+    public abstract void onMenuKeyPressed();
     public abstract void onPause();
     public abstract void onResume();
     

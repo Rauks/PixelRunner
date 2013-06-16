@@ -516,6 +516,11 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         AudioManager.getInstance().stop();
         SceneManager.getInstance().unloadGameLevelScene();
     }
+    
+    @Override
+    public void onMenuKeyPressed(){
+        this.onPause();
+    }
     @Override
     public void onPause() {
         if(!this.isWin){

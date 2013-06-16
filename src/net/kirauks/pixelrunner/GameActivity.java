@@ -56,7 +56,6 @@ public class GameActivity extends BaseGameActivity{
     @Override
     public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException {
         this.mEngine.enableVibrator(this);
-        this.mEngine.registerUpdateHandler(new FPSLogger());
         this.phoneAudioManager = (android.media.AudioManager)getSystemService(AUDIO_SERVICE);
         this.mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
             @Override
@@ -92,8 +91,11 @@ public class GameActivity extends BaseGameActivity{
     
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {  
-        if (keyCode == KeyEvent.KEYCODE_BACK){
+        if(keyCode == KeyEvent.KEYCODE_BACK){
             SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
+        }
+        else if(keyCode == KeyEvent.KEYCODE_MENU){
+            SceneManager.getInstance().getCurrentScene().onMenuKeyPressed();
         }
         return false; 
     }
