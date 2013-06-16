@@ -90,6 +90,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     
     private boolean isPaused = false;
     private boolean isStarted = false;
+    private boolean isRestarting = false;
     private boolean isWin = false;
     
     //HUD
@@ -396,6 +397,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     
     private synchronized void restart(){
         if(this.isStarted){
+            this.isRestarting = true;
             this.isStarted = false;
             this.onRestartBegin();
             this.unregisterUpdateHandler(this.levelWinHandler);
@@ -429,6 +431,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                             BaseGameScene.this.parallaxFactor = 1f;
                             BaseGameScene.this.player.resetMovements();
                             BaseGameScene.this.onRestartEnd();
+                            BaseGameScene.this.isRestarting = false;
                             BaseGameScene.this.start();
                         }
                     }));
@@ -439,7 +442,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     protected abstract void onRestartBegin();
     protected abstract void onRestartEnd();
     public synchronized void start(){
-        if(!BaseGameScene.this.isPaused && !this.isStarted){
+        if(!this.isPaused && !this.isStarted && !this.isRestarting){
             this.level.init();
             this.onStartBegin();
 
