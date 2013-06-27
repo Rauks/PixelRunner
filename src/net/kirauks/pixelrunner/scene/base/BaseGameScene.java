@@ -43,20 +43,21 @@ import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.IModifier;
 import net.kirauks.pixelrunner.GameActivity;
 import net.kirauks.pixelrunner.game.IPlayerListener;
-import net.kirauks.pixelrunner.scene.base.BaseScene;
 import net.kirauks.pixelrunner.game.descriptor.LevelDescriptor;
 import net.kirauks.pixelrunner.game.element.background.BackgroundElement;
 import net.kirauks.pixelrunner.game.element.level.LevelElement;
 import net.kirauks.pixelrunner.game.Player;
+import net.kirauks.pixelrunner.game.Player.JumpMode;
 import net.kirauks.pixelrunner.game.Trail;
+import net.kirauks.pixelrunner.game.element.level.BonusJump;
+import net.kirauks.pixelrunner.game.element.level.BonusSwap;
 import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.SceneManager;
 import net.kirauks.pixelrunner.scene.base.utils.ease.EaseBroadcast;
 import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.modifier.FadeOutModifier;
-import org.andengine.entity.modifier.MoveByModifier;
-import org.andengine.entity.modifier.MoveYModifier;
 
 /**
  *
@@ -96,12 +97,19 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
             if(BaseGameScene.this.player.isSwapped()){
                 BaseGameScene.this.buttonUp.setFlippedVertical(true);
                 BaseGameScene.this.buttonDown.setFlippedVertical(true);
+                BaseGameScene.this.changeButtonColor(HudButton.UP, BonusSwap.DEFAULT_COLOR);
+                BaseGameScene.this.changeButtonColor(HudButton.DOWN, BonusSwap.DEFAULT_COLOR);
+            }
+            else if(BaseGameScene.this.player.getJumpMode() == JumpMode.INFINITE){
+                BaseGameScene.this.changeButtonColor(HudButton.UP, BonusJump.DEFAULT_COLOR);
             }
         }
         @Override
         public void onBonusEnd() {
             BaseGameScene.this.buttonUp.setFlippedVertical(false);
             BaseGameScene.this.buttonDown.setFlippedVertical(false);
+            BaseGameScene.this.changeButtonColor(HudButton.UP, Color.WHITE);
+            BaseGameScene.this.changeButtonColor(HudButton.DOWN, Color.WHITE);
         }
     };
     
@@ -113,6 +121,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     //HUD
     protected HUD hud;
     //HUD - Buttons
+    private enum HudButton{UP, DOWN}
     private Sprite buttonUpBack;
     private Sprite buttonDownBack;
     private Sprite buttonUp;
@@ -328,10 +337,10 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                 BaseGameScene.this.isWin = true;
                 BaseGameScene.this.onWin();
                 
-                BaseGameScene.this.buttonDownBack.registerEntityModifier(new AlphaModifier(0.5f, 1f, 0f));
-                BaseGameScene.this.buttonUpBack.registerEntityModifier(new AlphaModifier(0.5f, 1f, 0f));
-                BaseGameScene.this.buttonDown.registerEntityModifier(new AlphaModifier(0.5f, 1f, 0f));
-                BaseGameScene.this.buttonUp.registerEntityModifier(new AlphaModifier(0.5f, 1f, 0f));
+                BaseGameScene.this.buttonDownBack.registerEntityModifier(new FadeOutModifier(0.5f));
+                BaseGameScene.this.buttonUpBack.registerEntityModifier(new FadeOutModifier(0.5f));
+                BaseGameScene.this.buttonDown.registerEntityModifier(new FadeOutModifier(0.5f));
+                BaseGameScene.this.buttonUp.registerEntityModifier(new FadeOutModifier(0.5f));
 
                 Sprite player = BaseGameScene.this.player;
                 final PhysicsConnector physicsConnector = BaseGameScene.this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(player);
@@ -401,10 +410,10 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.buttonDownBack = new Sprite(BUTTON_X, BUTTON_DOWN_Y, resourcesManager.buttonBack, vbom);
         this.hud.attachChild(this.buttonUpBack);
         this.hud.attachChild(this.buttonDownBack);
-        this.buttonUp = new Sprite(BUTTON_X, BUTTON_UP_Y, resourcesManager.buttonUp, vbom);
-        this.buttonDown = new Sprite(BUTTON_X, BUTTON_DOWN_Y, resourcesManager.buttonDown, vbom);
-        this.hud.attachChild(this.buttonUp);
-        this.hud.attachChild(this.buttonDown);
+        this.buttonUp = new Sprite(34, 34, resourcesManager.buttonUp, vbom);
+        this.buttonDown = new Sprite(34, 34, resourcesManager.buttonDown, vbom);
+        this.buttonUpBack.attachChild(this.buttonUp);
+        this.buttonDownBack.attachChild(this.buttonDown);
         
         //Broadcast messages
         this.chrono3 = new Text(0, 0, resourcesManager.fontPixel_200, "3", vbom);
@@ -442,6 +451,20 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.chrono1.setZIndex(5);
         this.chronoStart.setZIndex(5);
         this.hud.sortChildren();
+    }
+    private Sprite getTargetedButton(HudButton button){
+        switch(button){
+            case UP:
+                return this.buttonUp;
+            default:
+            case DOWN:
+                return this.buttonDown;
+        }
+    }
+    private void changeButtonColor(HudButton button, Color color){
+        Sprite target = this.getTargetedButton(button);
+        target.clearEntityModifiers();
+        target.registerEntityModifier(new ColorModifier(0.2f, target.getColor(), color));
     }
     
     private synchronized void restart(){
@@ -583,10 +606,6 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     }
     public void pause(){
         this.isPaused = true;
-        this.buttonDownBack.clearEntityModifiers();
-        this.buttonUpBack.clearEntityModifiers();
-        this.buttonDown.clearEntityModifiers();
-        this.buttonUp.clearEntityModifiers();
         this.buttonDownBack.registerEntityModifier(new FadeOutModifier(0.3f));
         this.buttonUpBack.registerEntityModifier(new FadeOutModifier(0.3f));
         this.buttonDown.registerEntityModifier(new FadeOutModifier(0.3f));
