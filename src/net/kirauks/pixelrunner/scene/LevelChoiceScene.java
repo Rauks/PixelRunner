@@ -36,6 +36,9 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
     private ScrollPage forest;
     private ScrollPage hills;
     private ScrollPage sweets;
+    private ScrollPage islands;
+    private ScrollPage fortress;
+    private ScrollPage space;
     
     public LevelChoiceScene(){
         super(GameActivity.CAMERA_WIDTH, GameActivity.CAMERA_HEIGHT);
@@ -88,7 +91,19 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
         this.sweets.setTitle(this.activity.getString(R.string.lvl_sweets));
         this.sweets.setProgress(this.progressDb.get(World.SWEETS));
         
-        addPages(this.tutorials, this.mountains, this.desert, this.city, this.forest, this.hills, this.sweets);
+        this.islands = new ScrollPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.ISLANDS, 12, this.vbom);
+        this.islands.setTitle(this.activity.getString(R.string.lvl_islands));
+        this.islands.setProgress(this.progressDb.get(World.ISLANDS));
+        
+        this.fortress = new ScrollPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.FORTRESS, 12, this.vbom);
+        this.fortress.setTitle(this.activity.getString(R.string.lvl_fortress));
+        this.fortress.setProgress(this.progressDb.get(World.FORTRESS));
+        
+        this.space = new ScrollPage(GameActivity.CAMERA_WIDTH - PADDING, GameActivity.CAMERA_HEIGHT - PADDING, World.SPACE, 12, this.vbom);
+        this.space.setTitle(this.activity.getString(R.string.lvl_space));
+        this.space.setProgress(this.progressDb.get(World.SPACE));
+        
+        addPages(this.tutorials, this.mountains, this.desert, this.city, this.forest, this.hills, this.sweets, this.islands, this.fortress, this.space);
         
         this.infosDb = new InfosDatabase(this.activity);
         this.moveToPage(this.infosDb.getInfo(Info.LEVEL_CHOICE_PAGE));

@@ -9,7 +9,7 @@ package net.kirauks.pixelrunner.game.descriptor.utils;
  * @author Karl
  */
 public enum World {
-    ARCADE(-1), TRAINING(0), MOUNTAINS(1), DESERT(2), CITY(3), FOREST(4), HILLS(5), SWEETS(6);
+    ARCADE(-1), TRAINING(0), MOUNTAINS(1), DESERT(2), CITY(3), FOREST(4), HILLS(5), SWEETS(6), ISLANDS(7), FORTRESS(8), SPACE(9);
     
     private int id;
     

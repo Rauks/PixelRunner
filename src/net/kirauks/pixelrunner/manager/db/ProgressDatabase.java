@@ -61,8 +61,27 @@ public class ProgressDatabase extends Database{
                     successDb.unlockSuccess(Success.SWEETS);
                 }
                 break;
+            case ISLANDS:
+                if(value > 12){
+                    successDb.unlockSuccess(Success.ISLANDS);
+                }
+                break;
+            case FORTRESS:
+                if(value > 12){
+                    successDb.unlockSuccess(Success.FORTRESS);
+                }
+                break;
+            case SPACE:
+                if(value > 12){
+                    successDb.unlockSuccess(Success.SPACE);
+                }
+                break;
         }
-        if(successDb.getSuccessStatus(Success.MOUNTAINS) && successDb.getSuccessStatus(Success.DESERT) && successDb.getSuccessStatus(Success.FOREST) && successDb.getSuccessStatus(Success.CITY) && successDb.getSuccessStatus(Success.HILLS) && successDb.getSuccessStatus(Success.SWEETS)){
+        if(successDb.getSuccessStatus(Success.MOUNTAINS) && successDb.getSuccessStatus(Success.DESERT)
+                && successDb.getSuccessStatus(Success.FOREST) && successDb.getSuccessStatus(Success.CITY)
+                && successDb.getSuccessStatus(Success.HILLS) && successDb.getSuccessStatus(Success.SWEETS)
+                && successDb.getSuccessStatus(Success.ISLANDS) && successDb.getSuccessStatus(Success.FORTRESS)
+                && successDb.getSuccessStatus(Success.SPACE)){
             successDb.unlockSuccess(Success.ENDGAME);
         }
     }
