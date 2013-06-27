@@ -56,6 +56,10 @@ public class ResourcesManager {
     public ITextureRegion wall;
     private BitmapTextureAtlas gameBackgroundTextureAtlas;
     public Map<String, ITextureRegion> gameParallaxLayers = new HashMap<String, ITextureRegion>();
+    private BitmapTextureAtlas buttonsTextureAtlas;
+    public ITextureRegion buttonBack;
+    public ITextureRegion buttonUp;
+    public ITextureRegion buttonDown;
     
     //Textures - Main
     private BitmapTextureAtlas menuTextureAtlas;
@@ -191,6 +195,13 @@ public class ResourcesManager {
         this.wall = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.wallTextureAtlas, this.activity, "wall.png", 0, 0);
         this.wallTextureAtlas.load();
         
+	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/main/");
+        this.buttonsTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 128, 128);
+        this.buttonBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.buttonsTextureAtlas, this.activity, "lvl_bg.png", 0, 0);
+        this.buttonUp = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.buttonsTextureAtlas, this.activity, "lvl_jump.png", 69, 0);
+        this.buttonDown = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.buttonsTextureAtlas, this.activity, "lvl_roll.png", 69, 37);
+        this.buttonsTextureAtlas.load();
+        
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/backgrounds/");
         this.gameBackgroundTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), BackgroundElement.MAX_WIDTH, BackgroundElement.MAX_HEIGHT * LevelDescriptor.MAX_BACKGROUND_ELEMENTS);
         int index = 0;
@@ -215,6 +226,10 @@ public class ResourcesManager {
         this.wall = null;
         this.gameBackgroundTextureAtlas.unload();
         this.gameParallaxLayers.clear();
+        this.buttonsTextureAtlas.unload();
+        this.buttonBack = null;
+        this.buttonUp = null;
+        this.buttonDown = null;
     }
     
     public static ResourcesManager getInstance(){

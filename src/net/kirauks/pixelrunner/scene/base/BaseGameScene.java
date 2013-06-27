@@ -52,6 +52,7 @@ import net.kirauks.pixelrunner.game.Trail;
 import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.SceneManager;
 import net.kirauks.pixelrunner.scene.base.utils.ease.EaseBroadcast;
+import org.andengine.entity.modifier.AlphaModifier;
 
 /**
  *
@@ -95,6 +96,11 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     
     //HUD
     protected HUD hud;
+    //HUD - Buttons
+    private Sprite buttonUpBack;
+    private Sprite buttonDownBack;
+    private Sprite buttonUp;
+    private Sprite buttonDown;
     //HUD Broadcast
     private Text chrono3;
     private Text chrono2;
@@ -304,6 +310,11 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
 
                 BaseGameScene.this.isWin = true;
                 BaseGameScene.this.onWin();
+                
+                BaseGameScene.this.buttonDownBack.registerEntityModifier(new AlphaModifier(0.5f, 1f, 0f));
+                BaseGameScene.this.buttonUpBack.registerEntityModifier(new AlphaModifier(0.5f, 1f, 0f));
+                BaseGameScene.this.buttonDown.registerEntityModifier(new AlphaModifier(0.5f, 1f, 0f));
+                BaseGameScene.this.buttonUp.registerEntityModifier(new AlphaModifier(0.5f, 1f, 0f));
 
                 Sprite player = BaseGameScene.this.player;
                 final PhysicsConnector physicsConnector = BaseGameScene.this.physicWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(player);
@@ -366,7 +377,17 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     }
     private void createHUD(){
         this.hud = new HUD();
-        this.camera.setHUD(this.hud);  
+        this.camera.setHUD(this.hud);
+        
+        //Buttons
+        this.buttonUpBack = new Sprite(47, 300, resourcesManager.buttonBack, vbom);
+        this.buttonDownBack = new Sprite(47, 180, resourcesManager.buttonBack, vbom);
+        this.hud.attachChild(this.buttonUpBack);
+        this.hud.attachChild(this.buttonDownBack);
+        this.buttonUp = new Sprite(32, 32, resourcesManager.buttonUp, vbom);
+        this.buttonDown = new Sprite(32, 32, resourcesManager.buttonDown, vbom);
+        this.buttonUpBack.attachChild(this.buttonUp);
+        this.buttonDownBack.attachChild(this.buttonDown);
         
         //Broadcast messages
         this.chrono3 = new Text(0, 0, resourcesManager.fontPixel_200, "3", vbom);
@@ -393,6 +414,15 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         Text winSub = new Text(this.win.getWidth()/2, -25f, resourcesManager.fontPixel_200, "WIN!", new TextOptions(HorizontalAlign.CENTER), vbom);
         this.win.attachChild(winSub);
         this.hud.attachChild(this.win);
+        
+        //Z-Indexes
+        this.buttonUpBack.setZIndex(10);
+        this.buttonDownBack.setZIndex(10);
+        this.chrono3.setZIndex(5);
+        this.chrono2.setZIndex(5);
+        this.chrono1.setZIndex(5);
+        this.chronoStart.setZIndex(5);
+        this.hud.sortChildren();
     }
     
     private synchronized void restart(){
@@ -534,6 +564,14 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     }
     public void pause(){
         this.isPaused = true;
+        this.buttonDownBack.clearEntityModifiers();
+        this.buttonUpBack.clearEntityModifiers();
+        this.buttonDown.clearEntityModifiers();
+        this.buttonUp.clearEntityModifiers();
+        this.buttonDownBack.registerEntityModifier(new AlphaModifier(0.5f, this.buttonDownBack.getAlpha(), 0f));
+        this.buttonUpBack.registerEntityModifier(new AlphaModifier(0.5f, this.buttonUpBack.getAlpha(), 0f));
+        this.buttonDown.registerEntityModifier(new AlphaModifier(0.5f, this.buttonDown.getAlpha(), 0f));
+        this.buttonUp.registerEntityModifier(new AlphaModifier(0.5f, this.buttonUp.getAlpha(), 0f));
         this.chrono1.clearEntityModifiers();
         this.chrono2.clearEntityModifiers();
         this.chrono3.clearEntityModifiers();
@@ -553,6 +591,10 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                 @Override
                 public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                     BaseGameScene.this.pause.setVisible(false);
+                    BaseGameScene.this.buttonDownBack.registerEntityModifier(new AlphaModifier(0.5f, BaseGameScene.this.buttonDownBack.getAlpha(), 1f));
+                    BaseGameScene.this.buttonUpBack.registerEntityModifier(new AlphaModifier(0.5f, BaseGameScene.this.buttonUpBack.getAlpha(), 1f));
+                    BaseGameScene.this.buttonDown.registerEntityModifier(new AlphaModifier(0.5f, BaseGameScene.this.buttonDown.getAlpha(), 1f));
+                    BaseGameScene.this.buttonUp.registerEntityModifier(new AlphaModifier(0.5f, BaseGameScene.this.buttonUp.getAlpha(), 1f));
                 }
 
                 @Override
@@ -582,6 +624,10 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         }
         else{
             this.pause.setVisible(false);
+            this.buttonDownBack.registerEntityModifier(new AlphaModifier(0.5f, this.buttonDownBack.getAlpha(), 1f));
+            this.buttonUpBack.registerEntityModifier(new AlphaModifier(0.5f, this.buttonUpBack.getAlpha(), 1f));
+            this.buttonDown.registerEntityModifier(new AlphaModifier(0.5f, this.buttonDown.getAlpha(), 1f));
+            this.buttonUp.registerEntityModifier(new AlphaModifier(0.5f, this.buttonUp.getAlpha(), 1f));
             this.setIgnoreUpdate(false);
             this.audioManager.resume();
             this.start();
@@ -604,6 +650,14 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.destroyPhysicsWorld();
         
         this.camera.setHUD(null);
+        this.buttonUp.detachSelf();
+        this.buttonUp.dispose();
+        this.buttonDown.detachSelf();
+        this.buttonDown.dispose();
+        this.buttonUpBack.detachSelf();
+        this.buttonUpBack.dispose();
+        this.buttonDownBack.detachSelf();
+        this.buttonDownBack.dispose();
         this.chrono3.detachSelf();
         this.chrono3.dispose();
         this.chrono2.detachSelf();
