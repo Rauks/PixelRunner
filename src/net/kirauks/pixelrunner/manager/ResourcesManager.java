@@ -197,7 +197,7 @@ public class ResourcesManager {
         
 	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/main/");
         this.buttonsTextureAtlas = new BitmapTextureAtlas(this.activity.getTextureManager(), 128, 128);
-        this.buttonBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.buttonsTextureAtlas, this.activity, "lvl_bg.png", 0, 0);
+        this.buttonBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.buttonsTextureAtlas, this.activity, "button_bg.png", 0, 0);
         this.buttonUp = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.buttonsTextureAtlas, this.activity, "lvl_jump.png", 69, 0);
         this.buttonDown = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.buttonsTextureAtlas, this.activity, "lvl_roll.png", 69, 37);
         this.buttonsTextureAtlas.load();
