@@ -13,4 +13,5 @@ public interface IPlayerListener {
     public void onRoll();
     public void onRollBackJump();
     public void onBonus();
+    public void onBonusEnd();
 }

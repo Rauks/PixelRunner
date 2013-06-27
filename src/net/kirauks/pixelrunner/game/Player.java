@@ -118,6 +118,9 @@ public abstract class Player extends AnimatedSprite{
         this.swapped = false;
         this.hasLife = false;
         this.setColor(Color.WHITE);
+        if(this.listener != null){
+            this.listener.onBonusEnd();
+        }
     }
     public void jump(){
         switch(this.jumpMode){

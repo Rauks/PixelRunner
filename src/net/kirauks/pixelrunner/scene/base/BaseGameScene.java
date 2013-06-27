@@ -53,6 +53,10 @@ import net.kirauks.pixelrunner.manager.AudioManager;
 import net.kirauks.pixelrunner.manager.SceneManager;
 import net.kirauks.pixelrunner.scene.base.utils.ease.EaseBroadcast;
 import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.FadeInModifier;
+import org.andengine.entity.modifier.FadeOutModifier;
+import org.andengine.entity.modifier.MoveByModifier;
+import org.andengine.entity.modifier.MoveYModifier;
 
 /**
  *
@@ -67,6 +71,9 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     private final float BROADCAST_LEVEL = 240;
     private final float BROADCAST_LEFT = -100;
     private final float BROADCAST_RIGHT = 1000;
+    private final float BUTTON_X = 47;
+    private final float BUTTON_UP_Y = 300;
+    private final float BUTTON_DOWN_Y = 180;
     
     public class BaseGamePlayerListener implements IPlayerListener{
         @Override
@@ -86,6 +93,15 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         @Override
         public void onBonus() {
             BaseGameScene.this.activity.vibrate(30);
+            if(BaseGameScene.this.player.isSwapped()){
+                BaseGameScene.this.buttonUp.setFlippedVertical(true);
+                BaseGameScene.this.buttonDown.setFlippedVertical(true);
+            }
+        }
+        @Override
+        public void onBonusEnd() {
+            BaseGameScene.this.buttonUp.setFlippedVertical(false);
+            BaseGameScene.this.buttonDown.setFlippedVertical(false);
         }
     };
     
@@ -110,6 +126,7 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
     private Text pause;
     //HUD - Win
     private Text win;
+    private Text winSub;
     //Level
     protected LevelDescriptor level;
     private TimerHandler levelReaderHandler;
@@ -380,14 +397,14 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.camera.setHUD(this.hud);
         
         //Buttons
-        this.buttonUpBack = new Sprite(47, 300, resourcesManager.buttonBack, vbom);
-        this.buttonDownBack = new Sprite(47, 180, resourcesManager.buttonBack, vbom);
+        this.buttonUpBack = new Sprite(BUTTON_X, BUTTON_UP_Y, resourcesManager.buttonBack, vbom);
+        this.buttonDownBack = new Sprite(BUTTON_X, BUTTON_DOWN_Y, resourcesManager.buttonBack, vbom);
         this.hud.attachChild(this.buttonUpBack);
         this.hud.attachChild(this.buttonDownBack);
-        this.buttonUp = new Sprite(32, 32, resourcesManager.buttonUp, vbom);
-        this.buttonDown = new Sprite(32, 32, resourcesManager.buttonDown, vbom);
-        this.buttonUpBack.attachChild(this.buttonUp);
-        this.buttonDownBack.attachChild(this.buttonDown);
+        this.buttonUp = new Sprite(BUTTON_X, BUTTON_UP_Y, resourcesManager.buttonUp, vbom);
+        this.buttonDown = new Sprite(BUTTON_X, BUTTON_DOWN_Y, resourcesManager.buttonDown, vbom);
+        this.hud.attachChild(this.buttonUp);
+        this.hud.attachChild(this.buttonDown);
         
         //Broadcast messages
         this.chrono3 = new Text(0, 0, resourcesManager.fontPixel_200, "3", vbom);
@@ -411,11 +428,13 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         //win message
         this.win = new Text(GameActivity.CAMERA_WIDTH/2, GameActivity.CAMERA_HEIGHT/2 + 130, resourcesManager.fontPixel_200, "EPIC", new TextOptions(HorizontalAlign.CENTER), vbom);
         this.win.setVisible(false);
-        Text winSub = new Text(this.win.getWidth()/2, -25f, resourcesManager.fontPixel_200, "WIN!", new TextOptions(HorizontalAlign.CENTER), vbom);
-        this.win.attachChild(winSub);
+        this.winSub = new Text(this.win.getWidth()/2, -25f, resourcesManager.fontPixel_200, "WIN!", new TextOptions(HorizontalAlign.CENTER), vbom);
+        this.win.attachChild(this.winSub);
         this.hud.attachChild(this.win);
         
         //Z-Indexes
+        this.buttonUp.setZIndex(15);
+        this.buttonDown.setZIndex(15);
         this.buttonUpBack.setZIndex(10);
         this.buttonDownBack.setZIndex(10);
         this.chrono3.setZIndex(5);
@@ -568,10 +587,10 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.buttonUpBack.clearEntityModifiers();
         this.buttonDown.clearEntityModifiers();
         this.buttonUp.clearEntityModifiers();
-        this.buttonDownBack.registerEntityModifier(new AlphaModifier(0.5f, this.buttonDownBack.getAlpha(), 0f));
-        this.buttonUpBack.registerEntityModifier(new AlphaModifier(0.5f, this.buttonUpBack.getAlpha(), 0f));
-        this.buttonDown.registerEntityModifier(new AlphaModifier(0.5f, this.buttonDown.getAlpha(), 0f));
-        this.buttonUp.registerEntityModifier(new AlphaModifier(0.5f, this.buttonUp.getAlpha(), 0f));
+        this.buttonDownBack.registerEntityModifier(new FadeOutModifier(0.3f));
+        this.buttonUpBack.registerEntityModifier(new FadeOutModifier(0.3f));
+        this.buttonDown.registerEntityModifier(new FadeOutModifier(0.3f));
+        this.buttonUp.registerEntityModifier(new FadeOutModifier(0.3f));
         this.chrono1.clearEntityModifiers();
         this.chrono2.clearEntityModifiers();
         this.chrono3.clearEntityModifiers();
@@ -591,10 +610,10 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
                 @Override
                 public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
                     BaseGameScene.this.pause.setVisible(false);
-                    BaseGameScene.this.buttonDownBack.registerEntityModifier(new AlphaModifier(0.5f, BaseGameScene.this.buttonDownBack.getAlpha(), 1f));
-                    BaseGameScene.this.buttonUpBack.registerEntityModifier(new AlphaModifier(0.5f, BaseGameScene.this.buttonUpBack.getAlpha(), 1f));
-                    BaseGameScene.this.buttonDown.registerEntityModifier(new AlphaModifier(0.5f, BaseGameScene.this.buttonDown.getAlpha(), 1f));
-                    BaseGameScene.this.buttonUp.registerEntityModifier(new AlphaModifier(0.5f, BaseGameScene.this.buttonUp.getAlpha(), 1f));
+                    BaseGameScene.this.buttonDownBack.registerEntityModifier(new FadeInModifier(0.3f));
+                    BaseGameScene.this.buttonUpBack.registerEntityModifier(new FadeInModifier(0.3f));
+                    BaseGameScene.this.buttonDown.registerEntityModifier(new FadeInModifier(0.3f));
+                    BaseGameScene.this.buttonUp.registerEntityModifier(new FadeInModifier(0.3f));
                 }
 
                 @Override
@@ -624,10 +643,10 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         }
         else{
             this.pause.setVisible(false);
-            this.buttonDownBack.registerEntityModifier(new AlphaModifier(0.5f, this.buttonDownBack.getAlpha(), 1f));
-            this.buttonUpBack.registerEntityModifier(new AlphaModifier(0.5f, this.buttonUpBack.getAlpha(), 1f));
-            this.buttonDown.registerEntityModifier(new AlphaModifier(0.5f, this.buttonDown.getAlpha(), 1f));
-            this.buttonUp.registerEntityModifier(new AlphaModifier(0.5f, this.buttonUp.getAlpha(), 1f));
+            this.buttonDownBack.registerEntityModifier(new FadeInModifier(0.3f));
+            this.buttonUpBack.registerEntityModifier(new FadeInModifier(0.3f));
+            this.buttonDown.registerEntityModifier(new FadeInModifier(0.3f));
+            this.buttonUp.registerEntityModifier(new FadeInModifier(0.3f));
             this.setIgnoreUpdate(false);
             this.audioManager.resume();
             this.start();
@@ -666,6 +685,8 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.chrono1.dispose();
         this.pause.detachSelf();
         this.pause.dispose();
+        this.winSub.detachSelf();
+        this.winSub.dispose();
         this.win.detachSelf();
         this.win.dispose();
         
