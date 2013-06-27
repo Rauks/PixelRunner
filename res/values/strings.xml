@@ -23,8 +23,8 @@
     
     <string name="credits_programming_names">Karl Woditsch</string>
     <string name="credits_design_names">Florent Lacroix</string>
-    <string name="credits_testers_names">Alexandre Binder\nAurelie Keraval\nCharles Hazard\nGeorges Olivares\nLucas D\'Agui\nNicolas Devenet\nSimon Chevalier</string>
-    <string name="credits_thanks_names">ENSISA\nLeonard Daver\nMichel Hassenforder\nNicolas Fruteau\nSuzanne Noll\nThibaut Meyer\nValeriane Jean</string>
+    <string name="credits_testers_names">Alexandre Binder\nAurelie Keraval\nCecilia Wlotzko\nCharles Hazard\nGeorges Olivares\nLucas D\'Agui\nNicolas Devenet\nSimon Chevalier</string>
+    <string name="credits_thanks_names">ENSISA\nJimmy Maceraudi\nLeonard Daver\nMichel Hassenforder\nNicolas Fruteau\nSuzanne Noll\nThibaut Meyer\nValeriane Jean</string>
     <string name="credits_achieved_names">AndEngine</string>
     
     <string name="lvl_tutorials">0.Training</string>
@@ -34,6 +34,9 @@
     <string name="lvl_forest">4.Forest</string>
     <string name="lvl_hills">5.Hills</string>
     <string name="lvl_sweets">6.Sweets</string>
+    <string name="lvl_islands">7.Islands</string>
+    <string name="lvl_fortress">8.Fortress</string>
+    <string name="lvl_space">9.Space</string>
     
     <string name="success_tutorials">Never Skip\nLeg Day</string>
     <string name="success_tutorials_sub">Do a training</string>
@@ -49,6 +52,12 @@
     <string name="success_hills_sub">Finish world 5 (Hills)</string>
     <string name="success_sweets">Oh Piece of Candy!</string>
     <string name="success_sweets_sub">Finish world 6 (Sweets)</string>
+    <string name="success_islands">You are a Pirate</string>
+    <string name="success_islands_sub">Finish world 7 (Islands)</string>
+    <string name="success_fortress">King of Pixels</string>
+    <string name="success_fortress_sub">Finish world 8 (Fortress)</string>
+    <string name="success_space">I\'m in Space!</string>
+    <string name="success_space_sub">Finish world 9 (Space)</string>
     <string name="success_endgame">The Flash</string>
     <string name="success_endgame_sub">Finish all worlds</string>
     <string name="success_jukebox">Music Lover</string>
