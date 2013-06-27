@@ -164,6 +164,9 @@ public abstract class Player extends AnimatedSprite{
             this.listener.onBonus();
         }
     }
+    public JumpMode getJumpMode(){
+        return this.jumpMode;
+    }
     public void getLife(){
         this.hasLife = true;
         this.fireBonusTimer();
