@@ -28,9 +28,6 @@ public class ProgressDatabase extends Database{
         super.setInt(PROGRESS_LABEL + world, value);
         SuccessDatabase successDb = new SuccessDatabase(this.getContext());
         switch(world){
-            case TRAINING:
-                successDb.unlockSuccess(Success.TUTORIALS);
-                break;
             case MOUNTAINS:
                 if(value > 12){
                     successDb.unlockSuccess(Success.MOUNTAINS);

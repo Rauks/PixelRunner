@@ -44,7 +44,7 @@ public class LevelChoiceScene extends BaseScrollMenuScene{
         super(GameActivity.CAMERA_WIDTH, GameActivity.CAMERA_HEIGHT);
         
         this.progressDb = new ProgressDatabase(this.activity);
-        this.progressDb.set(World.TRAINING, 4);
+        this.progressDb.set(World.TRAINING, 5);
         
         this.registerScrollScenePageListener(new IOnScrollListener() {
             @Override

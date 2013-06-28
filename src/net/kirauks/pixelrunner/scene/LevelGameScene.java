@@ -5,8 +5,10 @@
 package net.kirauks.pixelrunner.scene;
 
 import net.kirauks.pixelrunner.game.descriptor.LevelDescriptor;
+import net.kirauks.pixelrunner.game.descriptor.utils.World;
 import net.kirauks.pixelrunner.manager.SceneManager.SceneType;
 import net.kirauks.pixelrunner.manager.db.ProgressDatabase;
+import net.kirauks.pixelrunner.manager.db.SuccessDatabase;
 import net.kirauks.pixelrunner.scene.base.BaseGameScene;
 
 /**
@@ -46,6 +48,9 @@ public class LevelGameScene extends BaseGameScene{
     protected void onWin() {
         if(this.progressDb.get(this.level.getWorld()) == this.level.getLevelId()){
             this.progressDb.set(this.level.getWorld(), this.level.getLevelId() + 1);
+        }
+        if(this.level.getWorld() == World.TRAINING){
+            new SuccessDatabase(this.activity).unlockSuccess(SuccessDatabase.Success.TUTORIALS);
         }
     }
 
