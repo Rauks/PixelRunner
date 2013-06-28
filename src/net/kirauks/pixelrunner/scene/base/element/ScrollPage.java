@@ -74,7 +74,7 @@ public class ScrollPage extends Rectangle implements IScrollPageElementTouchList
         this.right.setScale(6f);
         this.attachChild(this.right);
         this.addElements(nbElements);
-        this.refreshLocks();
+        this.refreshElements();
     }
     
     public World getWorld(){
@@ -141,9 +141,9 @@ public class ScrollPage extends Rectangle implements IScrollPageElementTouchList
     }
     private void addElements(int nbElements){
         for (int i = 0; i < nbElements; i++) {
-            this.addElement(new ScrollPageElement(0, 0, i + 1, true, this.getVertexBufferObjectManager()));
+            this.addElement(new ScrollPageElement(0, 0, i + 1, true, false, this.getVertexBufferObjectManager()));
         }
-        this.refreshLocks();
+        this.refreshElements();
     }
     
     public SmartList<ITouchArea> getElementsTouchAreas(){
@@ -156,20 +156,28 @@ public class ScrollPage extends Rectangle implements IScrollPageElementTouchList
     
     public void setProgress(int progress){
         this.progress = progress;
-        this.refreshLocks();
+        this.refreshElements();
     }
     public int getProgress(){
         return this.progress;
     }
     
-    private void refreshLocks(){
+    private void refreshElements(){
         for(int i = 0; i < this.elements.size(); i++){
             if(i + 1 <= this.progress){
                 this.elements.get(i).setLocked(false);
+                if(i + 1 == this.progress){
+                    this.elements.get(i).setDone(false);
+                }
+                else{
+                    this.elements.get(i).setDone(true);
+                }
             }
             else{
                 this.elements.get(i).setLocked(true);
+                this.elements.get(i).setDone(false);
             }
+            this.elements.get(i).refreshEntity();
         }
     }
     

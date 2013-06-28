@@ -15,10 +15,10 @@ import net.kirauks.pixelrunner.manager.ResourcesManager;
 public class ScrollPageTutorial extends ScrollPage{
     public ScrollPageTutorial(final float pWidth, final float pHeight, World world, final VertexBufferObjectManager pVertexBufferObjectManager){
         super(pWidth, pHeight, world, 0, pVertexBufferObjectManager);
-        this.addElement(new ScrollPageElement(0, 0, 1, false, ResourcesManager.getInstance().lvlJump, pVertexBufferObjectManager));
-        this.addElement(new ScrollPageElement(0, 0, 2, false, ResourcesManager.getInstance().lvlRoll, pVertexBufferObjectManager));
-        this.addElement(new ScrollPageElement(0, 0, 3, false, ResourcesManager.getInstance().lvlDoubleJump, pVertexBufferObjectManager));
-        this.addElement(new ScrollPageElement(0, 0, 4, false, ResourcesManager.getInstance().lvlPlatform, pVertexBufferObjectManager));
+        this.addElement(new ScrollPageElement(0, 0, 1, false, true, ResourcesManager.getInstance().lvlJump, pVertexBufferObjectManager));
+        this.addElement(new ScrollPageElement(0, 0, 2, false, true, ResourcesManager.getInstance().lvlRoll, pVertexBufferObjectManager));
+        this.addElement(new ScrollPageElement(0, 0, 3, false, true, ResourcesManager.getInstance().lvlDoubleJump, pVertexBufferObjectManager));
+        this.addElement(new ScrollPageElement(0, 0, 4, false, true, ResourcesManager.getInstance().lvlPlatform, pVertexBufferObjectManager));
         this.setProgress(4);
     }
     

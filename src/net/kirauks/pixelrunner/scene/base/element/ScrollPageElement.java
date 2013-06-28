@@ -17,28 +17,34 @@ import net.kirauks.pixelrunner.manager.ResourcesManager;
  * @author Karl
  */
 public class ScrollPageElement extends Sprite{
+    private final static Color DONE_COLOR = Color.WHITE;
+    private final static Color UNDONE_COLOR = new Color(0.4f, 0.4f, 0.4f);
+    
     private int id;
     private boolean locked;
+    private boolean done;
     private IScrollPageElementTouchListener listener;
     
     private Shape picto;
     private Sprite lock;
     
-    public ScrollPageElement(float pX, float pY, int id, boolean locked, ITextureRegion texture, VertexBufferObjectManager pVertexBufferObjectManager){
+    public ScrollPageElement(float pX, float pY, int id, boolean locked, boolean done, ITextureRegion texture, VertexBufferObjectManager pVertexBufferObjectManager){
         super(pX, pY, ResourcesManager.getInstance().lvlBack, pVertexBufferObjectManager);
         this.setCullingEnabled(true);
         this.id = id;
         this.locked = locked;
+        this.done = done;
         this.initLock();
         this.picto = new Sprite(this.getHeight()/2, this.getWidth()/2, texture, this.getVertexBufferObjectManager());
         this.attachChild(this.picto);
         this.refreshEntity();
     }
-    public ScrollPageElement(float pX, float pY, int id, boolean locked, VertexBufferObjectManager pVertexBufferObjectManager){
+    public ScrollPageElement(float pX, float pY, int id, boolean locked, boolean done, VertexBufferObjectManager pVertexBufferObjectManager){
         super(pX, pY, ResourcesManager.getInstance().lvlBack, pVertexBufferObjectManager);
         this.setCullingEnabled(true);
         this.id = id;
         this.locked = locked;
+        this.done = done;
         this.initLock();
         this.picto = new Text(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().fontPixel_60, String.valueOf(id), this.getVertexBufferObjectManager());
         this.attachChild(this.picto);
@@ -46,7 +52,7 @@ public class ScrollPageElement extends Sprite{
     }
     private void initLock(){
         this.lock = new Sprite(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().lvlLock, this.getVertexBufferObjectManager());
-        this.lock.setColor(new Color(0.4f, 0.4f, 0.4f));
+        this.lock.setColor(UNDONE_COLOR);
         this.attachChild(this.lock);
     }
     
@@ -73,10 +79,12 @@ public class ScrollPageElement extends Sprite{
     
     public void setLocked(boolean locked){
         this.locked = locked;
-        this.refreshEntity();
+    }
+    public void setDone(boolean done){
+        this.done = done;
     }
     
-    private void refreshEntity(){
+    public void refreshEntity(){
         if(this.locked){
             this.lock.setVisible(true);
             this.picto.setVisible(false);
@@ -84,6 +92,7 @@ public class ScrollPageElement extends Sprite{
         else{
             this.lock.setVisible(false);
             this.picto.setVisible(true);
+            this.picto.setColor(this.done?DONE_COLOR:UNDONE_COLOR);
         }
     }
     
