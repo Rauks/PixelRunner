@@ -64,17 +64,18 @@ import org.andengine.entity.modifier.FadeOutModifier;
  * @author Karl
  */
 public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchListener{
-    private final float RIGHT_SPAWN = 900;
-    private final float PLAYER_X = 250;
-    private final float GROUND_LEVEL = 50;
-    private final float GROUND_WIDTH = 1000;
-    private final float GROUND_THICKNESS = LevelElement.PLATFORM_THICKNESS;
-    private final float BROADCAST_LEVEL = 240;
-    private final float BROADCAST_LEFT = -100;
-    private final float BROADCAST_RIGHT = 1000;
-    private final float BUTTON_X = 47;
-    private final float BUTTON_UP_Y = 300;
-    private final float BUTTON_DOWN_Y = 180;
+    private final static float RIGHT_SPAWN = 900;
+    private final static float PLAYER_X = 250;
+    private final static float GROUND_LEVEL = 50;
+    private final static float GROUND_WIDTH = 1000;
+    private final static float GROUND_THICKNESS = LevelElement.PLATFORM_THICKNESS;
+    private final static float BROADCAST_LEVEL = 240;
+    private final static float BROADCAST_LEFT = -100;
+    private final static float BROADCAST_RIGHT = 1000;
+    private final static float BUTTON_X = 47;
+    private final static float BUTTON_UP_Y = 300;
+    private final static float BUTTON_DOWN_Y = 180;
+    private final static Color BUTTON_INNER_COLOR = new Color(0.4f, 0.4f, 0.4f);
     
     public class BaseGamePlayerListener implements IPlayerListener{
         @Override
@@ -108,8 +109,8 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         public void onBonusEnd() {
             BaseGameScene.this.buttonUp.setFlippedVertical(false);
             BaseGameScene.this.buttonDown.setFlippedVertical(false);
-            BaseGameScene.this.changeButtonColor(HudButton.UP, Color.WHITE);
-            BaseGameScene.this.changeButtonColor(HudButton.DOWN, Color.WHITE);
+            BaseGameScene.this.changeButtonColor(HudButton.UP, BUTTON_INNER_COLOR);
+            BaseGameScene.this.changeButtonColor(HudButton.DOWN, BUTTON_INNER_COLOR);
         }
     };
     
@@ -412,6 +413,8 @@ public abstract class BaseGameScene extends BaseScene implements IOnSceneTouchLi
         this.hud.attachChild(this.buttonDownBack);
         this.buttonUp = new Sprite(34, 34, resourcesManager.buttonUp, vbom);
         this.buttonDown = new Sprite(34, 34, resourcesManager.buttonDown, vbom);
+        this.buttonUp.setColor(BUTTON_INNER_COLOR);
+        this.buttonDown.setColor(BUTTON_INNER_COLOR);
         this.buttonUpBack.attachChild(this.buttonUp);
         this.buttonDownBack.attachChild(this.buttonDown);
         
