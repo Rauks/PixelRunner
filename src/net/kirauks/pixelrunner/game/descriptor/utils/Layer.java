@@ -29,7 +29,7 @@ public enum Layer{
     STARS_2(0, 0, "stars_2"),
     PLANETS_1(0, 190, "planets_1"),
     PLANETS_2(0, 250, "planets_2"),
-    JUMP_1(0, 190, "training_1"),
+    JUMP_1(0, 180, "training_1"),
     JUMP_2(0, 220, "training_2"),
     ROLL_1(0, 5, "training_3"),
     ROLL_2(0, 5, "training_4"),
