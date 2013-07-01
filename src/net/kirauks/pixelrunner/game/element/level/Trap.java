@@ -48,7 +48,7 @@ public class Trap extends LevelElement{
     @Override
     protected void playerAction(Player player) {
         if(player.hasLife()){
-            this.changeColor(BonusLife.DEFAULT_COLOR);
+            this.trail.setColor(BonusLife.DEFAULT_COLOR);
             player.resetBonus();
         }
         else{
