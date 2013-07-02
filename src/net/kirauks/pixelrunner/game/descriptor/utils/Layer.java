@@ -4,6 +4,9 @@
  */
 package net.kirauks.pixelrunner.game.descriptor.utils;
 
+import net.kirauks.pixelrunner.GameActivity;
+import net.kirauks.pixelrunner.scene.base.BaseGameScene;
+
 /**
  *
  * @author Karl
@@ -31,12 +34,13 @@ public enum Layer{
     STARS_2(0, 0, "stars_2"),
     PLANETS_1(0, 164, "planets_1"),
     PLANETS_2(0, 250, "planets_2"),
-    JUMP_1(0, 180, "training_1"),
+    JUMP_1(0, 200, "training_1"),
     JUMP_2(0, 220, "training_2"),
-    ROLL_1(0, 5, "training_3"),
-    ROLL_2(0, 5, "training_4"),
-    DOUBLEJUMP_1(0, 190, "training_5"),
-    DOUBLEJUMP_2(0, 220, "training_6");
+    ROLL_1(0, 10, "training_3"),
+    ROLL_2(0, 26, "training_4"),
+    DOUBLEJUMP_1(0, 200, "training_5"),
+    DOUBLEJUMP_2(0, 220, "training_6"),
+    DASH(0, 186, "dash");
 
     public float x;
     public float y;

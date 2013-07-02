@@ -19,10 +19,10 @@ public enum BackgroundPack{
     SWEETS(Layer.SWEET_4.withSpeed(20), Layer.SWEET_3.withSpeed(25), Layer.SWEET_2.withSpeed(30), Layer.SWEET_1.withSpeed(35)), 
     FORTRESS(Layer.CLOUDS_2.withSpeed(20), Layer.FORTRESS_2.withSpeed(25), Layer.FORTRESS_1.withSpeed(30), Layer.FOREST_1.withSpeed(35)),
     SPACE(Layer.STARS_2.withSpeed(20), Layer.STARS_1.withSpeed(25), Layer.PLANETS_2.withSpeed(30), Layer.PLANETS_1.withSpeed(35)),
-    TRAINING_JUMP(Layer.JUMP_1.withSpeed(25), Layer.JUMP_2.withSpeed(30)), 
-    TRAINING_ROLL(Layer.ROLL_1.withSpeed(25), Layer.ROLL_2.withSpeed(30)), 
-    TRAINING_DOUBLEJUMP(Layer.DOUBLEJUMP_1.withSpeed(25), Layer.DOUBLEJUMP_2.withSpeed(30)), 
-    TRAINING_PLATFORMS(Layer.JUMP_1.withSpeed(25), Layer.JUMP_2.withSpeed(30));
+    TRAINING_JUMP(Layer.DASH.withSpeed(20), Layer.JUMP_1.withSpeed(25), Layer.JUMP_2.withSpeed(30)), 
+    TRAINING_ROLL(Layer.DASH.withSpeed(20), Layer.ROLL_1.withSpeed(25), Layer.ROLL_2.withSpeed(30)), 
+    TRAINING_DOUBLEJUMP(Layer.DASH.withSpeed(20), Layer.DOUBLEJUMP_1.withSpeed(25), Layer.DOUBLEJUMP_2.withSpeed(30)), 
+    TRAINING_PLATFORMS(Layer.DASH.withSpeed(20), Layer.JUMP_1.withSpeed(25), Layer.JUMP_2.withSpeed(30));
 
     private Layer[] backgrounds;
     
