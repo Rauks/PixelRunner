@@ -17,8 +17,9 @@ import net.kirauks.pixelrunner.manager.ResourcesManager;
  * @author Karl
  */
 public class ScrollPageElement extends Sprite{
-    private final static Color DONE_COLOR = Color.WHITE;
-    private final static Color UNDONE_COLOR = new Color(0.4f, 0.4f, 0.4f);
+    private final static Color UNDONE_COLOR = Color.WHITE;
+    private final static Color DONE_COLOR = new Color(0.4f, 0.4f, 0.4f);
+    private final static Color LOCK_COLOR = new Color(0.4f, 0.4f, 0.4f);
     
     private int id;
     private boolean locked;
@@ -52,7 +53,7 @@ public class ScrollPageElement extends Sprite{
     }
     private void initLock(){
         this.lock = new Sprite(this.getHeight()/2, this.getWidth()/2, ResourcesManager.getInstance().lvlLock, this.getVertexBufferObjectManager());
-        this.lock.setColor(UNDONE_COLOR);
+        this.lock.setColor(LOCK_COLOR);
         this.attachChild(this.lock);
     }
     
