@@ -18,6 +18,7 @@ public enum BackgroundPack{
     HILLS(Layer.CLOUDS_2.withSpeed(20), Layer.CLOUDS_1.withSpeed(25), Layer.HILL_2.withSpeed(30), Layer.HILL_1.withSpeed(35)), 
     SWEETS(Layer.SWEET_4.withSpeed(20), Layer.SWEET_3.withSpeed(25), Layer.SWEET_2.withSpeed(30), Layer.SWEET_1.withSpeed(35)), 
     FORTRESS(Layer.CLOUDS_2.withSpeed(20), Layer.FORTRESS_2.withSpeed(25), Layer.FORTRESS_1.withSpeed(30), Layer.FOREST_1.withSpeed(35)),
+    ISLANDS(Layer.CLOUDS_2.withSpeed(20), Layer.ISLANDS_3.withSpeed(25), Layer.ISLANDS_2.withSpeed(30), Layer.ISLANDS_1.withSpeed(35)),
     SPACE(Layer.STARS_2.withSpeed(20), Layer.STARS_1.withSpeed(25), Layer.PLANETS_2.withSpeed(30), Layer.PLANETS_1.withSpeed(35)),
     TRAINING_JUMP(Layer.DASH.withSpeed(20), Layer.JUMP_1.withSpeed(25), Layer.JUMP_2.withSpeed(30)), 
     TRAINING_ROLL(Layer.DASH.withSpeed(20), Layer.ROLL_1.withSpeed(25), Layer.ROLL_2.withSpeed(30)), 
@@ -64,6 +65,8 @@ public enum BackgroundPack{
                 return BackgroundPack.SWEETS;
             case FORTRESS:
                 return BackgroundPack.FORTRESS;
+            case ISLANDS:
+                return BackgroundPack.ISLANDS;
             default:
             case SPACE:
                 return BackgroundPack.SPACE;
@@ -71,7 +74,7 @@ public enum BackgroundPack{
     }
     
     public static BackgroundPack getRamdomBackgroundPack(){
-        switch(RANDGEN.nextInt(8)){
+        switch(RANDGEN.nextInt(9)){
             case 0:
                 return BackgroundPack.MOUNTAIN;
             case 1:
@@ -86,8 +89,10 @@ public enum BackgroundPack{
                 return BackgroundPack.SWEETS;
             case 6:
                 return BackgroundPack.FORTRESS;
-            default:
             case 7:
+                return BackgroundPack.ISLANDS;
+            default:
+            case 8:
                 return BackgroundPack.SPACE;
         }
     }
