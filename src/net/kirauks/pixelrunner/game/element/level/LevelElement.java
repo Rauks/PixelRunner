@@ -36,6 +36,7 @@ public abstract class LevelElement{
     
     public static final Color COLOR_DEFAULT = Color.WHITE;
     public static final Color COLOR_TRAIL_DEFAULT = Color.RED;
+    public static final Color COLOR_DISABLED_DEFAULT = new Color(0.2f, 0.2f, 0.2f);
     
     private Body body;
     private Shape shape;
@@ -95,7 +96,7 @@ public abstract class LevelElement{
     }
     public void changeColor(Color color){
         this.getBuildedShape().clearEntityModifiers();
-        this.getBuildedShape().registerEntityModifier(new ColorModifier(0.5f, this.getBuildedShape().getColor(), color));
+        this.getBuildedShape().registerEntityModifier(new ColorModifier(0.3f, this.getBuildedShape().getColor(), color));
     }
     
     protected abstract Shape buildShape(float pX, float pY, VertexBufferObjectManager pVertexBufferObjectManager, final Player player);

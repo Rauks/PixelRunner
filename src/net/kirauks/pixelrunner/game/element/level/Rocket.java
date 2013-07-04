@@ -10,6 +10,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import net.kirauks.pixelrunner.game.Player;
 import net.kirauks.pixelrunner.game.Trail;
 import net.kirauks.pixelrunner.manager.ResourcesManager;
+import org.andengine.util.adt.color.Color;
 
 /**
  *
@@ -48,11 +49,13 @@ public class Rocket extends LevelElement{
     @Override
     protected void playerAction(Player player) {
         if(player.hasLife()){
-            this.trail.setColor(BonusLife.DEFAULT_COLOR);
+            this.trail.setColor(COLOR_DISABLED_DEFAULT);
+            this.changeColor(COLOR_DISABLED_DEFAULT);
             player.resetBonus();
         }
         else{
             player.rollBackJump();
+            //this.changeColor(Color.RED);
         }
     }
     

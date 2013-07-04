@@ -39,15 +39,18 @@ public class Wall extends LevelElement{
     protected void playerAction(Player player) {
         if(!player.isRolling()){
             if(player.hasLife()){
-                this.trail.setColor(BonusLife.DEFAULT_COLOR);
+                this.trail.setColor(COLOR_DISABLED_DEFAULT);
+                this.changeColor(COLOR_DISABLED_DEFAULT);
                 player.resetBonus();
             }
             else{
                 player.rollBackJump();
+                //this.changeColor(Color.RED);
             }
         }
         else{
-            this.getBuildedShape().registerEntityModifier(new ColorModifier(.2f, this.getColor(), new Color(0.2f, 0.2f, 0.2f)));
+            this.trail.setColor(COLOR_DISABLED_DEFAULT);
+            this.changeColor(COLOR_DISABLED_DEFAULT);
         }
     }
 }
