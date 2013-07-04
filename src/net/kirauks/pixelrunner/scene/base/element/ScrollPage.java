@@ -26,8 +26,8 @@ public class ScrollPage extends Rectangle implements IScrollPageElementTouchList
     protected static final int MAX_ELEMENTS = 12;
     protected static final float PADDING_X = 130;
     protected static final float PADDING_Y = 80;
-    protected static final float MARGIN_TOP = 40;
-    protected static final float TITLE_MARGIN_TOP = 20;
+    protected static final float MARGIN_TOP = 25;
+    protected static final float TITLE_MARGIN_TOP = 10;
     
     private Text title;
     private Sprite left;
