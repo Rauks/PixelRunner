@@ -41,6 +41,8 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
     private Text thanksNames;
     private Text tests;
     private Text testsNames;
+    private Text musics;
+    private Text musicsNames;
     private Text achieved;
     private Text achievedNames;
     
@@ -78,11 +80,15 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
         this.achieved.setCullingEnabled(true);
         this.achievedNames = new Text(centerX, 0, this.resourcesManager.fontPixel_60, this.activity.getString(R.string.credits_achieved_names), new TextOptions(HorizontalAlign.CENTER), this.vbom);
         this.achievedNames.setCullingEnabled(true);
+        this.musics = new Text(centerX, 0, this.resourcesManager.fontPixel_34, this.activity.getString(R.string.credits_musics), this.vbom);
+        this.musics.setCullingEnabled(true);
+        this.musicsNames = new Text(centerX, 0, this.resourcesManager.fontPixel_60, this.activity.getString(R.string.credits_musics_names), new TextOptions(HorizontalAlign.CENTER), this.vbom);
+        this.musicsNames.setCullingEnabled(true);
         this.playerDance = new AnimatedSprite(centerX, 0, this.resourcesManager.player, this.vbom);
         this.playerDance.animate(Player.PLAYER_ANIMATE_DANCE, Player.PLAYER_ANIMATE_DANCE_FRAMES);
         this.playerDance.setCullingEnabled(true);
         
-        this.setFlow(this.title, 30f, 5f, this.prod, this.prodNames, this.design, this.designNames, this.tests, this.testsNames, this.thanks, this.thanksNames, this.achieved, this.achievedNames, this.playerDance);
+        this.setFlow(this.title, 30f, 5f, this.prod, this.prodNames, this.design, this.designNames, this.tests, this.testsNames, this.thanks, this.thanksNames, this.musics, this.musicsNames, this.achieved, this.achievedNames, this.playerDance);
         
         attachChild(this.title);
         attachChild(this.prod);
@@ -93,6 +99,8 @@ public class CreditScene extends BaseMenuScene implements IOnSceneTouchListener{
         attachChild(this.testsNames);
         attachChild(this.thanks);
         attachChild(this.thanksNames);
+        attachChild(this.musics);
+        attachChild(this.musicsNames);
         attachChild(this.achieved);
         attachChild(this.achievedNames);
         attachChild(this.playerDance);
