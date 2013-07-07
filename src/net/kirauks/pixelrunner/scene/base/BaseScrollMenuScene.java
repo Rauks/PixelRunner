@@ -30,7 +30,7 @@ import org.andengine.engine.camera.hud.HUD;
  *
  * @author Karl
  */
-public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSceneTouchListener, IScrollPageNavigationTouchListener, IScrollPageElementTouchListener{
+public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSceneTouchListener, IScrollPageNavigationTouchListener, IScrollPageElementTouchListener, IScrollPageShortcutTouchListener{
     public interface IOnScrollListener {
         public void onMoveToPageStarted(final int oldPageNumber, final int newPageNumber);
         public void onMoveToPageFinished(final int oldPageNumber, final int newPageNumber);
@@ -93,8 +93,6 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         super.createScene();
         
         this.menuHUD = new HUD();
-        this.menuHUD.setTouchAreaBindingOnActionDownEnabled(true);
-        this.menuHUD.setTouchAreaBindingOnActionMoveEnabled(true);
         this.camera.setHUD(this.menuHUD);
         
         this.setOnSceneTouchListener(this);
@@ -187,12 +185,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
             while(this.mPages.size() > this.pagesShortcuts.size()){
                 final int pageIndex = this.pagesShortcuts.size();
                 ScrollPageShortcut shortcut = new ScrollPageShortcut(pageIndex, vbom);
-                shortcut.registerScrollPageShortcutTouchListener(new IScrollPageShortcutTouchListener() {
-                    @Override
-                    public void onShortcut(int index) {
-                        BaseScrollMenuScene.this.moveToPage(index);
-                    }
-                });
+                shortcut.registerScrollPageShortcutTouchListener(this);
                 this.menuHUD.registerTouchArea(shortcut.getShortcutTouchArea());
                 this.pagesShortcuts.add(shortcut);
                 this.menuHUD.attachChild(shortcut);
@@ -432,7 +425,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         }
     }
     
-    //IPageNavigationTouchListener
+    //IScrollPageNavigationTouchListener
     @Override
     public void onLeft(){
         this.activity.vibrate(30);
@@ -444,7 +437,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         this.moveToPage(BaseScrollMenuScene.this.mCurrentPage + 1);
     }
     
-    //IPageElementTouchListener
+    //IScrollPageElementTouchListener
     @Override
     public void onElementActionUp(ScrollPageElement element) {
         if(this.mState != ScrollState.SLIDING){
@@ -452,4 +445,11 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         }
     }
     public abstract void onElementAction(ScrollPageElement element);
+    
+    //IScrollPageShortcutTouchListener
+    @Override
+    public void onShortcut(int index) {
+        this.activity.vibrate(30);
+        this.moveToPage(index);
+    }
 }
