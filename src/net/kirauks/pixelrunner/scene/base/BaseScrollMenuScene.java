@@ -20,8 +20,10 @@ import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
 import net.kirauks.pixelrunner.scene.base.element.IScrollPageElementTouchListener;
 import net.kirauks.pixelrunner.scene.base.element.IScrollPageNavigationTouchListener;
+import net.kirauks.pixelrunner.scene.base.element.IScrollPageShortcutTouchListener;
 import net.kirauks.pixelrunner.scene.base.element.ScrollPage;
 import net.kirauks.pixelrunner.scene.base.element.ScrollPageElement;
+import net.kirauks.pixelrunner.scene.base.element.ScrollPageShortcut;
 import org.andengine.engine.camera.hud.HUD;
 
 /**
@@ -43,7 +45,7 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     private static final float MINIMUM_TOUCH_LENGTH_TO_CHANGE_PAGE_DEFAULT = 100f;
     
     private SmartList<ScrollPage> mPages = new SmartList<ScrollPage>();
-    private SmartList<Text> pagesShortcuts = new SmartList<Text>();
+    private SmartList<ScrollPageShortcut> pagesShortcuts = new SmartList<ScrollPageShortcut>();
     private HUD menuHUD;
     private ScrollState mState;
     private IOnScrollListener mOnScrollScenePageListener;
@@ -91,6 +93,8 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         super.createScene();
         
         this.menuHUD = new HUD();
+        this.menuHUD.setTouchAreaBindingOnActionDownEnabled(true);
+        this.menuHUD.setTouchAreaBindingOnActionMoveEnabled(true);
         this.camera.setHUD(this.menuHUD);
         
         this.setOnSceneTouchListener(this);
@@ -175,18 +179,26 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
         }
         if(this.mPages.size() != this.pagesShortcuts.size()){
             while(this.mPages.size() < this.pagesShortcuts.size()){
-                Text last = this.pagesShortcuts.getLast();
+                ScrollPageShortcut last = this.pagesShortcuts.getLast();
                 this.pagesShortcuts.removeLast();
-                last.detachSelf();
-                last.dispose();
+                this.menuHUD.unregisterTouchArea(last.getShortcutTouchArea());
+                last.disposeShortcut();
             }
             while(this.mPages.size() > this.pagesShortcuts.size()){
-                Text shortcut = new Text(0, 0, resourcesManager.fontPixel_34, String.valueOf(this.pagesShortcuts.size()), vbom);
+                final int pageIndex = this.pagesShortcuts.size();
+                ScrollPageShortcut shortcut = new ScrollPageShortcut(pageIndex, vbom);
+                shortcut.registerScrollPageShortcutTouchListener(new IScrollPageShortcutTouchListener() {
+                    @Override
+                    public void onShortcut(int index) {
+                        BaseScrollMenuScene.this.moveToPage(index);
+                    }
+                });
+                this.menuHUD.registerTouchArea(shortcut.getShortcutTouchArea());
                 this.pagesShortcuts.add(shortcut);
                 this.menuHUD.attachChild(shortcut);
             }
             for(Text shortcut : this.pagesShortcuts){
-                shortcut.setPosition(GameActivity.CAMERA_WIDTH/2 - (this.pagesShortcuts.size()/2 - this.pagesShortcuts.indexOf(shortcut))*30, 25);
+                shortcut.setPosition(GameActivity.CAMERA_WIDTH/2 - (this.pagesShortcuts.size()/2 - this.pagesShortcuts.indexOf(shortcut))*40 + 20, 25);
             }
             this.refreshShortcuts();
         }
@@ -365,9 +377,8 @@ public abstract class BaseScrollMenuScene extends BaseMenuScene implements IOnSc
     @Override
     public void disposeScene() {
         super.disposeScene();
-        for(Text text : this.pagesShortcuts){
-            text.detachSelf();
-            text.dispose();
+        for(ScrollPageShortcut shortcut : this.pagesShortcuts){
+            shortcut.disposeShortcut();
         }
         this.pagesShortcuts.clear();
         this.camera.setHUD(null);
